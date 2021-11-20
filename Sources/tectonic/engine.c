@@ -3,7 +3,9 @@
 #include "lib/stc/ccommon.h"
 
 static tec_engine_context_t engine_context;
+
 static tec_engine_loop_configuration_t * engine_loop_config;
+static double accumulator = 0.0;
 
 void
 tec_engine_main_loop(void)
