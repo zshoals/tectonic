@@ -1,0 +1,39 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Kinc: Build for Windows (VS2019)",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"C:/HaxeLibraries/Kha/Kinc/make",
+				"windows",
+				"-v",
+				"vs2019",
+				"--compile"
+			],
+			"group": "build",
+			// Use the standard MS compiler pattern to detect errors, warnings and infos
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Kinc: Build for Windows (VS2019) NoShaders",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"C:/HaxeLibraries/Kha/Kinc/make",
+				"windows",
+				"--noshaders",
+				"-v",
+				"vs2019",
+				"--compile",
+
+			],
+			"group": "build",
+			// Use the standard MS compiler pattern to detect errors, warnings and infos
+			"problemMatcher": "$msCompile"
+		}
+	]
+}

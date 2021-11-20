@@ -1,0 +1,7 @@
+There should not really be any instances of static variables.
+
+All information should be stored in contexts that are passed in from main or something.
+
+Something in engine.h likely is the overall container for the contexts.
+
+REMEMBER: KINC IS THE ABSTRACTION LAYER!!!! You don't need to wrap something that's already wrapping everything else!!!!
