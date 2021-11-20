@@ -24,7 +24,7 @@
 			"program": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment\\Tectonic.exe",
 			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment",
 			"preLaunchTask": "Kinc: Build for Windows (VS2019) NoShaders",
-			"console": "externalTerminal",
+			"console": "newExternalWindow",
 			"logging": {
 				"moduleLoad": false,
 				"trace": true
