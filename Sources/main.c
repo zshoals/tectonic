@@ -8,11 +8,12 @@
 
 #include "tectonic/engine.h"
 
+#include "tectonic/lib/stc/ccommon.h"
+
 void 
 game_update(tec_engine_context_t engine_context, double dt) 
 {
-	//Your game code here
-	kinc_log(KINC_LOG_LEVEL_INFO, "I am printing a very nice message %f", dt);
+	//kinc_log(KINC_LOG_LEVEL_INFO, "I am printing a very nice message %f", dt);
 }
 
 void 
