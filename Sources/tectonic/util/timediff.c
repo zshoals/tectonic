@@ -15,7 +15,7 @@ tec_timediff_advance(tec_timediff_t * timer, double now)
 	timer->previous = timer->current;
 	timer->current = now;
 
-	assert(timer->current >= 0 && "Timediff overflow? %f %s %s", timer->current, __FILE__, __LINE__);
+	assert(timer->current >= 0 && "Timediff overflow?");
 }
 
 double 
