@@ -22,7 +22,7 @@ tec_timediff_begin(tec_timediff_t * timer, double now)
 double 
 tec_timediff_end(tec_timediff_t * timer, double now)
 {
-	assert(timer->running == true && "Begin timediff before you end!");
+	assert((timer->running == true) && "Begin timediff before you end!");
 
 	timer->running = false;
 	timer->end = now;

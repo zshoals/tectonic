@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <assert.h>
 
 #include "kinc/window.h"
 #include "kinc/system.h"
@@ -13,7 +14,7 @@
 void 
 game_update(tec_engine_context_t engine_context, double dt) 
 {
-	//your code
+	kinc_log(KINC_LOG_LEVEL_INFO, "RT %f", tec_engine_get_render_time());
 }
 
 void 
