@@ -11,21 +11,55 @@ static tec_engine_context_t engine_context;
 static tec_engine_loop_configuration_t * engine_loop_config;
 static double accumulator = 0.0;
 
+//All of this should be in a performance struct?
 static tec_timediff_t logic_timediff;
+static tec_timediff_t single_update_timediff;
 static tec_timediff_t render_timediff;
 static tec_timediff_t cycle_timediff;
+
+static double time_logic = 0.0;
+static double time_single_update = 0.0;
+static double time_render = 0.0;
+static double time_cycle = 0.0;
 
 void
 tec_engine_main_loop(void)
 {
+	accumulator += time_cycle;
 
-	c_autoscope(tec_timediff_advance(&logic_timediff, kinc_time()), tec_timediff_advance(&logic_timediff, kinc_time())) 
+	//Full frame cycle
+	tec_timediff_begin(&cycle_timediff, kinc_time());
 	{
-		//standard decoupled fixed step/render thingy
-		engine_loop_config->update_callback(engine_context, engine_loop_config->logic_timestep_s);
+		//Full logic cycle
+		tec_timediff_begin(&logic_timediff, kinc_time());
+		while (accumulator >= engine_loop_config->logic_timestep_s) 
+		{
+			//Single logic update
+			tec_timediff_begin(&single_update_timediff, kinc_time());
+
+			engine_loop_config->update_callback(engine_context, engine_loop_config->logic_timestep_s);
+			accumulator -= engine_loop_config->logic_timestep_s;
+
+			time_single_update = tec_timediff_end(&single_update_timediff, kinc_time());
+		}
+		time_logic = tec_timediff_end(&logic_timediff, kinc_time());
+
+		//Full render cycle
+		{
+			tec_timediff_begin(&render_timediff, kinc_time());
+
+			engine_loop_config->render_callback(engine_context, accumulator);
+
+			time_render = tec_timediff_end(&render_timediff, kinc_time());
+		}
 	}
-	
-	engine_loop_config->render_callback(engine_context, 0.0);
+	time_cycle = tec_timediff_end(&cycle_timediff, kinc_time());
+}
+
+double 
+tec_engine_get_full_logic_time(void) 
+{
+	return time_logic;
 }
 
 void 

@@ -5,21 +5,27 @@
 void 
 tec_timediff_init(tec_timediff_t * timer)
 {
-	timer->previous = 0.0;
-	timer->current = 0.0;
+	timer->begin = 0.0;
+	timer->end = 0.0;
+	timer->running = false;
 }
 
-void 
-tec_timediff_advance(tec_timediff_t * timer, double now)
+void
+tec_timediff_begin(tec_timediff_t * timer, double now)
 {
-	timer->previous = timer->current;
-	timer->current = now;
-
-	assert(timer->current >= 0 && "Timediff overflow?");
+	assert(timer->running == false && "End timediff before you begin!");
+	
+	timer->running = true;
+	timer->begin = now;
 }
 
 double 
-tec_timediff_dt(tec_timediff_t * timer) 
+tec_timediff_end(tec_timediff_t * timer, double now)
 {
-	return timer->current - timer->previous;
+	assert(timer->running == true && "Begin timediff before you end!");
+
+	timer->running = false;
+	timer->end = now;
+
+	return timer->end - timer->begin;
 }

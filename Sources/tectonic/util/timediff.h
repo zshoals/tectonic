@@ -1,13 +1,16 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef struct
 tec_timediff 
 {
-	double previous;
-	double current;
+	double begin;
+	double end;
+	bool running;
 } 
 tec_timediff_t;
 
 void tec_timediff_init(tec_timediff_t * timer);
-void tec_timediff_advance(tec_timediff_t * timer, double now);
-double tec_timediff_dt(tec_timediff_t * timer);
+void tec_timediff_begin(tec_timediff_t * timer, double now);
+double tec_timediff_end(tec_timediff_t * timer, double now);
