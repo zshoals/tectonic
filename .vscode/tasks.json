@@ -12,7 +12,8 @@
 				"windows",
 				"-v",
 				"vs2019",
-				"--compile"
+				"--compile",
+				"--debug",
 			],
 			"group": "build",
 			// Use the standard MS compiler pattern to detect errors, warnings and infos
@@ -29,6 +30,7 @@
 				"-v",
 				"vs2019",
 				"--compile",
+				"--debug",
 
 			],
 			"group": "build",
