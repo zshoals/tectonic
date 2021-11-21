@@ -48,12 +48,18 @@ tec_engine_main_loop(void)
 		{
 			tec_timediff_begin(&render_timediff, kinc_time());
 
-			engine_loop_config->render_callback(engine_context, accumulator);
+			engine_loop_config->render_callback(engine_context, accumulator /* should this subtract from something*/);
 
 			time_render = tec_timediff_end(&render_timediff, kinc_time());
 		}
 	}
 	time_cycle = tec_timediff_end(&cycle_timediff, kinc_time());
+}
+
+void 
+tec_engine_set_logic_timestep_s(double step)
+{
+	engine_loop_config->logic_timestep_s = step;
 }
 
 double 

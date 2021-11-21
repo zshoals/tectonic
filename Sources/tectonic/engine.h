@@ -30,5 +30,7 @@ double tec_engine_get_render_time(void);
 double tec_engine_get_single_update_time(void);
 double tec_engine_get_cycle_time(void);
 
+void tec_engine_set_logic_timestep_s(double step);
+
 void tec_engine_main_loop(void);
 void tec_engine_quake(kinc_window_options_t * window_options, kinc_framebuffer_options_t * framebuffer_options, tec_engine_loop_configuration_t * loop_config);

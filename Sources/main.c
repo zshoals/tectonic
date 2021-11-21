@@ -18,7 +18,7 @@ game_update(tec_engine_context_t engine_context, double dt)
 }
 
 void 
-game_render(tec_engine_context_t engine_context, double alpha) 
+game_render(tec_engine_context_t engine_context /*Should really just be render context only*/, double alpha) 
 {
 	kinc_g4_swap_buffers();
 }
