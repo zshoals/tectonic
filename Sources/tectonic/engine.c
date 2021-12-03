@@ -1,12 +1,13 @@
 #include "engine.h"
 #include "util/timediff.h"
+#include "util/time.h"
 
 #include "kinc/system.h"
 #include "kinc/log.h"
 
 #include "lib/stc/ccommon.h"
 
-static tec_engine_context_t engine_context;
+static tec_engine_context_t * engine_context;
 
 static tec_engine_loop_configuration_t * engine_loop_config;
 static double accumulator = 0.0;
@@ -30,30 +31,30 @@ tec_engine_main_loop(void)
 
 	accumulator += time_cycle;
 
-	tec_timediff_begin(&cycle_timediff, kinc_time());
+	tec_timediff_begin(&cycle_timediff);
 	{
 		//Full logic cycle
 		while (accumulator >= engine_loop_config->logic_timestep_s) 
 		{
 			//Single logic update
-			tec_timediff_begin(&single_update_timediff, kinc_time());
+			tec_timediff_begin(&single_update_timediff);
 
 			engine_loop_config->update_callback(engine_context, engine_loop_config->logic_timestep_s);
 			accumulator -= engine_loop_config->logic_timestep_s;
 
-			time_single_update = tec_timediff_end(&single_update_timediff, kinc_time());
+			time_single_update = tec_timediff_end(&single_update_timediff);
 		}
 
 		//Full render cycle
 		{
-			tec_timediff_begin(&render_timediff, kinc_time());
+			tec_timediff_begin(&render_timediff);
 
 			engine_loop_config->render_callback(engine_context, accumulator /* should this subtract from something*/);
 
-			time_render = tec_timediff_end(&render_timediff, kinc_time());
+			time_render = tec_timediff_end(&render_timediff);
 		}
 	}
-	time_cycle = tec_timediff_end(&cycle_timediff, kinc_time());
+	time_cycle = tec_timediff_end(&cycle_timediff);
 }
 
 void 
@@ -90,15 +91,21 @@ tec_engine_quake
 {
 	kinc_init(window_options->title, window_options->width, window_options->height, window_options, framebuffer_options);
 
+	//Use creation func instead?
 	tec_timediff_init(&single_update_timediff);
 	tec_timediff_init(&render_timediff);
 	tec_timediff_init(&cycle_timediff);
 
 	engine_loop_config = loop_config;
+
+	tec_engine_context_t ec;
+	tec_time_init(&ec.logic_timedata);
+	ec.logic_timedata.current = engine_loop_config->logic_timestep_s; //Bit of a hack, logic DT is always the fixed timestep
 	//tec_graphics_init_context(render_context);
 	//tec_audio_init_context(audio_context);
 	//tec_mouse_init_context(mouse_context);
 	//etc.
+	engine_context = &ec;
 
 	kinc_set_update_callback(&tec_engine_main_loop);
 	kinc_start();
