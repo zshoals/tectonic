@@ -4,4 +4,6 @@ All information should be stored in contexts that are passed in from main or som
 
 Something in engine.h likely is the overall container for the contexts.
 
+"transaction log" -- track every step of the world so we can step backwards in time?
+
 REMEMBER: KINC IS THE ABSTRACTION LAYER!!!! You don't need to wrap something that's already wrapping everything else!!!!
