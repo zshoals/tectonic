@@ -1,13 +1,14 @@
 #pragma once
 
 #include "kinc/window.h"
+#include "util/time.h"
 
 //Contains all necessary information to run the engine, including rendering context, loop configs, input systems, etc.
 //Might be big enough to require malloc
 typedef struct
 tec_engine_context
 {
-	double bob;
+	tec_time_t logic_timedata;
 	//Render context
 	//Keyboard context
 	//Mouse context
@@ -20,8 +21,8 @@ tec_engine_loop_configuration
 {
 	double logic_timestep_s;
 	double max_frametime_s;
-	void (* update_callback)(tec_engine_context_t engine_context, double dt);
-	void (* render_callback)(tec_engine_context_t engine_context, double alpha);
+	void (* update_callback)(tec_engine_context_t * engine_context, double dt);
+	void (* render_callback)(tec_engine_context_t * engine_context, double alpha);
 }
 tec_engine_loop_configuration_t;
 

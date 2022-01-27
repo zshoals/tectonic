@@ -12,13 +12,13 @@
 #include "tectonic/lib/stc/ccommon.h"
 
 void 
-game_update(tec_engine_context_t engine_context, double dt) 
+game_update(tec_engine_context_t * engine_context, double dt) 
 {
 	kinc_log(KINC_LOG_LEVEL_INFO, "RT %f", tec_engine_get_render_time());
 }
 
 void 
-game_render(tec_engine_context_t engine_context /*Should really just be render context only*/, double alpha) 
+game_render(tec_engine_context_t * engine_context /*Should really just be render context only*/, double alpha) 
 {
 	kinc_g4_swap_buffers();
 }
@@ -66,7 +66,7 @@ kickstart(int argc, char** argv)
 
 	tec_engine_loop_configuration_t lc =
 	{
-		.logic_timestep_s = (1.0 / 120.0),
+		.logic_timestep_s = (1.0 / 60.0),
 		.max_frametime_s = (1.0 / 4.0),
 		.update_callback = &game_update,
 		.render_callback = &game_render,

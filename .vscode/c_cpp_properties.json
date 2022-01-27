@@ -3,13 +3,13 @@
         {
             "name": "Win32",
             "includePath": [
-                "C:\\HaxeLibraries\\Kha\\Kinc\\Sources",
-                "C:\\HaxeLibraries\\Kha\\Kinc\\Backends\\System\\Windows\\Sources",
-                "C:\\HaxeLibraries\\Kha\\Kinc\\Backends\\System\\Microsoft\\Sources",
-                "C:\\HaxeLibraries\\Kha\\Kinc\\Backends\\System\\Windows\\Libraries\\DirectShow\\BaseClasses",
-                "C:\\HaxeLibraries\\Kha\\Kinc\\Backends\\Graphics4\\Direct3D11\\Sources",
-                "C:\\HaxeLibraries\\Kha\\Kinc\\Backends\\Audio2\\WASAPI\\Sources",
-                "C:\\HaxeLibraries\\Kha\\Kinc\\Backends\\Graphics5\\G5onG4\\Sources"
+                "C:\\HaxeLibraries\\Kinc\\Sources",
+                "C:\\HaxeLibraries\\Kinc\\Backends\\System\\Windows\\Sources",
+                "C:\\HaxeLibraries\\Kinc\\Backends\\System\\Microsoft\\Sources",
+                "C:\\HaxeLibraries\\Kinc\\Backends\\System\\Windows\\Libraries\\DirectShow\\BaseClasses",
+                "C:\\HaxeLibraries\\Kinc\\Backends\\Graphics4\\Direct3D11\\Sources",
+                "C:\\HaxeLibraries\\Kinc\\Backends\\Audio2\\WASAPI\\Sources",
+                "C:\\HaxeLibraries\\Kinc\\Backends\\Graphics5\\G5onG4\\Sources"
             ],
             "defines": [
                 "KORE_G1",

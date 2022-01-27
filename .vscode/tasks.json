@@ -8,7 +8,7 @@
 			"type": "shell",
 			"command": "node",
 			"args": [
-				"C:/HaxeLibraries/Kha/Kinc/make",
+				"C:/HaxeLibraries/Kinc/make.js",
 				"windows",
 				"-v",
 				"vs2019",
@@ -24,7 +24,7 @@
 			"type": "shell",
 			"command": "node",
 			"args": [
-				"C:/HaxeLibraries/Kha/Kinc/make",
+				"C:/HaxeLibraries/Kinc/make.js",
 				"windows",
 				"--noshaders",
 				"-v",
