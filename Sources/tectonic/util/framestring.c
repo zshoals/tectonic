@@ -95,7 +95,8 @@ tec_framestring_find(tec_framestring_t source, tec_framestring_t needle)
 		string_out.length = -1;
 	}
 
-	string_out.length = needle.length;
+	size_t new_string_length = string_out.string - source.string;
+	string_out.length = new_string_length;
 	return string_out;
 };
 
