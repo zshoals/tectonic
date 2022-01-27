@@ -6,7 +6,7 @@
 #include "kinc/string.h"
 #include "kinc/log.h"
 
-#define TEC_FRAMESTRING_MEM TEC_KILOBYTES(2)
+#define TEC_FRAMESTRING_MEM TEC_MEGABYTES(8)
 
 local_data tec_byte_t framestring_heap[TEC_FRAMESTRING_MEM] = {0};
 local_data tec_byte_t * memory_position = &framestring_heap;
