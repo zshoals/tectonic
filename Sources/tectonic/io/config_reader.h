@@ -4,7 +4,7 @@
 #include "config.h"
 #include <stdbool.h>
 
-#define TEC_MAX_CONFIG_BUFFER_MEMORY 100
+#define TEC_MAX_CONFIG_BUFFER_MEMORY 1000
 
 enum 
 tec_config_readable_options 
