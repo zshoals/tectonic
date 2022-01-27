@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string.h>
+
 #define tec_byte_t unsigned char 
 
 #define TEC_KILOBYTES(amount) ((amount) * 1024)
