@@ -76,10 +76,15 @@ tec_engine_main_loop(void)
 	}
 	time_cycle = tec_timediff_end(&cycle_timediff);
 
-	const char * tester = "appe574574nd";
-	tec_log_info("Whatever %s and %s", tester, "Whatchu thinkin bout Bro");
-	tec_log_info_verbose("Yep this is important information I think");
-	kinc_log(KINC_LOG_LEVEL_WARNING, "Whatchu doin Momo %s", "wutcha doin");
+	tec_framestring_t newstr1 = tec_framestring_create("This whatchu thinkin about grl %s");
+	tec_framestring_t newstr2 = tec_framestring_create("That was %s really bad.");
+	tec_framestring_t newstr3 = tec_framestring_create("God damnit");
+
+	tec_log_info(newstr1.string, "Yeah 55555555 baby");
+
+	//kinc_log(KINC_LOG_LEVEL_ERROR, newstr1.string, "YEAH");
+	tec_log_warn(newstr2.string, "SHUT THE FUCK UP");
+	tec_log_error(newstr3.string);
 
 	kinc_stop();
 }
