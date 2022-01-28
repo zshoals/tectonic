@@ -13,6 +13,9 @@
 
 #include "io/json.h"
 #include "util/framestring.h"
+#include "debug/log.h"
+
+#define TEC_LOG_MODULE_NAME "Engine"
 
 static tec_engine_context_t engine_context;
 
@@ -73,47 +76,10 @@ tec_engine_main_loop(void)
 	}
 	time_cycle = tec_timediff_end(&cycle_timediff);
 
-	tec_json_config_state_t config;
-	tec_json_config_option_int_t options_int[64];
-	int opt_int_count = 0;
-	tec_json_config_option_bool_t options_bool[64];
-	int opt_bool_count = 0;
-
-	// if (tec_json_config_load_file(&config, "settings.json"))
-	// {
-	// 	for (int i = 0; i < config.options_count; i++) 
-	// 	{
-	// 		tec_json_element_type_t type = tec_json_config_read_element_type(&config);
-	// 		switch (type)
-	// 		{
-	// 			case TEC_JSON_INT:
-	// 				if (strcmp("OMEGASETTING", config.current_location->name->string) == 0) 
-	// 				{
-	// 					strcpy(options_int[opt_int_count].configuration_name, "OMEGASETTING");
-	// 				}
-	// 				break;
-	// 			case TEC_JSON_BOOL:
-	// 				break;
-	// 		}
-
-	// 		tec_json_config_advance(&config);
-	// 	}
-	// }
-
-	tec_framestring_t string = tec_framestring_create("This is a test of the typing system");
-	tec_framestring_t needle = tec_framestring_create("typing");
-	kinc_log(KINC_LOG_LEVEL_INFO, "%s", string.string);
-	tec_framestring_t string_copy = tec_framestring_copy(string);
-	assert(string.string != string_copy.string);
-	tec_framestring_t appended = tec_framestring_append(string, needle);
-
-	kinc_log(KINC_LOG_LEVEL_INFO, "%s, %d", tec_framestring_find(string, needle).string, tec_framestring_find(string, needle).length);
-
-	if (tec_framestring_compare(string, string_copy))
-	{
-		kinc_log(KINC_LOG_LEVEL_INFO, "FOUND A COPY OF IT!!@!!");
-	}
-	kinc_log(KINC_LOG_LEVEL_INFO, "%s", appended.string);
+	const char * tester = "appe574574nd";
+	tec_log_info("Whatever %s and %s", tester, "Whatchu thinkin bout Bro");
+	tec_log_info_verbose("Yep this is important information I think");
+	kinc_log(KINC_LOG_LEVEL_WARNING, "Whatchu doin Momo %s", "wutcha doin");
 
 	kinc_stop();
 }
