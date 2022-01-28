@@ -6,7 +6,7 @@
 #include "kinc/string.h"
 #include "kinc/log.h"
 
-#define TEC_FRAMESTRING_MEM TEC_MEGABYTES(8)
+#define TEC_LOG_MODULE_NAME "Framestring"
 
 local_data tec_byte_t framestring_heap[TEC_FRAMESTRING_MEM] = {0};
 local_data tec_byte_t * memory_position = &framestring_heap;
@@ -42,6 +42,50 @@ tec_framestring_create(char const * null_term_string)
 	memcpy(buffer, null_term_string, string_out.length);
 
 	string_out.string = buffer;
+
+	return string_out;
+};
+
+tec_framestring_t 
+tec_framestring_create_up_to_size(char const * string, size_t length)
+{
+	assert(string && "Given string was null, but must be non-null.");
+	assert(length > 0 && "Length was 0 or less. Length must be a positive value.");
+	
+	tec_byte_t * buffer;
+	bool found_null_term = false;
+	int char_count = 0;
+
+	while (char_count < length)
+	{
+		char const * value = &string[char_count];
+		if (DEREF(value) == '\0')
+		{
+			char_count++;
+			found_null_term = true;
+			break;
+		}
+
+		char_count++;
+	}
+
+	length = char_count;
+	buffer = framestring_memory_allocate(length);
+
+	if (found_null_term)
+	{
+		memcpy(buffer, string, length);
+	}
+	else
+	{
+		length += 1; //No null terminator found; add one.
+		memcpy(buffer, string, length);
+		buffer[length - 1] = '\0';
+	}
+
+	tec_framestring_t string_out;
+	string_out.string = buffer;
+	string_out.length = length;
 
 	return string_out;
 };
@@ -109,7 +153,7 @@ tec_framestring_substring(tec_framestring_t string, size_t from, size_t to)
 	tec_byte_t * new_string_start = string.string + from;
 	tec_byte_t * buffer = framestring_memory_allocate(new_string_length);
 	memcpy(buffer, new_string_start, new_string_length);
-	buffer[new_string_length] = "\0";
+	buffer[new_string_length] = '\0';
 
 	tec_framestring_t string_out;
 	string_out.string = buffer;
