@@ -19,16 +19,6 @@
 
 static tec_engine_context_t engine_context;
 
-typedef struct 
-tec_test_data
-{
-	int one;
-	char string[500];
-	double buff;
-	double yep;
-}
-tec_test_data_t;
-
 static tec_engine_loop_configuration_t engine_loop_config;
 static double accumulator = 0.0;
 
@@ -76,17 +66,9 @@ tec_engine_main_loop(void)
 	}
 	time_cycle = tec_timediff_end(&cycle_timediff);
 
-	tec_framestring_t newstr1 = tec_framestring_create("This whatchu thinkin about grl %s");
-	tec_framestring_t newstr2 = tec_framestring_create("That was %s really bad.");
-	tec_framestring_t newstr3 = tec_framestring_create("God damnit");
-
-	tec_log_info(newstr1.string, "Yeah 55555555 baby");
-
-	//kinc_log(KINC_LOG_LEVEL_ERROR, newstr1.string, "YEAH");
-	tec_log_warn(newstr2.string, "SHUT THE FUCK UP");
-	tec_log_error(newstr3.string);
-
+	tec_framestring_internal_memory_reset();
 	kinc_stop();
+
 }
 
 void 

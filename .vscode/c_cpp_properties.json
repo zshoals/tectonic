@@ -12,6 +12,7 @@
                 "C:\\HaxeLibraries\\Kinc\\Backends\\Graphics5\\G5onG4\\Sources"
             ],
             "defines": [
+                "TEC_LOG_LOGGING_ENABLED=1",
                 "KORE_G1",
                 "KORE_G2",
                 "KORE_G3",

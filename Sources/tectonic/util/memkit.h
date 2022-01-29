@@ -8,6 +8,9 @@
 #define TEC_MEGABYTES(amount) ((TEC_KILOBYTES(amount)) * 1024)
 #define TEC_GIGABYTES(amount) ((TEC_MEGABYTES(amount)) * 1024)
 
+//From Flecs and also "C - get type alignment portably"
+#define alignof(type) ((size_t)&((struct { char c; type d; } *)0)->d)
+
 //Prefer static buffers. However....
 
 //Frame Data Alloc, reset per frame
@@ -16,3 +19,4 @@
 //Asset Loader Alloc (reuse level alloc or frame alloc?)
 //Framestring Alloc, currently located in framestring.h
 //This might be stupid. How does this interact with other libraries, for instance? Do I care?
+

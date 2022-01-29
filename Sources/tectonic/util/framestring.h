@@ -2,17 +2,6 @@
 
 #include <stdbool.h>
 
-//compare
-//create
-//cache length
-//append
-//find
-//substring
-//copy
-//Tokenizer?
-
-//mem_reset_pointer
-
 #define TEC_FRAMESTRING_MEM TEC_MEGABYTES(8)
 
 typedef struct
@@ -35,5 +24,6 @@ tec_framestring_t tec_framestring_copy(tec_framestring_t string);
 tec_framestring_t tec_framestring_append(tec_framestring_t destination, tec_framestring_t appendage);
 tec_framestring_t tec_framestring_find(tec_framestring_t source, tec_framestring_t needle);
 tec_framestring_t tec_framestring_substring(tec_framestring_t string, size_t from, size_t to);
+//Tokenizer?
 
 void tec_framestring_internal_memory_reset(void);
