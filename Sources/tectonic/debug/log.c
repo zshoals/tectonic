@@ -1,7 +1,7 @@
 #include "log.h"
 #include "kinc/log.h"
 #include <stdarg.h>
-#include "../util/framestring.h"
+#include "../util/string.h"
 #include "../frequent.h"
 
 //#define TEC_LOG_INFO_PREFIX "[TEC-INFO]::[" TEC_LOG_MODULE_NAME "] "
@@ -16,9 +16,12 @@
 local_func void
 tec_log_modify(char const * format, char const * prefix_string, kinc_log_level_t level, va_list args)
 {
-	tec_framestring_t new_format = tec_framestring_create(prefix_string);
-	tec_framestring_t original = tec_framestring_create(format);
-	tec_framestring_t final = tec_framestring_append(new_format, original);
+	tec_string_t new_format = tec_string_create(prefix_string);
+	tec_string_t original = tec_string_create(format);
+
+	char buffer[8192];
+	tec_string_t final = tec_string_append(&buffer, new_format, original);
+
 	kinc_log_args(level, final.string, args);
 }
 

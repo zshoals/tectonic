@@ -2,8 +2,7 @@
 #include "memkit.h"
 #include "../frequent.h"
 #include <assert.h>
-#include <string.h>
-#include "kinc/string.h"
+#include "string.h"
 #include "kinc/log.h"
 
 #define TEC_LOG_MODULE_NAME "Framestring"
@@ -35,129 +34,78 @@ tec_framestring_internal_memory_reset(void)
 tec_framestring_t 
 tec_framestring_create(char const * null_term_string)
 {
-	tec_framestring_t string_out;
-	string_out.length = kinc_string_length(null_term_string) + 1; //We want the null terminated size
-	tec_byte_t * buffer = framestring_memory_allocate(string_out.length);
+	tec_string_t input = tec_string_create(null_term_string);
+	tec_byte_t * buffer = framestring_memory_allocate(input.length);
+	tec_string_t copied = tec_string_copy(buffer, input);
 
-	memcpy(buffer, null_term_string, string_out.length);
+	tec_framestring_t fs;
+	fs.string = copied;
 
-	string_out.string = buffer;
-
-	return string_out;
+	return fs;
 };
 
-tec_framestring_t 
-tec_framestring_create_up_to_size(char const * string, size_t length)
+char const * 
+tec_framestring_string(tec_framestring_t string)
 {
-	assert(string && "Given string was null, but must be non-null.");
-	assert(length > 0 && "Length was 0 or less. Length must be a positive value.");
-	
-	tec_byte_t * buffer;
-	bool found_null_term = false;
-	int char_count = 0;
-
-	while (char_count < length)
-	{
-		char const * value = &string[char_count];
-		if (DEREF(value) == '\0')
-		{
-			char_count++;
-			found_null_term = true;
-			break;
-		}
-
-		char_count++;
-	}
-
-	length = char_count;
-	buffer = framestring_memory_allocate(length);
-
-	if (found_null_term)
-	{
-		memcpy(buffer, string, length);
-	}
-	else
-	{
-		length += 1; //No null terminator found; add one.
-		memcpy(buffer, string, length);
-		buffer[length - 1] = '\0';
-	}
-
-	tec_framestring_t string_out;
-	string_out.string = buffer;
-	string_out.length = length;
-
-	return string_out;
-};
-
-bool 
-tec_framestring_compare(tec_framestring_t a, tec_framestring_t b)
-{
-	if (a.length != b.length) return false;
-	if (memcmp(a.string, b.string, a.length) == 0) return true;
-	return false;
+	return string.string.string;
 };
 
 size_t 
 tec_framestring_length(tec_framestring_t string)
 {
-	return string.length;
+	return string.string.length;
 };
+
+bool 
+tec_framestring_compare(tec_framestring_t a, tec_framestring_t b)
+{
+	return tec_string_compare(a.string, b.string);
+};
+
 
 tec_framestring_t 
 tec_framestring_copy(tec_framestring_t string)
 {
-	return tec_framestring_create(string.string);
+	return tec_framestring_create(tec_framestring_string(string));
 };
 
 tec_framestring_t 
 tec_framestring_append(tec_framestring_t destination, tec_framestring_t appendage)
 {
-	size_t size = appendage.length + destination.length - 1; //Subtract one null terminator
-	tec_byte_t * write_position = framestring_memory_allocate(size);
-
-	tec_framestring_t string_out;
-	string_out.string = write_position;
-	string_out.length = size;
-
-	size_t first_string_size = destination.length - 1; //Remove null terminator from the first part of the string
-	memcpy(write_position, destination.string, first_string_size);
-	write_position += first_string_size;
-	memcpy(write_position, appendage.string, appendage.length);
-
-	return string_out;
+	tec_byte_t buffer[TEC_FRAMESTRING_APPEND_BUFFER_SIZE];
+	tec_string_t string_out = tec_string_append(&buffer, destination.string, appendage.string);
+	return tec_framestring_create(string_out.string);
 };
 
-tec_framestring_t 
+tec_framestring_find_result_t
 tec_framestring_find(tec_framestring_t source, tec_framestring_t needle)
 {
-	tec_framestring_t string_out;
-	string_out.string = kinc_string_find(source.string, needle.string);
-	if (!string_out.string) 
+	tec_string_find_result_t str_result = tec_string_find(source.string, needle.string);
+	
+	tec_framestring_find_result_t fs_result;
+
+	switch (str_result.result)
 	{
-		kinc_log(KINC_LOG_LEVEL_INFO, "No string match from source %s using needle %s", source.string, needle.string);
-		string_out.length = -1;
+		case TEC_STRING_NO_MATCH:
+			fs_result.result = TEC_FRAMESTRING_NO_MATCH;
+			break;
+		case TEC_STRING_FOUND:
+			fs_result.result = TEC_FRAMESTRING_FOUND;
+			break;
+		default:
+			assert(true && "Somehow failed on tec_framestring_find in the results assignment phase.");
 	}
 
-	size_t new_string_length = string_out.string - source.string;
-	string_out.length = new_string_length;
-	return string_out;
+	tec_framestring_t string_out = tec_framestring_create(str_result.string.string);
+	fs_result.string = string_out;
+
+	return fs_result;
 };
 
 tec_framestring_t 
 tec_framestring_substring(tec_framestring_t string, size_t from, size_t to)
 {
-	assert(from < to && "framestring_substring expects from to be less than to");
-
-	size_t new_string_length = from - to + 1; //Add null terminator
-	tec_byte_t * new_string_start = string.string + from;
-	tec_byte_t * buffer = framestring_memory_allocate(new_string_length);
-	memcpy(buffer, new_string_start, new_string_length);
-	buffer[new_string_length] = '\0';
-
-	tec_framestring_t string_out;
-	string_out.string = buffer;
-	string_out.length = new_string_length;
-
-	return string_out;
+	tec_byte_t * buffer = framestring_memory_allocate(from - to);
+	tec_string_t sub = tec_string_substring_n(buffer, string.string, from, to);
+	return tec_framestring_create(sub.string);
 };
