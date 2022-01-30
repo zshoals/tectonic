@@ -5,15 +5,7 @@
 #include "../frequent.h"
 #include <stddef.h>
 #include <assert.h>
-
-//#define TEC_LOG_INFO_PREFIX "[TEC-INFO]::[" TEC_LOG_MODULE_NAME "] "
-//#define TEC_LOG_INFO_VERBOSE_PREFIX "[TEC-INFO]::[" TEC_LOG_MODULE_NAME "]::[File-" __FILE__ "]::[Line-" TEC_EXPANDER(__LINE__) "] "
-//
-//#define TEC_LOG_WARN_PREFIX "[TEC-WARN]::[" TEC_LOG_MODULE_NAME "] "
-//#define TEC_LOG_WARN_VERBOSE_PREFIX "[TEC-WARN]::[" TEC_LOG_MODULE_NAME "]::[File-" __FILE__ "]::[Line-" TEC_EXPANDER(__LINE__) "] "
-//
-//#define TEC_LOG_ERROR_PREFIX "[TEC-ERROR]::[" TEC_LOG_MODULE_NAME "] "
-//#define TEC_LOG_ERROR_VERBOSE_PREFIX "[TEC-ERROR]::[" TEC_LOG_MODULE_NAME "]::[File-" __FILE__ "]::[Line-" TEC_EXPANDER(__LINE__) "] "
+#include <kinc/system.h>
 
 //Here resides a painful lesson about va_args:
 //the second parameter to va_start is the ADDRESS of the LAST PARAMETER IN THE FUNCTION

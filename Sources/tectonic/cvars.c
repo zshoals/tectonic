@@ -4,6 +4,7 @@
 #include <assert.h>
 #include "debug/log.h"
 #include <string.h>
+#include <kinc/system.h>
 
 #define TEC_LOG_MODULE_NAME "CVars"
 
@@ -157,5 +158,6 @@ set_window_defaults(void)
 void 
 tec_internal_cvars_set_all_default(void)
 {
+	tec_log_info("Initializing all CVars to default values");
 	set_window_defaults();
 }
