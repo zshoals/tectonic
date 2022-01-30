@@ -15,11 +15,11 @@ set_string(tec_cvar_t * cvar, tec_cvar_value_t value)
 	if (strlen(value.string_value) < TEC_CVARS_MAX_STRING_VALUE_LENGTH)
 	{
 		strcpy(cvar->value.string_value, value.string_value);
-		tec_log_info("String-type CVar %s set to %s", cvar->name, cvar->value.string_value);
+		tec_log_info("[CVar: String-value] %s set to %s", cvar->name, cvar->value.string_value);
 	}
 	else
 	{
-		tec_log_error("String-type CVar %s was not set because the supplied string value was too long.", cvar->name);
+		tec_log_error("[CVar: String-value] %s was not set because the supplied string value was too long.", cvar->name);
 	}
 }
 
@@ -27,14 +27,14 @@ local_func void
 set_int(tec_cvar_t * cvar, tec_cvar_value_t value)
 {
 	cvar->value.int_value = value.int_value;
-	tec_log_info("Int-type CVar %s set to %d", cvar->name, cvar->value.int_value);
+	tec_log_info("[CVar: Int-value] %s set to %d", cvar->name, cvar->value.int_value);
 }
 
 local_func void
 set_bool(tec_cvar_t * cvar, tec_cvar_value_t value)
 {
 	cvar->value.bool_value = value.bool_value;
-	tec_log_info("Bool-type CVar %s set to %d", cvar->name, cvar->value.bool_value);
+	tec_log_info("[CVar: Bool-value] %s set to %d", cvar->name, cvar->value.bool_value);
 }
 
 void 
