@@ -18,24 +18,32 @@ tec_renderer_draw_mode_e;
 
 typedef enum
 {
+	TEC_UNIFORM_TYPE_NULL, //No uniform, no need to do anything
+
 	TEC_UNIFORM_TYPE_BOOL,
 
 	TEC_UNIFORM_TYPE_FLOAT,
 	TEC_UNIFORM_TYPE_FLOAT2,
 	TEC_UNIFORM_TYPE_FLOAT3,
 	TEC_UNIFORM_TYPE_FLOAT4,
-	TEC_UNIFORM_TYPE_FLOATS, //No support yet? From my end, that is.
+	//TEC_UNIFORM_TYPE_FLOATS, //No support yet? From my end, that is.
 
 	TEC_UNIFORM_TYPE_INT,
 	TEC_UNIFORM_TYPE_INT2,
 	TEC_UNIFORM_TYPE_INT3,
 	TEC_UNIFORM_TYPE_INT4,
-	TEC_UNIFORM_TYPE_INTS, //No support yet?
+	//TEC_UNIFORM_TYPE_INTS, //No support yet?
 
 	TEC_UNIFORM_TYPE_MAT3,
 	TEC_UNIFORM_TYPE_MAT4,
 }
 tec_renderer_uniform_type_e;
+
+typedef enum
+{
+	TEC_TEXTURE_NULL,
+	TEC_TEXTURE_PRESENT,
+} tec_renderer_texture_presence_e;
 
 //Note: The expectation for the uniform name at this time is that it's set via string literal, not extracted from a file
 typedef struct
@@ -49,8 +57,8 @@ tec_renderer_uniform
 		bool bool_value;
 	};
 	char const * name;
+	kinc_g4_constant_location_t location;
 	tec_renderer_uniform_type_e type;
-	bool in_use;
 }
 tec_renderer_uniform_t;
 
@@ -65,15 +73,25 @@ tec_renderer_uniform_t;
 //Compiled Pipeline
 //	Unique name/identifier
 //	associated uniforms
+#define TEC_RENDERER_MAX_TEXTURE_UNITS 8
+#define TEC_RENDERER_MAX_UNIFORMS 16
+
+typedef struct
+tec_renderer_texture_data
+{
+	kinc_g4_texture_unit_t texture_units[TEC_RENDERER_MAX_TEXTURE_UNITS]; //Can theoretically support more, but no thanks
+	kinc_g4_texture_t textures[TEC_RENDERER_MAX_TEXTURE_UNITS];
+	tec_renderer_texture_presence_e present[TEC_RENDERER_MAX_TEXTURE_UNITS];
+}
+tec_renderer_texture_data_t;
 
 typedef struct
 tec_renderer_material
 {
 	char const * name;
-	kinc_g4_texture_unit_t texture_units[8]; //Can theoretically support more, but no thanks
-	kinc_g4_texture_t textures[8];
+	tec_renderer_texture_data_t tex_data;
 	kinc_g4_pipeline_t pipeline;
-	tec_renderer_uniform_t uniforms[16]; //Same as above
+	tec_renderer_uniform_t uniforms[TEC_RENDERER_MAX_UNIFORMS]; //Same as above
 }
 tec_renderer_material_t;
 
