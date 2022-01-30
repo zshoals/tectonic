@@ -10,6 +10,10 @@
 #include "tectonic/engine.h"
 
 #include "tectonic/lib/stc/ccommon.h"
+#include "tectonic/cvars.h"
+#include "tectonic/debug/log.h"
+
+#define TEC_LOG_MODULE_NAME "Main"
 
 void 
 game_update(tec_engine_context_t * engine_context, double dt) 
@@ -27,6 +31,10 @@ int
 kickstart(int argc, char** argv) 
 {
 	kinc_display_init();
+
+	tec_internal_cvars_set_all_default();
+	kinc_log(KINC_LOG_LEVEL_INFO, "%d", tec_cvars_get_cvar(W_VERTICAL_SYNCED).int_value);
+	tec_log_info_verbose("YHep we are testing this %d", tec_cvars_get_cvar(W_WIDTH).int_value);
 
 	char const * config_title = "Tectonic Project";
 	int config_window_width = 800;
