@@ -41,8 +41,8 @@ set_bool(tec_cvar_t * cvar, tec_cvar_value_t value)
 void 
 tec_cvars_set_cvar
 (
-	tec_cvars_identifier_t cvar, 
-	tec_cvars_value_type_t value_type, 
+	tec_cvars_identifier_e cvar, 
+	tec_cvars_value_type_e value_type, 
 	tec_cvar_value_t value
 )
 {
@@ -73,26 +73,26 @@ tec_cvars_set_cvar
 }
 
 tec_cvar_value_t 
-tec_cvars_get_cvar(tec_cvars_identifier_t cvar)
+tec_cvars_get_cvar(tec_cvars_identifier_e cvar)
 {
 	return cvars[cvar].value;
 }
 
 //Internal cvar configuration
 local_func void
-set_name(tec_cvars_identifier_t cvar, char const * name)
+set_name(tec_cvars_identifier_e cvar, char const * name)
 {
 	strcpy(cvars[cvar].name, name);
 }
 
 local_func void
-set_value_type(tec_cvars_identifier_t cvar, tec_cvars_value_type_t type)
+set_value_type(tec_cvars_identifier_e cvar, tec_cvars_value_type_e type)
 {
 	cvars[cvar].value.value_type = type;
 }
 
 local_func void
-set_cvar_fast(tec_cvars_identifier_t cvar, char const * name, tec_cvar_value_t value)
+set_cvar_fast(tec_cvars_identifier_e cvar, char const * name, tec_cvar_value_t value)
 {
 	set_name(cvar, name);
 	set_value_type(cvar, value.value_type);

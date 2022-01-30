@@ -7,4 +7,4 @@ typedef enum
 	W_HEIGHT,
 	W_VERTICAL_SYNCED,
 } 
-tec_cvars_identifier_t;
+tec_cvars_identifier_e;
