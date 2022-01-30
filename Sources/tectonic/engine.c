@@ -67,14 +67,6 @@ tec_engine_main_loop(void)
 	}
 	time_cycle = tec_timediff_end(&cycle_timediff);
 
-	tec_framestring_t string = tec_framestring_create("This is a test");
-	tec_framestring_t appended = tec_framestring_append(string, string);
-	tec_framestring_find_result_t result = tec_framestring_find(appended, tec_framestring_create("a test"));
-
-	tec_framestring_t sub = tec_framestring_substring(appended, 5, 10);
-
-	//kinc_log(KINC_LOG_LEVEL_INFO, tec_framestring_string(sub));
-
 	tec_framestring_internal_memory_reset();
 	kinc_stop();
 
