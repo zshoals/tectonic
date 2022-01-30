@@ -5,34 +5,36 @@
 #include "debug/log.h"
 #include <string.h>
 
-local_data tec_cvars_t cvars[64] = {0};
+#define TEC_LOG_MODULE_NAME "CVars"
+
+local_data tec_cvar_t cvars[64] = {0};
 
 local_func void
-set_string(tec_cvars_t * cvar, tec_cvar_value_t value)
+set_string(tec_cvar_t * cvar, tec_cvar_value_t value)
 {
 	if (strlen(value.string_value) < TEC_CVARS_MAX_STRING_VALUE_LENGTH)
 	{
 		strcpy(cvar->value.string_value, value.string_value);
-		tec_log_info("CVAR %s set to %s", cvar->name, cvar->value.string_value);
+		tec_log_info("String-type CVar %s set to %s", cvar->name, cvar->value.string_value);
 	}
 	else
 	{
-		tec_log_error("CVAR %s was not set because the supplied string value was too long.", cvar->name);
+		tec_log_error("String-type CVar %s was not set because the supplied string value was too long.", cvar->name);
 	}
 }
 
 local_func void
-set_int(tec_cvars_t * cvar, tec_cvar_value_t value)
+set_int(tec_cvar_t * cvar, tec_cvar_value_t value)
 {
 	cvar->value.int_value = value.int_value;
-	tec_log_info("CVAR %s set to %d", cvar->name, cvar->value.int_value);
+	tec_log_info("Int-type CVar %s set to %d", cvar->name, cvar->value.int_value);
 }
 
 local_func void
-set_bool(tec_cvars_t * cvar, tec_cvar_value_t value)
+set_bool(tec_cvar_t * cvar, tec_cvar_value_t value)
 {
 	cvar->value.bool_value = value.bool_value;
-	tec_log_info("CVAR %s set to %d", cvar->name, cvar->value.bool_value);
+	tec_log_info("Bool-type CVar %s set to %d", cvar->name, cvar->value.bool_value);
 }
 
 void 
@@ -43,7 +45,7 @@ tec_cvars_set_cvar
 	tec_cvar_value_t value
 )
 {
-	tec_cvars_t * setting = &cvars[cvar];
+	tec_cvar_t * setting = &cvars[cvar];
 	if (setting->value.value_type == value_type)
 	{
 		//Technically, this function could just do a strict copy of "value", but we can
@@ -65,7 +67,7 @@ tec_cvars_set_cvar
 	}
 	else
 	{
-		tec_log_error("Improper value_type supplied for setting CVAR %s; CVAR not set.", setting->name);
+		tec_log_error("Improper value_type supplied for setting CVar %s; CVar not set.", setting->name);
 	}
 }
 
@@ -153,7 +155,7 @@ set_window_defaults(void)
 	Full Default Initialization for all Cvar types
 */
 void 
-tec_cvars_set_all_default(void)
+tec_internal_cvars_set_all_default(void)
 {
 	set_window_defaults();
 }

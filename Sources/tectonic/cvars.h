@@ -28,16 +28,14 @@ tec_cvar_value
 tec_cvar_value_t;
 
 typedef struct
-tec_cvars
+tec_cvar
 {
 	char name[TEC_CVARS_MAX_NAME_LENGTH];
 	tec_cvar_value_t value;
 }
-tec_cvars_t;
-
-void tec_cvars_set_all_default(void);
+tec_cvar_t;
 
 void tec_cvars_set_cvar(tec_cvars_identifier_t cvar, tec_cvar_value_t value);
 tec_cvar_value_t tec_cvars_get_cvar(tec_cvars_identifier_t cvar);
 
-void tec_internal_cvars_initialize_cvars(void);
+void tec_internal_cvars_set_all_default(void);
