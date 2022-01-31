@@ -37,6 +37,7 @@ tec_material_texture_presence_e;
 
 typedef enum
 {
+	TEC_BLENDING_DISABLED,
 	//Normal assumes you are using a shader with premultiplied alpha
 	TEC_BLENDING_NORMAL,
 	TEC_BLENDING_ADD,

@@ -41,6 +41,11 @@ tec_material_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_mater
 {
 	switch (blending_mode)
 	{
+		case TEC_BLENDING_DISABLED:
+			pipeline->blend_source = KINC_G4_BLEND_ONE;
+			pipeline->blend_destination = KINC_G4_BLEND_ZERO;
+			break;
+
 		case TEC_BLENDING_NORMAL:
 			pipeline->blend_source = KINC_G4_BLEND_ONE;
 			pipeline->blend_destination = KINC_G4_BLEND_INV_SOURCE_ALPHA;
@@ -48,21 +53,22 @@ tec_material_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_mater
 
 		case TEC_BLENDING_ADD:
 			pipeline->blend_source = KINC_G4_BLEND_ONE;
-			pipeline->blend_source = KINC_G4_BLEND_ONE;
+			pipeline->blend_destination = KINC_G4_BLEND_ONE;
 			break;
 
 		case TEC_BLENDING_MULTIPLY:
 			pipeline->blend_source = KINC_G4_BLEND_DEST_COLOR;
-			pipeline->blend_source = KINC_G4_BLEND_INV_SOURCE_ALPHA;
+			pipeline->blend_destination = KINC_G4_BLEND_INV_SOURCE_ALPHA;
 			break;
 
 		case TEC_BLENDING_MASK_WITH_COLOR:
 			pipeline->blend_source = KINC_G4_BLEND_SOURCE_ALPHA;
-			pipeline->blend_source = KINC_G4_BLEND_SOURCE_ALPHA;
+			pipeline->blend_destination = KINC_G4_BLEND_SOURCE_ALPHA;
 			break;
+
 		case TEC_BLENDING_MASK:
 			pipeline->blend_source = KINC_G4_BLEND_ZERO;
-			pipeline->blend_source = KINC_G4_BLEND_SOURCE_ALPHA;
+			pipeline->blend_destination = KINC_G4_BLEND_SOURCE_ALPHA;
 			break;
 		
 		default:
