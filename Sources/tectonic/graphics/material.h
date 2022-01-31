@@ -32,7 +32,21 @@ typedef enum
 {
 	TEC_TEXTURE_NULL,
 	TEC_TEXTURE_PRESENT,
-} tec_material_texture_presence_e;
+} 
+tec_material_texture_presence_e;
+
+typedef enum
+{
+	//Normal assumes you are using a shader with premultiplied alpha
+	TEC_BLENDING_NORMAL,
+	TEC_BLENDING_ADD,
+	TEC_BLENDING_MULTIPLY,
+	//I have no idea what this blend mode is, but it causes the underlying image to only be drawn to non-fully-transparent regions in the image posted above it
+	//Very useful for imitating lighting by putting a "lighting" layer UNDER the draw layer
+	TEC_BLENDING_MASK_WITH_COLOR,
+	TEC_BLENDING_MASK,
+}
+tec_material_pipeline_blending_e;
 
 //Note: The expectation for the uniform name at this time is that it's set via string literal, not extracted from a file
 typedef union
@@ -82,3 +96,4 @@ void tec_material_initialize(tec_material_material_t * mat, char const * name, k
 //Currently, materials can only be assigned. Trying to null them or something will be bad news. Don't try it.
 void tec_material_assign_texture(tec_material_material_t * mat, kinc_g4_texture_t texture, size_t slot);
 void tec_material_assign_uniform(tec_material_material_t * mat, char const * name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot);
+void tec_material_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_material_pipeline_blending_e blending_mode);

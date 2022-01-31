@@ -1,5 +1,6 @@
 #include "material.h"
 #include "kinc/graphics4/pipeline.h"
+#include <assert.h>
 
 void 
 tec_material_initialize(tec_material_material_t * mat, char const * name, kinc_g4_pipeline_t pipeline)
@@ -33,4 +34,39 @@ tec_material_assign_uniform(tec_material_material_t * mat, char const * name, te
 	mat->uniforms[slot].data = data;
 	mat->uniforms[slot].type = type;
 	mat->uniforms[slot].location = kinc_g4_pipeline_get_constant_location(&mat->pipeline, name);
+}
+
+void
+tec_material_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_material_pipeline_blending_e blending_mode)
+{
+	switch (blending_mode)
+	{
+		case TEC_BLENDING_NORMAL:
+			pipeline->blend_source = KINC_G4_BLEND_ONE;
+			pipeline->blend_destination = KINC_G4_BLEND_INV_SOURCE_ALPHA;
+			break;
+
+		case TEC_BLENDING_ADD:
+			pipeline->blend_source = KINC_G4_BLEND_ONE;
+			pipeline->blend_source = KINC_G4_BLEND_ONE;
+			break;
+
+		case TEC_BLENDING_MULTIPLY:
+			pipeline->blend_source = KINC_G4_BLEND_DEST_COLOR;
+			pipeline->blend_source = KINC_G4_BLEND_INV_SOURCE_ALPHA;
+			break;
+
+		case TEC_BLENDING_MASK_WITH_COLOR:
+			pipeline->blend_source = KINC_G4_BLEND_SOURCE_ALPHA;
+			pipeline->blend_source = KINC_G4_BLEND_SOURCE_ALPHA;
+			break;
+		case TEC_BLENDING_MASK:
+			pipeline->blend_source = KINC_G4_BLEND_ZERO;
+			pipeline->blend_source = KINC_G4_BLEND_SOURCE_ALPHA;
+			break;
+		
+		default:
+			assert(0 && "Should not be able to reach default in blend_mode_helper");
+	}
+
 }
