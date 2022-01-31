@@ -3,7 +3,7 @@
 #include "../lib/HandmadeMath.h"
 #include "color.h"
 
-//Contains commands for things like drawing rects and lines and shit. Textured, untextured, etc.
+//Contains commands for things like drawing rects and lines. Textured, untextured, etc.
 //Batches and submits everything to renderer
 
 //Rect -> Center positions, size, color (this one's untextured)

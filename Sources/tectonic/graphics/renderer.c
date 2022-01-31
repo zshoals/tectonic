@@ -5,11 +5,11 @@
 #include "../frequent.h"
 
 local_func void
-renderer_assign_uniforms(tec_renderer_material_t * mat)
+renderer_assign_uniforms(tec_material_material_t * mat)
 {
-	for (int i = 0; i < TEC_RENDERER_MAX_UNIFORMS; i++)
+	for (int i = 0; i < TEC_MATERIAL_MAX_UNIFORMS; i++)
 	{
-		tec_renderer_uniform_t * uniform = &mat->uniforms[i];
+		tec_material_uniform_t * uniform = &mat->uniforms[i];
 		switch (uniform->type)
 		{
 			//BASIC===========================
@@ -19,7 +19,7 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				break;
 
 			case TEC_UNIFORM_TYPE_BOOL:
-				kinc_g4_set_bool(uniform->location, uniform->bool_value);
+				kinc_g4_set_bool(uniform->location, uniform->data.bool_value);
 				break;
 
 			//FLOATS==========================
@@ -28,7 +28,7 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_float
 				(
 					uniform->location, 
-					uniform->float_values[0]
+					uniform->data.float_values[0]
 				);
 				break;
 
@@ -36,8 +36,8 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_float2
 				(
 					uniform->location, 
-					uniform->float_values[0], 
-					uniform->float_values[1]
+					uniform->data.float_values[0], 
+					uniform->data.float_values[1]
 				);
 				break;
 
@@ -45,9 +45,9 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_float3
 				(
 					uniform->location, 
-					uniform->float_values[0], 
-					uniform->float_values[1],
-					uniform->float_values[2]
+					uniform->data.float_values[0], 
+					uniform->data.float_values[1],
+					uniform->data.float_values[2]
 				);
 				break;
 
@@ -55,10 +55,10 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_float4
 				(
 					uniform->location, 
-					uniform->float_values[0], 
-					uniform->float_values[1], 
-					uniform->float_values[2], 
-					uniform->float_values[3]
+					uniform->data.float_values[0], 
+					uniform->data.float_values[1], 
+					uniform->data.float_values[2], 
+					uniform->data.float_values[3]
 				);
 				break;
 
@@ -68,7 +68,7 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_int
 				(
 					uniform->location, 
-					uniform->int_values[0]
+					uniform->data.int_values[0]
 				);
 				break;
 
@@ -76,8 +76,8 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_int2
 				(
 					uniform->location, 
-					uniform->int_values[0], 
-					uniform->int_values[1]
+					uniform->data.int_values[0], 
+					uniform->data.int_values[1]
 				);
 				break;
 
@@ -85,9 +85,9 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_int3
 				(
 					uniform->location, 
-					uniform->int_values[0], 
-					uniform->int_values[1], 
-					uniform->int_values[2]
+					uniform->data.int_values[0], 
+					uniform->data.int_values[1], 
+					uniform->data.int_values[2]
 				);
 				break;
 
@@ -95,10 +95,10 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_int4
 				(
 					uniform->location, 
-					uniform->int_values[0], 
-					uniform->int_values[1], 
-					uniform->int_values[2], 
-					uniform->int_values[3]
+					uniform->data.int_values[0], 
+					uniform->data.int_values[1], 
+					uniform->data.int_values[2], 
+					uniform->data.int_values[3]
 				);
 				break;
 				
@@ -108,7 +108,7 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_matrix3
 				(
 					uniform->location,
-					&uniform->mat3_value
+					&uniform->data.mat3_value
 				);
 				break;
 
@@ -116,7 +116,7 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 				kinc_g4_set_matrix4
 				(
 					uniform->location,
-					&uniform->mat4_value
+					&uniform->data.mat4_value
 				);
 				break;
 
@@ -133,7 +133,7 @@ tec_internal_renderer_context_cache
 	kinc_g4_vertex_buffer_t * cached_vbo;
 	kinc_g4_index_buffer_t * cached_ibo;
 	kinc_g4_render_target_t * cached_surface;
-	tec_renderer_material_t * cached_material;
+	tec_material_material_t * cached_material;
 }
 tec_internal_renderer_context_cache_t;
 
@@ -158,7 +158,7 @@ cache_surface_location(kinc_g4_render_target_t * surface)
 }
 
 void
-cache_material_location(tec_renderer_material_t * mat)
+cache_material_location(tec_material_material_t * mat)
 {
 	render_cache.cached_material = mat;
 }
@@ -174,9 +174,9 @@ tec_renderer_draw(tec_renderer_context_t * ctx, tec_renderer_draw_mode_e draw_mo
 
 		kinc_g4_set_pipeline(&ctx->material->pipeline);
 
-		for (int i = 0; i < TEC_RENDERER_MAX_TEXTURE_UNITS; i++)
+		for (int i = 0; i < TEC_MATERIAL_MAX_TEXTURE_UNITS; i++)
 		{
-			tec_renderer_texture_data_t * data = &ctx->material->tex_data;
+			tec_material_texture_data_t * data = &ctx->material->tex_data;
 			if (data->present[i] == TEC_TEXTURE_PRESENT)
 			{
 				kinc_g4_set_texture(ctx->material->tex_data.texture_units[i], &ctx->material->tex_data.textures[i]);
@@ -197,7 +197,7 @@ tec_renderer_draw(tec_renderer_context_t * ctx, tec_renderer_draw_mode_e draw_mo
 		}
 		else
 		{
-			//Set the appropriate render target to draw to that the context requests
+			//Set the appropriate render target to draw to
 			cache_surface_location(ctx->surface);
 			kinc_g4_set_render_targets(&ctx->surface, 1);
 		}
