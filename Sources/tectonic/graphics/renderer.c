@@ -21,6 +21,7 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 			case TEC_UNIFORM_TYPE_BOOL:
 				kinc_g4_set_bool(uniform->location, uniform->bool_value);
 				break;
+
 			//FLOATS==========================
 			//================================
 			case TEC_UNIFORM_TYPE_FLOAT:
@@ -100,6 +101,7 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 					uniform->int_values[3]
 				);
 				break;
+				
 			//MATRIX==========================
 			//================================
 			case TEC_UNIFORM_TYPE_MAT3:
@@ -125,35 +127,94 @@ renderer_assign_uniforms(tec_renderer_material_t * mat)
 	}
 }
 
+typedef struct
+tec_internal_renderer_context_cache
+{
+	kinc_g4_vertex_buffer_t * cached_vbo;
+	kinc_g4_index_buffer_t * cached_ibo;
+	kinc_g4_render_target_t * cached_surface;
+	tec_renderer_material_t * cached_material;
+}
+tec_internal_renderer_context_cache_t;
+
+local_data tec_internal_renderer_context_cache_t render_cache = {0};
+
+void
+cache_vbo_location(kinc_g4_vertex_buffer_t * vbo)
+{
+	render_cache.cached_vbo = vbo;
+}
+
+void
+cache_ibo_location(kinc_g4_index_buffer_t * ibo)
+{
+	render_cache.cached_ibo = ibo;
+}
+
+void
+cache_surface_location(kinc_g4_render_target_t * surface)
+{
+	render_cache.cached_surface = surface;
+}
+
+void
+cache_material_location(tec_renderer_material_t * mat)
+{
+	render_cache.cached_material = mat;
+}
+
 void 
 tec_renderer_draw(tec_renderer_context_t * ctx, tec_renderer_draw_mode_e draw_mode)
 {
-	//We don't kinc_begin(0) here...it needs to be somewhere else...g2?
-	//This one looks dangerous, uses multi targets?
-	if (ctx->surface == NULL)
+	//No material match, so we must refresh uniforms, textures, pipelines, etc.
+	//Could probably be broken down more but admittedly I'm a bit lazy
+	if (ctx->material != render_cache.cached_material) 
 	{
-		//No surface present in the context means that we want to draw to the framebuffer
-		kinc_g4_restore_render_target(); 
-	}
-	else
-	{
-		//Set the appropriate render target to draw to that the context requests
-		kinc_g4_set_render_targets(&ctx->surface, 1);
-	}
+		cache_material_location(ctx->material);
 
-	kinc_g4_set_pipeline(&ctx->material->pipeline);
-	renderer_assign_uniforms(ctx->material);
-	kinc_g4_set_vertex_buffer(&ctx->vbo);
-	kinc_g4_set_index_buffer(&ctx->ibo);
+		kinc_g4_set_pipeline(&ctx->material->pipeline);
 
-	//Apply textures to all required texture units
-	for (int i = 0; i < TEC_RENDERER_MAX_TEXTURE_UNITS; i++)
-	{
-		tec_renderer_texture_data_t * data = &ctx->material->tex_data;
-		if (data->present[i] == TEC_TEXTURE_PRESENT)
+		for (int i = 0; i < TEC_RENDERER_MAX_TEXTURE_UNITS; i++)
 		{
-			kinc_g4_set_texture(ctx->material->tex_data.texture_units[i], &ctx->material->tex_data.textures[i]);
+			tec_renderer_texture_data_t * data = &ctx->material->tex_data;
+			if (data->present[i] == TEC_TEXTURE_PRESENT)
+			{
+				kinc_g4_set_texture(ctx->material->tex_data.texture_units[i], &ctx->material->tex_data.textures[i]);
+			}
 		}
+
+		renderer_assign_uniforms(ctx->material);
+	}
+
+	//The render target or framebuffer got swapped, so we need to set it now
+	if (ctx->surface != render_cache.cached_surface)
+	{
+		if (ctx->surface == NULL)
+		{
+			//No surface present in the context means that we want to draw to the framebuffer
+			cache_surface_location(NULL);
+			kinc_g4_restore_render_target(); 
+		}
+		else
+		{
+			//Set the appropriate render target to draw to that the context requests
+			cache_surface_location(ctx->surface);
+			kinc_g4_set_render_targets(&ctx->surface, 1);
+		}
+	}
+
+	//The vertex buffer got swapped (very unlikely, excluding first run), so it needs updated
+	if (&ctx->vbo != render_cache.cached_vbo)
+	{
+		cache_vbo_location(&ctx->vbo);
+		kinc_g4_set_vertex_buffer(&ctx->vbo);
+	}
+
+	//The index buffer got swapped (also very unlikely), so it needs updated
+	if (&ctx->ibo != render_cache.cached_ibo)
+	{
+		cache_ibo_location(&ctx->ibo);
+		kinc_g4_set_index_buffer(&ctx->ibo);
 	}
 
 	//Mag filter needs set up in the context, maybe needs hashed also
