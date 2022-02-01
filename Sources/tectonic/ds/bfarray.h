@@ -3,6 +3,7 @@
 
 //"Bounded Fixed" arrays data structure
 //The pattern of needing a fixed size, bounds checked array is so common we may as well generate it ourselves
+#ifdef bfarray_type
 
 #define _tec_self tec_bfarray_
 #define _tec_concat(a, b) a ## b
@@ -58,3 +59,5 @@ bfarray_type * _tec_func(_get_location)(_tec_me_t * bfarray, size_t slot)
 
 #undef bfarray_type
 #undef bfarray_size
+
+#endif
