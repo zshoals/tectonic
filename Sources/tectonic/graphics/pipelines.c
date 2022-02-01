@@ -5,6 +5,7 @@
 #include "kinc/io/filereader.h"
 #include <stddef.h>
 #include "kinc/graphics4/vertexstructure.h"
+#include "kinc/graphics4/shader.h"
 
 tec_byte_t * vert_shader;
 tec_byte_t * frag_shader;
@@ -94,4 +95,30 @@ tec_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blend
 			assert(0 && "Should not be able to reach default in blend_mode_helper");
 	}
 
+}
+
+
+void tec_pipeline_initialize_fragment_shader(tec_fragment_shader_t * frag, char const * name, tec_byte_t * copy_from, size_t data_length)
+{
+	frag->name = name;
+	frag->data_length = data_length;
+	memcpy(&frag->data, copy_from, data_length);
+}
+void tec_pipeline_initialize_vertex_shader(tec_vertex_shader_t * vert, char const * name, tec_byte_t * copy_from, size_t data_length)
+{
+	vert->name = name;
+	vert->data_length = data_length;
+	memcpy(&vert->data, copy_from, data_length);
+};
+
+void 
+tec_pipeline_compile_fragment_shader(tec_fragment_shader_t * frag)
+{
+	kinc_g4_shader_init(&frag->frag, &frag->data, frag->data_length, KINC_G4_SHADER_TYPE_FRAGMENT);
+}
+
+void 
+tec_pipeline_compile_vertex_shader(tec_vertex_shader_t * vert)
+{
+	kinc_g4_shader_init(&vert->vert, &vert->data, vert->data_length, KINC_G4_SHADER_TYPE_VERTEX);
 }

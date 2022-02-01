@@ -3,6 +3,8 @@
 #include "kinc/io/filereader.h"
 #include "../frequent.h"
 
+#include "kinc/graphics4/shader.h"
+
 #define TEC_LOG_MODULE_NAME "Asset Loader"
 
 local_func bool
@@ -30,7 +32,7 @@ asset_can_be_loaded(char const * asset)
 local_func bool
 save_can_be_loaded(char const * asset); //Not yet implemented
 
-local_func bool 
+local_func size_t 
 load_asset(tec_byte_t * buffer, char const * asset)
 {
 	tec_log_info("Attempting to open asset \"%s\".....", asset);
@@ -41,16 +43,17 @@ load_asset(tec_byte_t * buffer, char const * asset)
 		size_t size = kinc_file_reader_size(&reader);
 		kinc_file_reader_read(&reader, buffer, size);
 		kinc_file_reader_close(&reader);
-		return true;
+		return size;
 	}
 	else 
 	{
 		tec_log_warn("Failed to open asset \"%s\".", asset);
-		return false;
+		size_t size = 0;
+		return size;
 	}
 }
 
-local_func bool 
+local_func size_t
 load_save(tec_byte_t * buffer, char const * asset)
 {
 	tec_log_info("Attempting to open save \"%s\".....", asset);
@@ -61,12 +64,13 @@ load_save(tec_byte_t * buffer, char const * asset)
 		size_t size = kinc_file_reader_size(&reader);
 		kinc_file_reader_read(&reader, buffer, size);
 		kinc_file_reader_close(&reader);
-		return true;
+		return size;
 	}
 	else 
 	{
 		tec_log_warn("Failed to open save \"%s\".", asset);
-		return false;
+		size_t size = 0;
+		return size;
 	}
 }
 
@@ -82,8 +86,10 @@ tec_asset_manager_load_fragment(tec_asset_manager_storage_t * resources, char co
 	if (asset_can_be_loaded(asset))
 	{
 		tec_fragment_shader_t frag;
-		frag.name = asset;
-		load_asset(&frag.bytes, asset);
+		size_t size = load_asset(&resources->resouce_loading_buffer, asset);
+		tec_pipeline_initialize_fragment_shader(&frag, asset, &resources->resouce_loading_buffer, size);
+		tec_pipeline_compile_fragment_shader(&frag);
+
 		bfstack_tec_fragment_shader_t_16_push(&resources->fragment_programs, frag);
 	}
 }
@@ -93,10 +99,12 @@ tec_asset_manager_load_vertex(tec_asset_manager_storage_t * resources, char cons
 {
 	if (asset_can_be_loaded(asset))
 	{
-		tec_fragment_shader_t vert;
-		vert.name = asset;
-		load_asset(&vert.bytes, asset);
-		bfstack_tec_fragment_shader_t_16_push(&resources->fragment_programs, vert);
+		tec_vertex_shader_t vert;
+		size_t size = load_asset(&resources->resouce_loading_buffer, asset);
+		tec_pipeline_initialize_vertex_shader(&vert, asset, &resources->resouce_loading_buffer, size);
+		tec_pipeline_compile_vertex_shader(&vert);
+		
+		bfstack_tec_vertex_shader_t_16_push(&resources->vertex_programs, vert);
 	}
 }
 
