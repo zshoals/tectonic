@@ -56,7 +56,7 @@ tec_pipeline_create_default_textured(void)
 }
 
 void
-tec_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_material_pipeline_blending_e blending_mode)
+tec_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blending_e blending_mode)
 {
 	switch (blending_mode)
 	{
