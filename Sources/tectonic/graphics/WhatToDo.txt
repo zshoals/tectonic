@@ -1,0 +1,34 @@
+First of all, I want to move away from static buffers located in the .c file
+I would like to instead have everything reference from one statically allocated "engine context"
+EVERYTHING, materials, pipelines, renderer contexts, etc.
+Again, not malloc'd, the engine context can be statically allocated
+Maybe we'll leave framestring alone though lol
+
+
+Pipelines.h/.c will contain:
+	* Search method to locate appropriately named pipelines
+	* create a pipeline
+	* set blend mode
+	* set its vertex structure
+	* vertex and fragment shader storage, this one is a little tricky, enum for vert and frag shaders?
+
+	In an ideal world, just select the program you want to use in material.h
+	All pipelines can just be an enum
+
+Material.h
+	* Should just be able to load a shader from a list of shaders, that'd be easiest
+	* Problem: Materials can be almost the same, but need to be duplicated anyway. Rect A with different uniforms than Rect B, for instance
+
+G2.h
+	* Needs to somehow compile all of the drawing operations into a nice order
+	* Still don't know how to handle sending commands or how they'd even be interpreted when spritebatching,
+		If spritebatcher automatically sorts layers and shit, how do we "time" a command? What use is a command, anyway? Clear operations?
+
+engine.h
+	* Needs to contain...fucking everything.
+	* pipeline storage, vert bytes storage, frag bytes storage, etc.
+	* material storage. rendertarget storage. fuck framestrings though they stay in the file scope. Maybe cvars can stay in file scope too
+	* needs to hold g2 context
+	* basically, we need to stop falling back on the crutch of putting stuff into the static file scope. It's easy, but bad.
+		It also makes the organization of things somewhat hard to reason about. Is a function intended to work with a locally scoped data source?
+		Does it make assumptions about that? etc.
