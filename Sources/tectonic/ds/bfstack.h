@@ -34,8 +34,8 @@ _tec_me_t _tec_func(_create)(char const * name)
 	{
 		.data = {0},
 		.max_size = template_array_size,
-		.current_slot_head = 0;
-		.fixed_name = name;
+		.current_slot_head = 0,
+		.fixed_name = name,
 	};
 
 	return temp;
@@ -47,8 +47,8 @@ template_type * _tec_func(_push)(_tec_me_t * bfstack, template_type data)
 	"Push would result in out of bounds access (Greater Than Current_Slot_Head) on bfstack \"%s\", slot %d", bfstack->fixed_name, bfstack->current_slot_head
 	);
 
-	size_t old_position = bfstack->data[bfstack->current_slot_head];
-	bfstack->data[slot] = data;
+	size_t old_position = bfstack->current_slot_head;
+	bfstack->data[old_position] = data;
 	bfstack->current_slot_head++;
 
 	return &bfstack->data[old_position];
