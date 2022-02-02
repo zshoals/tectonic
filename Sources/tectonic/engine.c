@@ -15,10 +15,17 @@
 #include "util/framestring.h"
 #include "debug/log.h"
 #include "util/string.h"
+#include "io/asset_manager.h"
+
+#include "kinc/graphics4/vertexstructure.h"
+#include "kinc/image.h"
 
 #define TEC_LOG_MODULE_NAME "Engine"
 
 static tec_engine_context_t engine_context;
+
+static tec_asset_manager_storage_t assets;
+
 
 static tec_engine_loop_configuration_t engine_loop_config;
 static double accumulator = 0.0;
@@ -99,7 +106,38 @@ tec_engine_get_cycle_time(void)
 local_func void
 default_asset_and_resource_initialization_routine(void)
 {
+	tec_asset_manager_initialize(&assets);
 
+	//Load vertex and fragment shaders
+	tec_asset_manager_load_vertex(&assets, "textured-standard.vert");
+	tec_asset_manager_load_fragment(&assets, "textured-standard.frag");
+	//Make default pipelines and register them to resources
+	kinc_g4_vertex_structure_t vert_format;
+	kinc_g4_vertex_structure_init(&vert_format);
+	kinc_g4_vertex_structure_add(&vert_format, "vertexPosition", KINC_G4_VERTEX_DATA_FLOAT3);
+	kinc_g4_vertex_structure_add(&vert_format, "vertexColor", KINC_G4_VERTEX_DATA_FLOAT4);
+	kinc_g4_vertex_structure_add(&vert_format, "projectionMatrix", KINC_G4_VERTEX_DATA_FLOAT4X4);
+
+	tec_pipeline_data_t pipeline;
+	kinc_g4_pipeline_t kpipe;
+	kinc_g4_pipeline_init(&kpipe);
+	tec_pipeline_blend_mode_helper(&kpipe, TEC_BLENDING_NORMAL);
+
+	pipeline.name = "textured-normal";
+	pipeline.pipeline = kpipe;
+	pipeline.vertex_structure = vert_format;
+
+	pipeline.pipeline.input_layout[0] = &pipeline.vertex_structure;
+	pipeline.pipeline.input_layout[1] = NULL;
+
+	kinc_g4_pipeline_compile(&pipeline.pipeline);
+
+	tec_asset_manager_register_pipeline(&assets, pipeline);
+
+	//Load textures (1x white pixel for now)
+	tec_asset_manager_load_image_to_texture(&assets, "white1x1.png");
+	//construct the default materials with the linked uniforms,
+	
 }
 
 void 
@@ -122,6 +160,8 @@ tec_engine_quake
 	//tec_audio_init_context(audio_context);
 	//tec_mouse_init_context(mouse_context);
 	//etc.
+
+	default_asset_and_resource_initialization_routine();
 
 	kinc_set_update_callback(&tec_engine_main_loop);
 	kinc_start();
