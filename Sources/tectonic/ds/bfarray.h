@@ -27,13 +27,13 @@ _tec_me
 }
 _tec_me_t;
 
-void _tec_func(_init)(_tec_me_t * bfarray, char const * name)
+static void _tec_func(_init)(_tec_me_t * bfarray, char const * name)
 {
 	bfarray->max_size = template_array_size;
 	bfarray->fixed_name = name;
 }
 
-_tec_me_t _tec_func(_create)(char const * name)
+static _tec_me_t _tec_func(_create)(char const * name)
 {
 	_tec_me_t temp = 
 	{
@@ -45,7 +45,7 @@ _tec_me_t _tec_func(_create)(char const * name)
 	return temp;
 }
 
-void _tec_func(_set)(_tec_me_t * bfarray, template_type data, size_t slot)
+static void _tec_func(_set)(_tec_me_t * bfarray, template_type data, size_t slot)
 {
 	assert(slot < template_array_size && "Out of bounds access (Greater Than Max_Size) on bfarray \"%s\", slot %d", bfarray->fixed_name, slot);
 	assert(slot >= 0 && "Out of bounds access (Less Than Zero) on bfarray \"%s\", slot %d", bfarray->fixed_name, slot);
@@ -53,7 +53,7 @@ void _tec_func(_set)(_tec_me_t * bfarray, template_type data, size_t slot)
 	bfarray->data[slot] = data;
 }
 
-template_type _tec_func(_get)(_tec_me_t * bfarray, size_t slot)
+static template_type _tec_func(_get)(_tec_me_t * bfarray, size_t slot)
 {
 	assert(slot < template_array_size && "Out of bounds access (Greater Than Max_Size) on bfarray \"%s\", slot %d", bfarray->fixed_name, slot);
 	assert(slot >= 0 && "Out of bounds access (Less Than Zero) on bfarray \"%s\", slot %d", bfarray->fixed_name, slot);
@@ -61,7 +61,7 @@ template_type _tec_func(_get)(_tec_me_t * bfarray, size_t slot)
 	return bfarray->data[slot];
 }
 
-template_type * _tec_func(_get_location)(_tec_me_t * bfarray, size_t slot)
+static template_type * _tec_func(_get_location)(_tec_me_t * bfarray, size_t slot)
 {
 	assert(slot < template_array_size && "Out of bounds access (Greater Than Max_Size) on bfarray \"%s\", slot %d", bfarray->fixed_name, slot);
 	assert(slot >= 0 && "Out of bounds access (Less Than Zero) on bfarray \"%s\", slot %d", bfarray->fixed_name, slot);
@@ -74,7 +74,7 @@ template_type * _tec_func(_get_location)(_tec_me_t * bfarray, size_t slot)
 //-1 if no match
 #ifdef template_searchable
 #include <string.h>
-int _tec_func(_search_linear)(_tec_me_t * bfarray, char const * needle)
+static int _tec_func(_search_linear)(_tec_me_t * bfarray, char const * needle)
 {
 	for (int i = 0; i < bfarray->max_size; i++)
 	{

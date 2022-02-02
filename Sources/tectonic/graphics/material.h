@@ -81,6 +81,6 @@ tec_material_t;
 
 void tec_material_initialize(tec_material_t * mat, char const * name, kinc_g4_pipeline_t * pipeline);
 //Currently, materials can only be assigned. Trying to null them or something will be bad news. Don't try it.
-void tec_material_assign_texture(tec_material_t * mat, kinc_g4_texture_t * texture, size_t slot);
+void tec_material_assign_texture(tec_material_t * mat, char const * name,  kinc_g4_texture_t * texture, size_t slot);
 void tec_material_assign_uniform(tec_material_t * mat, char const * name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot);
 //Needs "update uniform", search for uniform, update it without affecting anything else

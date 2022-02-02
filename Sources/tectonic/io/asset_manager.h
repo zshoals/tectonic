@@ -7,6 +7,8 @@
 #include "../graphics/texture.h"
 #include "../graphics/material.h"
 
+#include "../type_declarations.h"
+
 //Resource manager?
 
 typedef enum
@@ -28,35 +30,7 @@ tec_asset_manager_asset_type_e;
 //It needs to hold enough memory to contain the entire game state
 //Sketchy stuff
 
-#define TEC_MAX_SHADERS 16
-#define TEC_MAX_TEXTURES 64
-#define TEC_MAX_MATERIALS 64
-#define TEC_MAX_PIPELINES 64
 
-#define template_type tec_pipeline_data_t
-#define template_array_size TEC_MAX_PIPELINES
-#define template_searchable
-#include "../ds/bfstack.h"
-
-#define template_type tec_vertex_shader_t
-#define template_array_size TEC_MAX_SHADERS
-#define template_searchable
-#include "../ds/bfstack.h"
-
-#define template_type tec_fragment_shader_t
-#define template_array_size TEC_MAX_SHADERS
-#define template_searchable
-#include "../ds/bfstack.h"
-
-#define template_type tec_texture_t
-#define template_array_size TEC_MAX_TEXTURES
-#define template_searchable
-#include "../ds/bfstack.h"
-
-#define template_type tec_material_t
-#define template_array_size TEC_MAX_MATERIALS
-#define template_searchable
-#include "../ds/bfstack.h"
 
 
 //Only this struct contains the "hard copies" of data
@@ -72,6 +46,8 @@ tec_asset_manager_storage
 	bfstack_tec_fragment_shader_t_16 fragment_shaders;
 	bfstack_tec_texture_t_64 textures;
 	bfstack_tec_material_t_64 materials;
+
+	//Render Target / Surface container
 	
 	//SFX container
 	

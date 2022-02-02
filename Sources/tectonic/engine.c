@@ -20,6 +20,9 @@
 #include "kinc/graphics4/vertexstructure.h"
 #include "kinc/image.h"
 
+#include "math/matrix.h"
+#include "lib/HandmadeMath.h"
+
 #define TEC_LOG_MODULE_NAME "Engine"
 
 static tec_engine_context_t engine_context;
@@ -116,16 +119,20 @@ default_asset_and_resource_initialization_routine(void)
 	kinc_g4_vertex_structure_init(&vert_format);
 	kinc_g4_vertex_structure_add(&vert_format, "vertexPosition", KINC_G4_VERTEX_DATA_FLOAT3);
 	kinc_g4_vertex_structure_add(&vert_format, "vertexColor", KINC_G4_VERTEX_DATA_FLOAT4);
-	kinc_g4_vertex_structure_add(&vert_format, "projectionMatrix", KINC_G4_VERTEX_DATA_FLOAT4X4);
 
 	tec_pipeline_data_t pipeline;
 	kinc_g4_pipeline_t kpipe;
 	kinc_g4_pipeline_init(&kpipe);
 	tec_pipeline_blend_mode_helper(&kpipe, TEC_BLENDING_NORMAL);
 
+	//Fragment and vertex shaders need to be compiled and then actually assigned to the pipeline
+	//omegalul error.
+
 	pipeline.name = "textured-normal";
 	pipeline.pipeline = kpipe;
 	pipeline.vertex_structure = vert_format;
+	pipeline.pipeline.vertex_shader = &tec_asset_manager_find_vertex(&assets, "textured-standard.vert")->vert;
+	pipeline.pipeline.fragment_shader = &tec_asset_manager_find_fragment(&assets, "textured-standard.frag")->frag;
 
 	pipeline.pipeline.input_layout[0] = &pipeline.vertex_structure;
 	pipeline.pipeline.input_layout[1] = NULL;
@@ -137,6 +144,20 @@ default_asset_and_resource_initialization_routine(void)
 	//Load textures (1x white pixel for now)
 	tec_asset_manager_load_image_to_texture(&assets, "white1x1.png");
 	//construct the default materials with the linked uniforms,
+
+	tec_material_t mat_default;
+
+	//I HAVE TO FIX THIS DUMBASS INTERFACE
+	tec_material_initialize(&mat_default, "default-textured", &tec_asset_manager_find_pipeline(&assets, "textured-normal")->pipeline);
+
+	//!TODO: Crashing here, fix it soon
+	tec_material_assign_texture(&mat_default, "tex", &tec_asset_manager_find_texture(&assets, "white1x1.png")->texture, 0);
+
+	hmm_m4 matrix = HMM_Orthographic(0.0, 1.0, 1.0, 0.0, 5.0, 500.0); // ?????
+	kinc_matrix4x4_t out = tec_matrix_convert(matrix);
+	tec_material_uniform_data_u udata;
+	udata.mat4_value = out;
+	tec_material_assign_uniform(&mat_default, "projectionMatrix", udata, TEC_UNIFORM_TYPE_MAT4, 0);
 	
 }
 

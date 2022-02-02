@@ -15,6 +15,10 @@
 
 // }
 
+//!TODO: With how this works currently, it's possible that functions using the
+//resource loading buffer may access stale data. It might need to be zeroed each load
+//but maybe not, data might terminate appropriately when loaded by kinc
+
 local_func bool
 asset_can_be_loaded(char const * asset)
 {

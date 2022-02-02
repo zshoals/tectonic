@@ -21,14 +21,14 @@ _tec_me
 }
 _tec_me_t;
 
-void _tec_func(_init)(_tec_me_t * bfstack, char const * name)
+static void _tec_func(_init)(_tec_me_t * bfstack, char const * name)
 {
 	bfstack->max_size = template_array_size;
 	bfstack->fixed_name = name;
 	bfstack->current_slot_head = 0;
 }
 
-_tec_me_t _tec_func(_create)(char const * name)
+static _tec_me_t _tec_func(_create)(char const * name)
 {
 	_tec_me_t temp = 
 	{
@@ -41,7 +41,7 @@ _tec_me_t _tec_func(_create)(char const * name)
 	return temp;
 }
 
-template_type * _tec_func(_push)(_tec_me_t * bfstack, template_type data)
+static template_type * _tec_func(_push)(_tec_me_t * bfstack, template_type data)
 {
 	assert(bfstack->current_slot_head < template_array_size && 
 	"Push would result in out of bounds access (Greater Than Current_Slot_Head) on bfstack \"%s\", slot %d", bfstack->fixed_name, bfstack->current_slot_head
@@ -54,12 +54,12 @@ template_type * _tec_func(_push)(_tec_me_t * bfstack, template_type data)
 	return &bfstack->data[old_position];
 }
 
-void _tec_func(_pop)(_tec_me_t * bfstack, template_type data)
+static void _tec_func(_pop)(_tec_me_t * bfstack, template_type data)
 {
 	assert(bfstack->current_slot_head > 0 && "Push would result in out of bounds access (Less Than Zero) on bfstack \"%s\", slot %d",bfstack->fixed_name, bfstack->current_slot_head);
 }
 
-template_type _tec_func(_get)(_tec_me_t * bfstack, size_t slot)
+static template_type _tec_func(_get)(_tec_me_t * bfstack, size_t slot)
 {
 	assert(slot < bfstack->current_slot_head && "Out of bounds access (Greater Than Max_Size) on bfstack \"%s\", slot %d", bfstack->fixed_name, bfstack->current_slot_head);
 	assert(slot >= 0 && "Out of bounds access (Less Than Zero) on bfstack \"%s\", slot %d", bfstack->fixed_name, bfstack->current_slot_head);
@@ -67,7 +67,7 @@ template_type _tec_func(_get)(_tec_me_t * bfstack, size_t slot)
 	return bfstack->data[slot];
 }
 
-template_type * _tec_func(_get_location)(_tec_me_t * bfstack, size_t slot)
+static template_type * _tec_func(_get_location)(_tec_me_t * bfstack, size_t slot)
 {
 	assert(slot < bfstack->current_slot_head && "Out of bounds access (Greater Than Max_Size) on bfstack \"%s\", slot %d", bfstack->fixed_name, bfstack->current_slot_head);
 	assert(slot >= 0 && "Out of bounds access (Less Than Zero) on bfstack \"%s\", slot %d", bfstack->fixed_name, bfstack->current_slot_head);
@@ -80,7 +80,7 @@ template_type * _tec_func(_get_location)(_tec_me_t * bfstack, size_t slot)
 //-1 if no match
 #ifdef template_searchable
 #include <string.h>
-int _tec_func(_search_linear)(_tec_me_t * bfstack, char const * needle)
+static int _tec_func(_search_linear)(_tec_me_t * bfstack, char const * needle)
 {
 	for (int i = 0; i < bfstack->current_slot_head; i++)
 	{

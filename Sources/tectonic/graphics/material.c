@@ -26,7 +26,7 @@ void
 tec_material_assign_texture(tec_material_t * mat, char const * name, kinc_g4_texture_t * texture, size_t slot)
 {
 	mat->tex_data.textures[slot] = texture;
-	mat->tex_data.texture_units[slot] = kinc_g4_pipeline_get_texture_unit(&mat->pipeline, name);
+	mat->tex_data.texture_units[slot] = kinc_g4_pipeline_get_texture_unit(mat->pipeline, name);
 	mat->tex_data.present[slot] = TEC_TEXTURE_PRESENT;
 }
 
@@ -36,5 +36,5 @@ tec_material_assign_uniform(tec_material_t * mat, char const * name, tec_materia
 	mat->uniforms[slot].name = name;
 	mat->uniforms[slot].data = data;
 	mat->uniforms[slot].type = type;
-	mat->uniforms[slot].location = kinc_g4_pipeline_get_constant_location(&mat->pipeline, name);
+	mat->uniforms[slot].location = kinc_g4_pipeline_get_constant_location(mat->pipeline, name);
 }
