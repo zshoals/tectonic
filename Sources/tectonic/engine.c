@@ -96,6 +96,12 @@ tec_engine_get_cycle_time(void)
 	return time_cycle;
 }
 
+local_func void
+default_asset_and_resource_initialization_routine(void)
+{
+
+}
+
 void 
 tec_engine_quake
 (

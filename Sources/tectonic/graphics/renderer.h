@@ -25,7 +25,7 @@ tec_renderer_context
 	//Handle NULL special case, as the framebuffer can't be drawn to directly this way
 	kinc_g4_render_target_t * surface;
 	//All materials need to be stored in the heap somewhere, this should probably be a pointer
-	tec_material_material_t * material;
+	tec_material_t * material;
 }
 tec_renderer_context_t;
 

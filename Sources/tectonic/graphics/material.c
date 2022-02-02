@@ -3,13 +3,13 @@
 #include <assert.h>
 #include "../frequent.h"
 
-tec_material_material_t default_textured;
+tec_material_t default_textured;
 
 void 
-tec_material_initialize(tec_material_material_t * mat, char const * name, kinc_g4_pipeline_t * pipeline)
+tec_material_initialize(tec_material_t * mat, char const * name, kinc_g4_pipeline_t * pipeline)
 {
 	mat->name = name;
-	mat->pipeline = DEREF(pipeline);
+	mat->pipeline = pipeline;
 
 	for (int i = 0; i < TEC_MATERIAL_MAX_TEXTURE_UNITS; i++)
 	{
@@ -23,7 +23,7 @@ tec_material_initialize(tec_material_material_t * mat, char const * name, kinc_g
 }
 
 void 
-tec_material_assign_texture(tec_material_material_t * mat, char const * name, kinc_g4_texture_t texture, size_t slot)
+tec_material_assign_texture(tec_material_t * mat, char const * name, kinc_g4_texture_t * texture, size_t slot)
 {
 	mat->tex_data.textures[slot] = texture;
 	mat->tex_data.texture_units[slot] = kinc_g4_pipeline_get_texture_unit(&mat->pipeline, name);
@@ -31,7 +31,7 @@ tec_material_assign_texture(tec_material_material_t * mat, char const * name, ki
 }
 
 void 
-tec_material_assign_uniform(tec_material_material_t * mat, char const * name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot)
+tec_material_assign_uniform(tec_material_t * mat, char const * name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot)
 {
 	mat->uniforms[slot].name = name;
 	mat->uniforms[slot].data = data;

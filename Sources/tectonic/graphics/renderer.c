@@ -5,7 +5,7 @@
 #include "../frequent.h"
 
 local_func void
-renderer_assign_uniforms(tec_material_material_t * mat)
+renderer_assign_uniforms(tec_material_t * mat)
 {
 	for (int i = 0; i < TEC_MATERIAL_MAX_UNIFORMS; i++)
 	{
@@ -133,7 +133,7 @@ tec_internal_renderer_context_cache
 	kinc_g4_vertex_buffer_t * cached_vbo;
 	kinc_g4_index_buffer_t * cached_ibo;
 	kinc_g4_render_target_t * cached_surface;
-	tec_material_material_t * cached_material;
+	tec_material_t * cached_material;
 }
 tec_internal_renderer_context_cache_t;
 
@@ -158,7 +158,7 @@ cache_surface_location(kinc_g4_render_target_t * surface)
 }
 
 void
-cache_material_location(tec_material_material_t * mat)
+cache_material_location(tec_material_t * mat)
 {
 	render_cache.cached_material = mat;
 }

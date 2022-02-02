@@ -64,7 +64,7 @@ typedef struct
 tec_material_texture_data
 {
 	kinc_g4_texture_unit_t texture_units[TEC_MATERIAL_MAX_TEXTURE_UNITS]; //Can theoretically support more, but no thanks
-	kinc_g4_texture_t textures[TEC_MATERIAL_MAX_TEXTURE_UNITS];
+	kinc_g4_texture_t * textures[TEC_MATERIAL_MAX_TEXTURE_UNITS];
 	tec_material_texture_presence_e present[TEC_MATERIAL_MAX_TEXTURE_UNITS];
 }
 tec_material_texture_data_t;
@@ -74,12 +74,12 @@ tec_material_material
 {
 	char const * name;
 	tec_material_texture_data_t tex_data;
-	kinc_g4_pipeline_t pipeline;
+	kinc_g4_pipeline_t * pipeline;
 	tec_material_uniform_t uniforms[TEC_MATERIAL_MAX_UNIFORMS]; //Same as above
 }
-tec_material_material_t;
+tec_material_t;
 
-void tec_material_initialize(tec_material_material_t * mat, char const * name, kinc_g4_pipeline_t pipeline);
+void tec_material_initialize(tec_material_t * mat, char const * name, kinc_g4_pipeline_t * pipeline);
 //Currently, materials can only be assigned. Trying to null them or something will be bad news. Don't try it.
-void tec_material_assign_texture(tec_material_material_t * mat, kinc_g4_texture_t texture, size_t slot);
-void tec_material_assign_uniform(tec_material_material_t * mat, char const * name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot);
+void tec_material_assign_texture(tec_material_t * mat, kinc_g4_texture_t * texture, size_t slot);
+void tec_material_assign_uniform(tec_material_t * mat, char const * name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot);

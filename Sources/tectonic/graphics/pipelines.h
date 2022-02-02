@@ -43,18 +43,6 @@ typedef enum
 }
 tec_pipelines_fragment_programs_e;
 
-#define TEC_MAX_SHADERS 16
-
-#define template_type tec_vertex_shader_t
-#define template_array_size TEC_MAX_SHADERS
-#define template_searchable
-#include "../ds/bfstack.h"
-
-#define template_type tec_fragment_shader_t
-#define template_array_size TEC_MAX_SHADERS
-#define template_searchable
-#include "../ds/bfstack.h"
-
 typedef enum
 {
 	TEC_BLENDING_DISABLED,
