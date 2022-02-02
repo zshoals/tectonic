@@ -68,8 +68,8 @@ tec_asset_manager_storage
 	tec_byte_t resource_loading_buffer[TEC_MEGABYTES(66)];
 
 	bfstack_tec_pipeline_data_t_64 pipelines;
-	bfstack_tec_vertex_shader_t_16 vertex_programs;
-	bfstack_tec_fragment_shader_t_16 fragment_programs;
+	bfstack_tec_vertex_shader_t_16 vertex_shaders;
+	bfstack_tec_fragment_shader_t_16 fragment_shaders;
 	bfstack_tec_texture_t_64 textures;
 	bfstack_tec_material_t_64 materials;
 	
@@ -81,6 +81,8 @@ tec_asset_manager_storage
 	//json container
 }
 tec_asset_manager_storage_t;
+
+void tec_asset_manager_initialize(tec_asset_manager_storage_t * resources);
 
 //attempts to load an asset, returns false if not found
 bool tec_asset_manager_load_fragment(tec_asset_manager_storage_t * resources, char const * asset);
@@ -94,6 +96,17 @@ bool tec_asset_manager_load_music(tec_asset_manager_storage_t * resources, char 
 bool tec_asset_manager_load_config(tec_asset_manager_storage_t * resources, char const * asset);
 bool tec_asset_manager_load_json(tec_asset_manager_storage_t * resources, char const * asset);
 
-bool tec_asset_manager_register_pipeline(tec_asset_manager_storage_t * resources, char const * pipeline);
-bool tec_asset_manager_register_material(tec_asset_manager_storage_t * resources, char const * material);
-bool tec_asset_manager_register_texture(tec_asset_manager_storage_t * resources, char const * texture);
+bool tec_asset_manager_register_pipeline(tec_asset_manager_storage_t * resources, tec_pipeline_data_t pipeline);
+bool tec_asset_manager_register_material(tec_asset_manager_storage_t * resources, tec_material_t material);
+bool tec_asset_manager_register_texture(tec_asset_manager_storage_t * resources, tec_texture_t texture);
+
+/*
+	Locating asset functions
+*/
+
+//Null if nothing found
+tec_fragment_shader_t * tec_asset_manager_find_fragment(tec_asset_manager_storage_t * resources, char const * fragment_shader);
+tec_vertex_shader_t * tec_asset_manager_find_vertex(tec_asset_manager_storage_t * resources, char const * vertex_shader);
+tec_pipeline_data_t * tec_asset_manager_find_pipeline(tec_asset_manager_storage_t * resources, char const * pipeline);
+tec_texture_t * tec_asset_manager_find_texture(tec_asset_manager_storage_t * resources, char const * texture);
+tec_material_t * tec_asset_manager_find_material(tec_asset_manager_storage_t * resources, char const * material);

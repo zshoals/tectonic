@@ -7,7 +7,7 @@
 #include "kinc/image.h"
 #include "kinc/graphics4/texture.h"
 
-#define TEC_LOG_MODULE_NAME "Asset Loader"
+#define TEC_LOG_MODULE_NAME "Asset Manager"
 
 // local_func tec_byte_t *
 // memory_allocate(tec_asset_manager_storage_t * resources, size_t size)
@@ -98,7 +98,7 @@ tec_asset_manager_load_fragment(tec_asset_manager_storage_t * resources, char co
 		tec_pipeline_initialize_fragment_shader(&frag, asset, &resources->resource_loading_buffer, size);
 		tec_pipeline_compile_fragment_shader(&frag);
 
-		bfstack_tec_fragment_shader_t_16_push(&resources->fragment_programs, frag);
+		bfstack_tec_fragment_shader_t_16_push(&resources->fragment_shaders, frag);
 
 		return true;
 	}
@@ -115,7 +115,7 @@ tec_asset_manager_load_vertex(tec_asset_manager_storage_t * resources, char cons
 		tec_pipeline_initialize_vertex_shader(&vert, asset, &resources->resource_loading_buffer, size);
 		tec_pipeline_compile_vertex_shader(&vert);
 		
-		bfstack_tec_vertex_shader_t_16_push(&resources->vertex_programs, vert);
+		bfstack_tec_vertex_shader_t_16_push(&resources->vertex_shaders, vert);
 
 		return true;
 	}
@@ -123,15 +123,17 @@ tec_asset_manager_load_vertex(tec_asset_manager_storage_t * resources, char cons
 }
 
 bool 
-tec_asset_manager_register_pipeline(tec_asset_manager_storage_t * resources, char const * pipeline)
+tec_asset_manager_register_pipeline(tec_asset_manager_storage_t * resources, tec_pipeline_data_t pipeline)
 {
-
+	bfstack_tec_pipeline_data_t_64_push(&resources->pipelines, pipeline);
+	return true;
 }
 
 bool 
-tec_asset_manager_register_material(tec_asset_manager_storage_t * resources, char const * material)
+tec_asset_manager_register_material(tec_asset_manager_storage_t * resources, tec_material_t material)
 {
-
+	bfstack_tec_material_t_64_push(&resources->materials, material);
+	return true;
 }
 
 /*=======================
@@ -152,6 +154,7 @@ tec_asset_manager_load_image_to_texture(tec_asset_manager_storage_t * resources,
 		tex.name = asset;
 		kinc_g4_texture_init_from_image(&tex.texture, &image);
 
+		//This should actually be executed in register texture?
 		bfstack_tec_texture_t_64_push(&resources->textures, tex);
 
 		kinc_image_destroy(&image);
@@ -198,3 +201,109 @@ tec_asset_manager_load_json(tec_asset_manager_storage_t * resources, char const 
 }
 
 
+/*
+
+ASSET RETRIEVAL
+
+*/
+
+tec_fragment_shader_t * 
+tec_asset_manager_find_fragment(tec_asset_manager_storage_t * resources, char const * fragment_shader)
+{
+	int result = bfstack_tec_fragment_shader_t_16_search_linear(&resources->fragment_shaders, fragment_shader);
+
+	if (result == -1)
+	{
+		tec_log_warn("Couldn't find fragment shader \"%s\"", fragment_shader);
+		return NULL;
+	}
+	else
+	{
+		tec_log_info("Located fragment shader \"%s\" in slot %d.", fragment_shader, result);
+		return bfstack_tec_fragment_shader_t_16_get_location(&resources->fragment_shaders, result);
+	}
+}
+
+tec_vertex_shader_t * 
+tec_asset_manager_find_vertex(tec_asset_manager_storage_t * resources, char const * vertex_shader)
+{
+	int result = bfstack_tec_vertex_shader_t_16_search_linear(&resources->vertex_shaders, vertex_shader);
+
+	if (result == -1)
+	{
+		tec_log_warn("Couldn't find vertex shader \"%s\"", vertex_shader);
+		return NULL;
+	}
+	else
+	{
+		tec_log_info("Located vertex shader \"%s\" in slot %d.", vertex_shader, result);
+		return bfstack_tec_vertex_shader_t_16_get_location(&resources->vertex_shaders, result);
+	}
+}
+
+tec_pipeline_data_t * 
+tec_asset_manager_find_pipeline(tec_asset_manager_storage_t * resources, char const * pipeline)
+{
+	int result = bfstack_tec_pipeline_data_t_64_search_linear(&resources->pipelines, pipeline);
+
+	if (result == -1)
+	{
+		tec_log_warn("Couldn't find pipeline \"%s\"", pipeline);
+		return NULL;
+	}
+	else
+	{
+		tec_log_info("Located pipeline \"%s\" in slot %d.", pipeline, result);
+		return bfstack_tec_pipeline_data_t_64_get_location(&resources->pipelines, result);
+	}
+}
+
+tec_texture_t * 
+tec_asset_manager_find_texture(tec_asset_manager_storage_t * resources, char const * texture)
+{
+	int result = bfstack_tec_texture_t_64_search_linear(&resources->textures, texture);
+
+	if (result == -1)
+	{
+		tec_log_warn("Couldn't find texture \"%s\"", texture);
+		return NULL;
+	}
+	else
+	{
+		tec_log_info("Located texture \"%s\" in slot %d.", texture, result);
+		return bfstack_tec_texture_t_64_get_location(&resources->textures, result);
+	}
+}
+
+tec_material_t * 
+tec_asset_manager_find_material(tec_asset_manager_storage_t * resources, char const * material)
+{
+	int result = bfstack_tec_material_t_64_search_linear(&resources->materials, material);
+
+	if (result == -1)
+	{
+		tec_log_warn("Couldn't find material \"%s\"", material);
+		return NULL;
+	}
+	else
+	{
+		tec_log_info("Located material \"%s\" in slot %d.", material, result);
+		return bfstack_tec_material_t_64_get_location(&resources->materials, result);
+	}
+}
+
+
+void 
+tec_asset_manager_initialize(tec_asset_manager_storage_t * resources)
+{
+	tec_log_info("Initializing asset storage...");
+	bfstack_tec_texture_t_64_init(&resources->textures, "Texture Storage");
+	bfstack_tec_vertex_shader_t_16_init(&resources->vertex_shaders, "Vertex Shader Storage");
+	bfstack_tec_fragment_shader_t_16_init(&resources->fragment_shaders, "Fragment Shader Storage");
+	bfstack_tec_material_t_64_init(&resources->materials, "Material Storage");
+	bfstack_tec_pipeline_data_t_64_init(&resources->pipelines, "Pipeline Storage");
+	tec_log_info("Asset storage initialized");
+
+	//sfx
+	//music, etc.
+}
