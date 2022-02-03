@@ -49,7 +49,7 @@ tec_pipeline_compile_program(tec_assets_storage_t * assets, tec_assref_shader_pr
 }
 
 void
-tec_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blending_e blending_mode)
+tec_internal_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blending_e blending_mode)
 {
 	switch (blending_mode)
 	{
