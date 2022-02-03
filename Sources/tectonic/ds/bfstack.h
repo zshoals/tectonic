@@ -54,6 +54,19 @@ static template_type * _tec_func(_push)(_tec_me_t * bfstack, template_type data)
 	return &bfstack->data[old_position];
 }
 
+//returns the slot before advancing the head
+static size_t _tec_func(_advance_head)(_tec_me_t * bfstack)
+{
+	assert(bfstack->current_slot_head < template_array_size && 
+	"Push would result in out of bounds access (Greater Than Current_Slot_Head) on bfstack \"%s\", slot %d", bfstack->fixed_name, bfstack->current_slot_head
+	);
+
+	size_t old_position = bfstack->current_slot_head;
+	bfstack->current_slot_head++;
+
+	return old_position;
+}
+
 static void _tec_func(_pop)(_tec_me_t * bfstack, template_type data)
 {
 	assert(bfstack->current_slot_head > 0 && "Push would result in out of bounds access (Less Than Zero) on bfstack \"%s\", slot %d",bfstack->fixed_name, bfstack->current_slot_head);
