@@ -1,10 +1,12 @@
 #include "pipelines.h"
 #include <assert.h>
-#include "kinc/graphics4/pipeline.h"
-#include "../util/memkit.h"
 #include <stddef.h>
+#include "kinc/graphics4/pipeline.h"
 #include "kinc/graphics4/vertexstructure.h"
 #include "kinc/graphics4/shader.h"
+#include "../util/memkit.h"
+#include "../assets/assets.h"
+#include "../assets/assets_references.h"
 
 tec_pipeline_data_t 
 tec_pipeline_create_program(char const * name, tec_vertex_shader_t * vert, tec_fragment_shader_t * frag, kinc_g4_vertex_structure_t vs, tec_pipeline_blending_e blend_mode)

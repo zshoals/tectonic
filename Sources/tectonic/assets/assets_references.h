@@ -14,45 +14,45 @@ typedef enum
 	TEC_ASSET_MISSING,
 	TEC_ASSET_PRESENT,
 }
-tec_assets_reference_status_e;
+tec_assref_status_e;
 
 
 typedef struct
-tec_assets_reference_fragment
+tec_assref_fragment
 {
 	size_t const asset_location;
-	tec_assets_reference_status_e const status;
+	tec_assref_status_e const status;
 }
-tec_assets_reference_fragment_shader_t;
+tec_assref_fragment_shader_t;
 
 typedef struct
-tec_assets_reference_vertex_shader
+tec_assref_vertex_shader
 {
 	size_t const asset_location;
-	tec_assets_reference_status_e const status;
+	tec_assref_status_e const status;
 }
-tec_assets_reference_vertex_shader_t;
+tec_assref_vertex_shader_t;
 
 typedef struct
-tec_assets_reference_compiled_pipeline
+tec_assref_compiled_pipeline
 {
 	size_t const asset_location;
-	tec_assets_reference_status_e const status;
+	tec_assref_status_e const status;
 }
-tec_assets_reference_compiled_pipeline_t;
+tec_assref_compiled_pipeline_t;
 
 typedef struct
-tec_assets_reference_texture
+tec_assref_texture
 {
 	size_t const asset_location;
-	tec_assets_reference_status_e const status;
+	tec_assref_status_e const status;
 }
-tec_assets_reference_texture_t;
+tec_assref_texture_t;
 
 typedef struct
-tec_assets_reference_material
+tec_assref_material
 {
 	size_t const asset_location;
-	tec_assets_reference_status_e const status;
+	tec_assref_status_e const status;
 }
-tec_assets_reference_material_t;
+tec_assref_material_t;

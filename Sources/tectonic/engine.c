@@ -23,7 +23,7 @@
 #include "math/matrix.h"
 #include "lib/HandmadeMath.h"
 #include "math/random.h"
-#include "io/assets.h"
+#include "assets/assets.h"
 
 #include "frequent.h"
 
