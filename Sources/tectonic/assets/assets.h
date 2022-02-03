@@ -89,14 +89,14 @@ bool tec_assets_register_material(tec_assets_storage_t * resources, tec_material
 */
 
 //Null if nothing found
-tec_assets_reference_fragment_shader_t tec_assets_find_fragment_shader(tec_assets_storage_t * resources, char const * fragment_shader);
-tec_assets_reference_vertex_shader_t tec_assets_find_vertex_shader(tec_assets_storage_t * resources, char const * vertex_shader);
-tec_assets_reference_compiled_pipeline_t tec_assets_find_compiled_pipeline(tec_assets_storage_t * resources, char const * pipeline);
-tec_assets_reference_texture_t tec_assets_find_texture(tec_assets_storage_t * resources, char const * texture);
-tec_assets_reference_material_t tec_assets_find_material(tec_assets_storage_t * resources, char const * material);
+tec_assref_fragment_shader_t tec_assets_find_fragment_shader(tec_assets_storage_t * resources, char const * fragment_shader);
+tec_assref_vertex_shader_t tec_assets_find_vertex_shader(tec_assets_storage_t * resources, char const * vertex_shader);
+tec_assref_compiled_pipeline_t tec_assets_find_compiled_pipeline(tec_assets_storage_t * resources, char const * pipeline);
+tec_assref_texture_t tec_assets_find_texture(tec_assets_storage_t * resources, char const * texture);
+tec_assref_material_t tec_assets_find_material(tec_assets_storage_t * resources, char const * material);
 
-tec_fragment_shader_t * tec_internal_assets_retrieve_fragment_shader_data_location(tec_assets_storage_t * resources, tec_assets_reference_fragment_shader_t ref);
-tec_vertex_shader_t * tec_internal_assets_retrieve_vertex_shader_data_location(tec_assets_storage_t * resources, tec_assets_reference_vertex_shader_t ref);
-tec_pipeline_data_t * tec_internal_assets_retrieve_compiled_pipeline_data_location(tec_assets_storage_t * resources, tec_assets_reference_compiled_pipeline_t ref);
-tec_texture_t * tec_internal_assets_retrieve_texture_data_location(tec_assets_storage_t * resources, tec_assets_reference_texture_t ref);
-tec_material_t * tec_internal_assets_retrieve_material_data_location(tec_assets_storage_t * resources, tec_assets_reference_material_t ref);
+tec_fragment_shader_t * tec_internal_assets_retrieve_fragment_shader_data_location(tec_assets_storage_t * resources, tec_assref_fragment_shader_t ref);
+tec_vertex_shader_t * tec_internal_assets_retrieve_vertex_shader_data_location(tec_assets_storage_t * resources, tec_assref_vertex_shader_t ref);
+tec_pipeline_data_t * tec_internal_assets_retrieve_compiled_pipeline_data_location(tec_assets_storage_t * resources, tec_assref_compiled_pipeline_t ref);
+tec_texture_t * tec_internal_assets_retrieve_texture_data_location(tec_assets_storage_t * resources, tec_assref_texture_t ref);
+tec_material_t * tec_internal_assets_retrieve_material_data_location(tec_assets_storage_t * resources, tec_assref_material_t ref);

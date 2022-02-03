@@ -211,7 +211,7 @@ ASSET RETRIEVAL
 
 */
 
-tec_assets_reference_fragment_shader_t
+tec_assref_fragment_shader_t
 tec_assets_find_fragment_shader(tec_assets_storage_t * resources, char const * fragment_shader)
 {
 	int result = bfstack_tec_fragment_shader_t_16_search_linear(&resources->fragment_shaders, fragment_shader);
@@ -219,19 +219,19 @@ tec_assets_find_fragment_shader(tec_assets_storage_t * resources, char const * f
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find fragment shader \"%s\"", fragment_shader);
-		tec_assets_reference_fragment_shader_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		tec_assref_fragment_shader_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
 		return ref;
 	}
 	else
 	{
 		tec_log_info("Located fragment shader \"%s\" in slot %d.", fragment_shader, result);
 		size_t location = bfstack_tec_fragment_shader_t_16_get_location(&resources->fragment_shaders, result);
-		tec_assets_reference_fragment_shader_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		tec_assref_fragment_shader_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
 		return ref;
 	}
 }
 
-tec_assets_reference_vertex_shader_t
+tec_assref_vertex_shader_t
 tec_assets_find_vertex_shader(tec_assets_storage_t * resources, char const * vertex_shader)
 {
 	int result = bfstack_tec_vertex_shader_t_16_search_linear(&resources->vertex_shaders, vertex_shader);
@@ -239,19 +239,19 @@ tec_assets_find_vertex_shader(tec_assets_storage_t * resources, char const * ver
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find vertex shader \"%s\"", vertex_shader);
-		tec_assets_reference_vertex_shader_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		tec_assref_vertex_shader_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
 		return ref;
 	}
 	else
 	{
 		tec_log_info("Located vertex shader \"%s\" in slot %d.", vertex_shader, result);
 		size_t location = bfstack_tec_vertex_shader_t_16_get_location(&resources->vertex_shaders, result);
-		tec_assets_reference_vertex_shader_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		tec_assref_vertex_shader_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
 		return ref;
 	}
 }
 
-tec_assets_reference_compiled_pipeline_t
+tec_assref_compiled_pipeline_t
 tec_assets_find_compiled_pipeline(tec_assets_storage_t * resources, char const * pipeline)
 {
 	int result = bfstack_tec_pipeline_data_t_64_search_linear(&resources->pipelines, pipeline);
@@ -259,19 +259,19 @@ tec_assets_find_compiled_pipeline(tec_assets_storage_t * resources, char const *
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find pipeline \"%s\"", pipeline);
-		tec_assets_reference_compiled_pipeline_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		tec_assref_compiled_pipeline_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
 		return ref;
 	}
 	else
 	{
 		tec_log_info("Located pipeline \"%s\" in slot %d.", pipeline, result);
 		size_t location = bfstack_tec_pipeline_data_t_64_get_location(&resources->pipelines, result);
-		tec_assets_reference_compiled_pipeline_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		tec_assref_compiled_pipeline_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
 		return ref;
 	}
 }
 
-tec_assets_reference_texture_t
+tec_assref_texture_t
 tec_assets_find_texture(tec_assets_storage_t * resources, char const * texture)
 {
 	int result = bfstack_tec_texture_t_64_search_linear(&resources->textures, texture);
@@ -279,19 +279,19 @@ tec_assets_find_texture(tec_assets_storage_t * resources, char const * texture)
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find texture \"%s\"", texture);
-		tec_assets_reference_texture_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		tec_assref_texture_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
 		return ref;
 	}
 	else
 	{
 		tec_log_info("Located texture \"%s\" in slot %d.", texture, result);
 		size_t location = bfstack_tec_texture_t_64_get_location(&resources->textures, result);
-		tec_assets_reference_texture_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		tec_assref_texture_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
 		return ref;
 	}
 }
 
-tec_assets_reference_material_t
+tec_assref_material_t
 tec_assets_find_material(tec_assets_storage_t * resources, char const * material)
 {
 	int result = bfstack_tec_material_t_64_search_linear(&resources->materials, material);
@@ -299,14 +299,14 @@ tec_assets_find_material(tec_assets_storage_t * resources, char const * material
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find material \"%s\"", material);
-		tec_assets_reference_material_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		tec_assref_material_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
 		return ref;
 	}
 	else
 	{
 		tec_log_info("Located material \"%s\" in slot %d.", material, result);
 		size_t location = bfstack_tec_material_t_64_get_location(&resources->materials, result);
-		tec_assets_reference_material_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		tec_assref_material_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
 		return ref;
 	}
 }
@@ -314,35 +314,35 @@ tec_assets_find_material(tec_assets_storage_t * resources, char const * material
 
 
 tec_fragment_shader_t * 
-tec_internal_assets_retrieve_fragment_shader_data_location(tec_assets_storage_t * resources, tec_assets_reference_fragment_shader_t ref)
+tec_internal_assets_retrieve_fragment_shader_data_location(tec_assets_storage_t * resources, tec_assref_fragment_shader_t ref)
 {
 	assert(ref.status == TEC_ASSET_PRESENT && "Tried to retrieve a non-existent fragment shader.");
 	return &resources->fragment_shaders.data[ref.asset_location];
 }
 
 tec_vertex_shader_t * 
-tec_internal_assets_retrieve_vertex_shader_data_location(tec_assets_storage_t * resources, tec_assets_reference_vertex_shader_t ref)
+tec_internal_assets_retrieve_vertex_shader_data_location(tec_assets_storage_t * resources, tec_assref_vertex_shader_t ref)
 {
 	assert(ref.status == TEC_ASSET_PRESENT && "Tried to retrieve a non-existent vertex shader.");
 	return &resources->vertex_shaders.data[ref.asset_location];
 }
 
 tec_pipeline_data_t * 
-tec_internal_assets_retrieve_compiled_pipeline_data_location(tec_assets_storage_t * resources, tec_assets_reference_compiled_pipeline_t ref)
+tec_internal_assets_retrieve_compiled_pipeline_data_location(tec_assets_storage_t * resources, tec_assref_compiled_pipeline_t ref)
 {
 	assert(ref.status == TEC_ASSET_PRESENT && "Tried to retrieve a non-existent compiled pipeline");
 	return &resources->pipelines.data[ref.asset_location];
 }
 
 tec_texture_t * 
-tec_internal_assets_retrieve_texture_data_location(tec_assets_storage_t * resources, tec_assets_reference_texture_t ref)
+tec_internal_assets_retrieve_texture_data_location(tec_assets_storage_t * resources, tec_assref_texture_t ref)
 {
 	assert(ref.status == TEC_ASSET_PRESENT && "Tried to retrieve a non-existent texture.");
 	return &resources->textures.data[ref.asset_location];
 }
 
 tec_material_t * 
-tec_internal_assets_retrieve_material_data_location(tec_assets_storage_t * resources, tec_assets_reference_material_t ref)
+tec_internal_assets_retrieve_material_data_location(tec_assets_storage_t * resources, tec_assref_material_t ref)
 {
 	assert(ref.status == TEC_ASSET_PRESENT && "Tried to retrieve a non-existent material");
 	return &resources->materials.data[ref.asset_location];
