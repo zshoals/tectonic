@@ -79,10 +79,14 @@ tec_assref_shader_program_t tec_pipeline_create_program
 	kinc_g4_vertex_structure_t vs, 
 	tec_pipeline_blending_e blend_mode
 );
+void tec_pipeline_compile_program(tec_assets_storage_t * assets, tec_assref_shader_program_t program);
 
-void tec_pipeline_initialize_fragment_shader(tec_fragment_shader_t * frag, char const * name, tec_byte_t * copy_from, size_t data_length);
-void tec_pipeline_initialize_vertex_shader(tec_vertex_shader_t * vert, char const * name, tec_byte_t * copy_from, size_t data_length);
 
+
+
+
+void tec_internal_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blending_e blending_mode);
+void tec_internal_pipeline_initialize_fragment_shader(tec_fragment_shader_t * frag, char const * name, tec_byte_t * copy_from, size_t data_length);
+void tec_internal_pipeline_initialize_vertex_shader(tec_vertex_shader_t * vert, char const * name, tec_byte_t * copy_from, size_t data_length);
 void tec_internal_pipeline_compile_fragment_shader(tec_fragment_shader_t * frag);
 void tec_internal_pipeline_compile_vertex_shader(tec_vertex_shader_t * vert);
-void tec_internal_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blending_e blending_mode);
