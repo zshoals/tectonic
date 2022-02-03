@@ -99,8 +99,8 @@ tec_assets_load_fragment_shader(tec_assets_storage_t * resources, char const * a
 	{
 		tec_fragment_shader_t frag;
 		size_t size = load_asset(&resources->resource_loading_buffer, asset);
-		tec_pipeline_initialize_fragment_shader(&frag, asset, &resources->resource_loading_buffer, size);
-		tec_pipeline_compile_fragment_shader(&frag);
+		tec_internal_pipeline_initialize_fragment_shader(&frag, asset, &resources->resource_loading_buffer, size);
+		tec_internal_pipeline_compile_fragment_shader(&frag);
 
 		bfstack_tec_fragment_shader_t_16_push(&resources->fragment_shaders, frag);
 
@@ -116,8 +116,8 @@ tec_assets_load_vertex_shader(tec_assets_storage_t * resources, char const * ass
 	{
 		tec_vertex_shader_t vert;
 		size_t size = load_asset(&resources->resource_loading_buffer, asset);
-		tec_pipeline_initialize_vertex_shader(&vert, asset, &resources->resource_loading_buffer, size);
-		tec_pipeline_compile_vertex_shader(&vert);
+		tec_internal_pipeline_initialize_vertex_shader(&vert, asset, &resources->resource_loading_buffer, size);
+		tec_internal_pipeline_compile_vertex_shader(&vert);
 		
 		bfstack_tec_vertex_shader_t_16_push(&resources->vertex_shaders, vert);
 
@@ -126,19 +126,21 @@ tec_assets_load_vertex_shader(tec_assets_storage_t * resources, char const * ass
 	return false;
 }
 
-bool 
-tec_assets_register_compiled_pipeline(tec_assets_storage_t * resources, tec_pipeline_data_t pipeline)
-{
-	bfstack_tec_pipeline_data_t_64_push(&resources->pipelines, pipeline);
-	return true;
-}
+//REPLACED WITH ASSREF ASSIGNING A SLOT
 
-bool 
-tec_assets_register_material(tec_assets_storage_t * resources, tec_material_t material)
-{
-	bfstack_tec_material_t_64_push(&resources->materials, material);
-	return true;
-}
+// bool 
+// tec_assets_register_compiled_pipeline(tec_assets_storage_t * resources, tec_pipeline_data_t pipeline)
+// {
+// 	bfstack_tec_pipeline_data_t_64_push(&resources->pipelines, pipeline);
+// 	return true;
+// }
+
+// bool 
+// tec_assets_register_material(tec_assets_storage_t * resources, tec_material_t material)
+// {
+// 	bfstack_tec_material_t_64_push(&resources->materials, material);
+// 	return true;
+// }
 
 /*=======================
 
@@ -154,6 +156,8 @@ tec_assets_load_image_to_texture(tec_assets_storage_t * resources, char const * 
 		kinc_image_t image;
 		size_t size = kinc_image_init_from_file(&image, &resources->resource_loading_buffer, asset);
 
+		//Note: These should probably avoid the copy by using "advance_head" just like pipeline and material acquisition
+		//But I'll leave it for the moment
 		tec_texture_t tex;
 		tex.name = asset;
 		kinc_g4_texture_init_from_image(&tex.texture, &image);
@@ -251,22 +255,22 @@ tec_assets_find_vertex_shader(tec_assets_storage_t * resources, char const * ver
 	}
 }
 
-tec_assref_compiled_pipeline_t
-tec_assets_find_compiled_pipeline(tec_assets_storage_t * resources, char const * pipeline)
+tec_assref_shader_program_t
+tec_assets_find_shader_program(tec_assets_storage_t * resources, char const * pipeline)
 {
 	int result = bfstack_tec_pipeline_data_t_64_search_linear(&resources->pipelines, pipeline);
 
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find pipeline \"%s\"", pipeline);
-		tec_assref_compiled_pipeline_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		tec_assref_shader_program_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
 		return ref;
 	}
 	else
 	{
 		tec_log_info("Located pipeline \"%s\" in slot %d.", pipeline, result);
 		size_t location = bfstack_tec_pipeline_data_t_64_get_location(&resources->pipelines, result);
-		tec_assref_compiled_pipeline_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		tec_assref_shader_program_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
 		return ref;
 	}
 }
@@ -328,7 +332,7 @@ tec_internal_assets_retrieve_vertex_shader_data_location(tec_assets_storage_t * 
 }
 
 tec_pipeline_data_t * 
-tec_internal_assets_retrieve_compiled_pipeline_data_location(tec_assets_storage_t * resources, tec_assref_compiled_pipeline_t ref)
+tec_internal_assets_retrieve_shader_program_data_location(tec_assets_storage_t * resources, tec_assref_shader_program_t ref)
 {
 	assert(ref.status == TEC_ASSET_PRESENT && "Tried to retrieve a non-existent compiled pipeline");
 	return &resources->pipelines.data[ref.asset_location];
@@ -346,6 +350,27 @@ tec_internal_assets_retrieve_material_data_location(tec_assets_storage_t * resou
 {
 	assert(ref.status == TEC_ASSET_PRESENT && "Tried to retrieve a non-existent material");
 	return &resources->materials.data[ref.asset_location];
+}
+
+/*
+
+Acquires open slot, returns the slot for programs 
+
+*/
+tec_assref_shader_program_t 
+tec_internal_assets_acquire_shader_program_free_slot(tec_assets_storage_t * resources)
+{
+	size_t slot = bfstack_tec_pipeline_data_t_64_advance_head(&resources->pipelines);
+	tec_assref_shader_program_t ref = {.asset_location = slot, .status = TEC_ASSET_PRESENT};
+	return ref;
+}
+
+tec_assref_material_t 
+tec_internal_assets_acquire_material_free_slot(tec_assets_storage_t * resources)
+{
+	size_t slot = bfstack_tec_material_t_64_advance_head(&resources->materials);
+	tec_assref_material_t ref = {.asset_location = slot, .status = TEC_ASSET_PRESENT};
+	return ref;
 }
 
 
