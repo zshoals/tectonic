@@ -15,19 +15,21 @@
 #include "util/framestring.h"
 #include "debug/log.h"
 #include "util/string.h"
-#include "io/asset_manager.h"
+
 
 #include "kinc/graphics4/vertexstructure.h"
 #include "kinc/image.h"
 
 #include "math/matrix.h"
 #include "lib/HandmadeMath.h"
+#include "math/random.h"
+#include "io/assets.h"
 
 #define TEC_LOG_MODULE_NAME "Engine"
 
 static tec_engine_context_t engine_context;
 
-static tec_asset_manager_storage_t assets;
+static tec_assets_storage_t assets;
 
 
 static tec_engine_loop_configuration_t engine_loop_config;
@@ -78,7 +80,7 @@ tec_engine_main_loop(void)
 	time_cycle = tec_timediff_end(&cycle_timediff);
 
 	tec_framestring_internal_memory_reset();
-	kinc_stop();
+	//kinc_stop();
 
 }
 
@@ -109,55 +111,49 @@ tec_engine_get_cycle_time(void)
 local_func void
 default_asset_and_resource_initialization_routine(void)
 {
-	tec_asset_manager_initialize(&assets);
+	// tec_asset_manager_initialize(&assets);
 
-	//Load vertex and fragment shaders
-	tec_asset_manager_load_vertex(&assets, "textured-standard.vert");
-	tec_asset_manager_load_fragment(&assets, "textured-standard.frag");
-	//Make default pipelines and register them to resources
-	kinc_g4_vertex_structure_t vert_format;
-	kinc_g4_vertex_structure_init(&vert_format);
-	kinc_g4_vertex_structure_add(&vert_format, "vertexPosition", KINC_G4_VERTEX_DATA_FLOAT3);
-	kinc_g4_vertex_structure_add(&vert_format, "vertexColor", KINC_G4_VERTEX_DATA_FLOAT4);
+	// //Load vertex and fragment shaders
+	// tec_asset_manager_load_vertex(&assets, "textured-standard.vert");
+	// tec_asset_manager_load_fragment(&assets, "textured-standard.frag");
+	// //Make default pipelines and register them to resources
+	// kinc_g4_vertex_structure_t vert_format;
+	// kinc_g4_vertex_structure_init(&vert_format);
+	// kinc_g4_vertex_structure_add(&vert_format, "vertexPosition", KINC_G4_VERTEX_DATA_FLOAT3);
+	// kinc_g4_vertex_structure_add(&vert_format, "vertexColor", KINC_G4_VERTEX_DATA_FLOAT4);
 
-	tec_pipeline_data_t pipeline;
-	kinc_g4_pipeline_t kpipe;
-	kinc_g4_pipeline_init(&kpipe);
-	tec_pipeline_blend_mode_helper(&kpipe, TEC_BLENDING_NORMAL);
+	// //Fragment and vertex shaders need to be compiled and then actually assigned to the pipeline
+	// //omegalul error.
 
-	//Fragment and vertex shaders need to be compiled and then actually assigned to the pipeline
-	//omegalul error.
+	// // pipeline.name = "textured-normal";
+	// // pipeline.pipeline = kpipe;
+	// // pipeline.vertex_structure = vert_format;
+	// // pipeline.pipeline.vertex_shader = &tec_asset_manager_find_vertex(&assets, "textured-standard.vert")->vert;
+	// // pipeline.pipeline.fragment_shader = &tec_asset_manager_find_fragment(&assets, "textured-standard.frag")->frag;
 
-	pipeline.name = "textured-normal";
-	pipeline.pipeline = kpipe;
-	pipeline.vertex_structure = vert_format;
-	pipeline.pipeline.vertex_shader = &tec_asset_manager_find_vertex(&assets, "textured-standard.vert")->vert;
-	pipeline.pipeline.fragment_shader = &tec_asset_manager_find_fragment(&assets, "textured-standard.frag")->frag;
+	// // pipeline.pipeline.input_layout[0] = &pipeline.vertex_structure;
+	// // pipeline.pipeline.input_layout[1] = NULL;
 
-	pipeline.pipeline.input_layout[0] = &pipeline.vertex_structure;
-	pipeline.pipeline.input_layout[1] = NULL;
+	// kinc_g4_pipeline_compile(&pipeline.pipeline);
 
-	kinc_g4_pipeline_compile(&pipeline.pipeline);
+	// tec_asset_manager_register_pipeline(&assets, pipeline);
 
-	tec_asset_manager_register_pipeline(&assets, pipeline);
+	// //Load textures (1x white pixel for now)
+	// tec_asset_manager_load_image_to_texture(&assets, "white1x1.png");
+	// //construct the default materials with the linked uniforms,
 
-	//Load textures (1x white pixel for now)
-	tec_asset_manager_load_image_to_texture(&assets, "white1x1.png");
-	//construct the default materials with the linked uniforms,
+	// tec_material_t mat_default;
 
-	tec_material_t mat_default;
+	// //I HAVE TO FIX THIS DUMBASS INTERFACE
+	// tec_material_initialize(&mat_default, "default-textured", &tec_asset_manager_find_pipeline(&assets, "textured-normal")->pipeline);
 
-	//I HAVE TO FIX THIS DUMBASS INTERFACE
-	tec_material_initialize(&mat_default, "default-textured", &tec_asset_manager_find_pipeline(&assets, "textured-normal")->pipeline);
+	// tec_material_assign_texture(&mat_default, "tex", &tec_asset_manager_find_texture(&assets, "white1x1.png")->texture, 0);
 
-	//!TODO: Crashing here, fix it soon
-	tec_material_assign_texture(&mat_default, "tex", &tec_asset_manager_find_texture(&assets, "white1x1.png")->texture, 0);
-
-	hmm_m4 matrix = HMM_Orthographic(0.0, 1.0, 1.0, 0.0, 5.0, 500.0); // ?????
-	kinc_matrix4x4_t out = tec_matrix_convert(matrix);
-	tec_material_uniform_data_u udata;
-	udata.mat4_value = out;
-	tec_material_assign_uniform(&mat_default, "projectionMatrix", udata, TEC_UNIFORM_TYPE_MAT4, 0);
+	// hmm_m4 matrix = HMM_Orthographic(0.0, 1.0, 1.0, 0.0, 5.0, 500.0); // ?????
+	// kinc_matrix4x4_t out = tec_matrix_convert(matrix);
+	// tec_material_uniform_data_u udata;
+	// udata.mat4_value = out;
+	// tec_material_assign_uniform(&mat_default, "projectionMatrix", udata, TEC_UNIFORM_TYPE_MAT4, 0);
 	
 }
 
@@ -170,6 +166,8 @@ tec_engine_quake
 )
 {
 	kinc_init(window_options->title, window_options->width, window_options->height, window_options, framebuffer_options);
+
+	tec_random_init(0x86aef51a, 0x9134b3eb, 0xf2517abf);
 
 	tec_timediff_init(&single_update_timediff);
 	tec_timediff_init(&render_timediff);

@@ -7,53 +7,32 @@
 #include "kinc/graphics4/vertexstructure.h"
 #include "kinc/graphics4/shader.h"
 
-tec_byte_t * vert_shader;
-tec_byte_t * frag_shader;
-kinc_g4_vertex_structure_t vert_format;
-
-void
-load_textured_vert_and_frag(void)
+tec_pipeline_data_t 
+tec_pipeline_create_program(char const * name, tec_vertex_shader_t * vert, tec_fragment_shader_t * frag, kinc_g4_vertex_structure_t vs, tec_pipeline_blending_e blend_mode)
 {
-	{
-		kinc_file_reader_t reader_vert;
-		kinc_file_reader_open(&reader_vert, "textured-standard.vert", KINC_FILE_TYPE_ASSET);
-		size_t size_vert = kinc_file_reader_size(&reader_vert);
-		vert_shader = malloc(size_vert);
-		kinc_file_reader_read(&reader_vert, vert_shader, size_vert);
-		kinc_file_reader_close(&reader_vert);
-	}
+	kinc_g4_pipeline_t kpipe;
 
-	{
-		kinc_file_reader_t reader_frag;
-		kinc_file_reader_open(&reader_frag, "textured-standard.frag", KINC_FILE_TYPE_ASSET);
-		size_t size_frag = kinc_file_reader_size(&reader_frag);
-		frag_shader = malloc(size_frag);
-		kinc_file_reader_read(&reader_frag, frag_shader, size_frag);
-		kinc_file_reader_close(&reader_frag);
-	}
+	tec_pipeline_data_t pipeline;
+	pipeline.name = name;
+	pipeline.vertex_structure = vs;
+	pipeline.pipeline = kpipe;
+
+	kinc_g4_pipeline_init(&pipeline.pipeline);
+
+	pipeline.pipeline.input_layout[0] = &pipeline.vertex_structure;
+	pipeline.pipeline.input_layout[1] = NULL;
+	pipeline.pipeline.vertex_shader = &vert;
+	pipeline.pipeline.fragment_shader = &frag;
+
+	tec_pipeline_blend_mode_helper(&pipeline.pipeline, TEC_BLENDING_NORMAL);
+
+	return pipeline;
 }
 
-kinc_g4_pipeline_t 
-tec_pipeline_create_default_textured(void)
+void 
+tec_pipeline_compile_program(tec_pipeline_data_t * program)
 {
-	load_textured_vert_and_frag();
-
-	kinc_g4_vertex_structure_init(&vert_format);
-	kinc_g4_vertex_structure_add(&vert_format, "vertexPosition", KINC_G4_VERTEX_DATA_FLOAT3);
-	kinc_g4_vertex_structure_add(&vert_format, "vertexColor", KINC_G4_VERTEX_DATA_FLOAT4);
-	kinc_g4_vertex_structure_add(&vert_format, "projectionMatrix", KINC_G4_VERTEX_DATA_FLOAT4X4);
-
-	kinc_g4_pipeline_t program;
-	kinc_g4_pipeline_init(&program);
-
-	program.vertex_shader = vert_shader;
-	program.fragment_shader = frag_shader;
-	program.input_layout[0] = &vert_format;
-	program.input_layout[1] = NULL;
-
-	tec_pipeline_blend_mode_helper(&program, TEC_BLENDING_NORMAL);
-	
-	kinc_g4_pipeline_compile(&program);
+	kinc_g4_pipeline_compile(&program->pipeline);
 }
 
 void

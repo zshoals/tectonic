@@ -7,6 +7,7 @@
 #include "../util/memkit.h"
 #include "kinc/graphics4/shader.h"
 
+
 /*! default hardcoded shader pipelines with various blending modes.
 We don't really need that much, so hardcoding it is the simply and obvious solution.
 */
@@ -67,7 +68,7 @@ tec_pipeline_data
 tec_pipeline_data_t;
 
 kinc_g4_pipeline_t tec_pipeline_create_defaults(void);
-tec_pipeline_data_t tec_pipeline_create(tec_vertex_shader_t * vert, tec_fragment_shader_t * frag, kinc_g4_vertex_structure_t vs);
+//tec_pipeline_data_t tec_pipeline_create_program(char const * name, tec_vertex_shader_t * vert, tec_fragment_shader_t * frag, kinc_g4_vertex_structure_t vs, tec_pipeline_blending_e blend_mode);
 void tec_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blending_e blending_mode);
 
 void tec_pipeline_initialize_fragment_shader(tec_fragment_shader_t * frag, char const * name, tec_byte_t * copy_from, size_t data_length);
