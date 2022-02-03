@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../frequent.h"
-
 #define TEC_LOG_MODULE_NAME "Undefined Module, please define me with TEC_LOG_MODULE_NAME"
 
 #ifdef TEC_LOG_LOGGING_ENABLED

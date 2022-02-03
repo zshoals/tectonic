@@ -1,4 +1,5 @@
 #include "random.h"
+#include "../frequent.h"
 
 local_data tec_random_state_t random;
 

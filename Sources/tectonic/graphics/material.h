@@ -2,8 +2,11 @@
 
 #include <stdbool.h>
 #include "kinc/math/matrix.h"
-#include "kinc/graphics4/pipeline.h"
-#include "kinc/graphics4/texture.h"
+#include "kinc/graphics4/constantlocation.h"
+#include "kinc/graphics4/textureunit.h"
+
+typedef struct kinc_g4_pipeline kinc_g4_pipeline_t;
+typedef struct kinc_g4_texture kinc_g4_texture_t;
 
 typedef enum
 {

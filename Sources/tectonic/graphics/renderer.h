@@ -4,6 +4,8 @@
 #include "kinc/graphics4/indexbuffer.h"
 #include "material.h"
 
+typedef struct kinc_g4_render_target kinc_g4_render_target_t;
+
 typedef enum 
 {
 	TEC_RENDERER_CONTINUE_DRAW,

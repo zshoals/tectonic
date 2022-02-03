@@ -1,12 +1,12 @@
 #pragma once
 
-#include "material.h"
 #include "kinc/graphics4/pipeline.h"
 #include "kinc/graphics4/vertexbuffer.h"
 #include "kinc/graphics4/vertexstructure.h"
-#include "../util/memkit.h"
 #include "kinc/graphics4/shader.h"
+#include "../util/memkit.h"
 
+//typedef struct tec_assets_storage tec_assets_storage_t;
 
 /*! default hardcoded shader pipelines with various blending modes.
 We don't really need that much, so hardcoding it is the simply and obvious solution.

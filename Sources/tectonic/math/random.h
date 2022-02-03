@@ -3,7 +3,6 @@
 //SFC32
 
 #include <stdint.h>
-#include "../frequent.h"
 
 typedef struct
 tec_random_state

@@ -1,5 +1,6 @@
 #include "material.h"
 #include "kinc/graphics4/pipeline.h"
+#include "kinc/graphics4/texture.h"
 #include <assert.h>
 #include "../frequent.h"
 

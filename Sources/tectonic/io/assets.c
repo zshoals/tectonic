@@ -1,4 +1,4 @@
-
+#include "assets.h"
 #include "../debug/log.h"
 #include "kinc/io/filereader.h"
 #include "../frequent.h"
@@ -6,7 +6,6 @@
 #include "kinc/graphics4/shader.h"
 #include "kinc/image.h"
 #include "kinc/graphics4/texture.h"
-#include "assets.h"
 
 #define TEC_LOG_MODULE_NAME "Assets"
 

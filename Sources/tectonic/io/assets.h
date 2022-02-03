@@ -4,8 +4,8 @@
 #include <stdbool.h>
 
 #include "../graphics/pipelines.h"
-#include "../graphics/texture.h"
 #include "../graphics/material.h"
+#include "../graphics/texture.h"
 
 #include "../type_declarations.h"
 

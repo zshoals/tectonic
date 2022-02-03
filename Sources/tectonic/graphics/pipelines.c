@@ -2,7 +2,6 @@
 #include <assert.h>
 #include "kinc/graphics4/pipeline.h"
 #include "../util/memkit.h"
-#include "kinc/io/filereader.h"
 #include <stddef.h>
 #include "kinc/graphics4/vertexstructure.h"
 #include "kinc/graphics4/shader.h"
