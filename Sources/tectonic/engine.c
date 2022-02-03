@@ -113,32 +113,7 @@ tec_engine_get_cycle_time(void)
 local_func void
 default_asset_and_resource_initialization_routine(void)
 {
-	// tec_asset_manager_initialize(&assets);
-
-	// //Load vertex and fragment shaders
-	// tec_asset_manager_load_vertex(&assets, "textured-standard.vert");
-	// tec_asset_manager_load_fragment(&assets, "textured-standard.frag");
-	// //Make default pipelines and register them to resources
-	// kinc_g4_vertex_structure_t vert_format;
-	// kinc_g4_vertex_structure_init(&vert_format);
-	// kinc_g4_vertex_structure_add(&vert_format, "vertexPosition", KINC_G4_VERTEX_DATA_FLOAT3);
-	// kinc_g4_vertex_structure_add(&vert_format, "vertexColor", KINC_G4_VERTEX_DATA_FLOAT4);
-
-	// //Fragment and vertex shaders need to be compiled and then actually assigned to the pipeline
-	// //omegalul error.
-
-	// // pipeline.name = "textured-normal";
-	// // pipeline.pipeline = kpipe;
-	// // pipeline.vertex_structure = vert_format;
-	// // pipeline.pipeline.vertex_shader = &tec_asset_manager_find_vertex(&assets, "textured-standard.vert")->vert;
-	// // pipeline.pipeline.fragment_shader = &tec_asset_manager_find_fragment(&assets, "textured-standard.frag")->frag;
-
-	// // pipeline.pipeline.input_layout[0] = &pipeline.vertex_structure;
-	// // pipeline.pipeline.input_layout[1] = NULL;
-
-	// kinc_g4_pipeline_compile(&pipeline.pipeline);
-
-	// tec_asset_manager_register_pipeline(&assets, pipeline);
+	 tec_assets_initialize(&assets);
 
 	// //Load textures (1x white pixel for now)
 	// tec_asset_manager_load_image_to_texture(&assets, "white1x1.png");
@@ -156,6 +131,19 @@ default_asset_and_resource_initialization_routine(void)
 	// tec_material_uniform_data_u udata;
 	// udata.mat4_value = out;
 	// tec_material_assign_uniform(&mat_default, "projectionMatrix", udata, TEC_UNIFORM_TYPE_MAT4, 0);
+
+
+
+	tec_assets_load_vertex_shader(&assets, "textured-standard.vert");
+	tec_assets_load_fragment_shader(&assets, "textured-standard.frag");
+	tec_assref_vertex_shader_t vert = tec_assets_find_vertex_shader(&assets, "textured-standard.vert");
+	tec_assref_fragment_shader_t frag = tec_assets_find_fragment_shader(&assets, "textured-standard.frag");
+	kinc_g4_vertex_structure_t vs;
+	kinc_g4_vertex_structure_init(&vs);
+	kinc_g4_vertex_structure_add(&vs, "vertexPosition", KINC_G4_VERTEX_DATA_FLOAT3);
+	kinc_g4_vertex_structure_add(&vs, "vertexColor", KINC_G4_VERTEX_DATA_FLOAT4);
+	tec_assref_shader_program_t shader = tec_pipeline_create_program(&assets, "standard_texturizer", vert, frag, vs, TEC_BLENDING_NORMAL);
+	tec_pipeline_compile_program(&assets, shader);
 	
 }
 

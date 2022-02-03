@@ -80,6 +80,7 @@ static template_type _tec_func(_get)(_tec_me_t * bfstack, size_t slot)
 	return bfstack->data[slot];
 }
 
+
 static template_type * _tec_func(_get_location)(_tec_me_t * bfstack, size_t slot)
 {
 	assert(slot < bfstack->current_slot_head && "Out of bounds access (Greater Than Max_Size) on bfstack \"%s\", slot %d", bfstack->fixed_name, bfstack->current_slot_head);

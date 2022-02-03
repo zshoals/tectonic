@@ -9,6 +9,8 @@
 #include "../assets/assets_references.h"
 #include "../debug/log.h"
 
+#define TEC_LOG_MODULE_NAME "Pipelines"
+
 tec_assref_shader_program_t
 tec_pipeline_create_program
 (
@@ -30,8 +32,14 @@ tec_pipeline_create_program
 
 	pipeline->pipeline.input_layout[0] = &pipeline->vertex_structure;
 	pipeline->pipeline.input_layout[1] = NULL;
-	pipeline->pipeline.vertex_shader = &vert;
-	pipeline->pipeline.fragment_shader = &frag;
+
+	//O
+	//M
+	//F
+	//G
+	//This STUPID vertex/frag wrapper has caused the same issue TWICE                                         VVVVVVV - THIS STUPID THING UGH
+	pipeline->pipeline.vertex_shader = &tec_internal_assets_retrieve_vertex_shader_data_location(assets, vert)->vert;
+	pipeline->pipeline.fragment_shader = &tec_internal_assets_retrieve_fragment_shader_data_location(assets, frag)->frag;
 
 	tec_internal_pipeline_blend_mode_helper(&pipeline->pipeline, TEC_BLENDING_NORMAL);
 
