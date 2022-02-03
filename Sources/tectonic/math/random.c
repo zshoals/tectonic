@@ -1,5 +1,7 @@
 #include "random.h"
 
+local_data tec_random_state_t random;
+
 local_func inline uint32_t 
 raw32()
 {
@@ -38,7 +40,7 @@ tec_random_get_in(int min, int max)
 }
 
 void
-tec_random_get_in_fill(int * buffer, int count, int min, int max)
+tec_random_get_in_fill(int * buffer, size_t count, int min, int max)
 {
 	for (int i = 0; i < count; i++)
 	{
@@ -59,7 +61,7 @@ tec_random_get_float_in(float min, float max)
 }
 
 void
-tec_random_get_float_in_fill(float * buffer, int count, float min, float max)
+tec_random_get_float_in_fill(float * buffer, size_t count, float min, float max)
 {
 	for (int i = 0; i < count; i++)
 	{
