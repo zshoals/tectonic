@@ -39,7 +39,7 @@ tec_assref_compiled_pipeline
 	size_t const asset_location;
 	tec_assref_status_e const status;
 }
-tec_assref_compiled_pipeline_t;
+tec_assref_shader_program_t;
 
 typedef struct
 tec_assref_texture
