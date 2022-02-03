@@ -5,6 +5,9 @@
 #include "kinc/graphics4/vertexstructure.h"
 #include "kinc/graphics4/shader.h"
 #include "../util/memkit.h"
+#include "../assets/assets_references.h"
+
+typedef struct tec_assets_storage tec_assets_storage_t;
 
 //typedef struct tec_assets_storage tec_assets_storage_t;
 
@@ -67,12 +70,19 @@ tec_pipeline_data
 }
 tec_pipeline_data_t;
 
-kinc_g4_pipeline_t tec_pipeline_create_defaults(void);
-//tec_pipeline_data_t tec_pipeline_create_program(char const * name, tec_vertex_shader_t * vert, tec_fragment_shader_t * frag, kinc_g4_vertex_structure_t vs, tec_pipeline_blending_e blend_mode);
-void tec_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blending_e blending_mode);
+tec_assref_shader_program_t tec_pipeline_create_program
+(
+	tec_assets_storage_t * assets,
+	char const * name, 
+	tec_assref_vertex_shader_t vert, 
+	tec_assref_fragment_shader_t frag, 
+	kinc_g4_vertex_structure_t vs, 
+	tec_pipeline_blending_e blend_mode
+);
 
 void tec_pipeline_initialize_fragment_shader(tec_fragment_shader_t * frag, char const * name, tec_byte_t * copy_from, size_t data_length);
 void tec_pipeline_initialize_vertex_shader(tec_vertex_shader_t * vert, char const * name, tec_byte_t * copy_from, size_t data_length);
 
-void tec_pipeline_compile_fragment_shader(tec_fragment_shader_t * frag);
-void tec_pipeline_compile_vertex_shader(tec_vertex_shader_t * vert);
+void tec_internal_pipeline_compile_fragment_shader(tec_fragment_shader_t * frag);
+void tec_internal_pipeline_compile_vertex_shader(tec_vertex_shader_t * vert);
+void tec_internal_pipeline_blend_mode_helper(kinc_g4_pipeline_t * pipeline, tec_pipeline_blending_e blending_mode);

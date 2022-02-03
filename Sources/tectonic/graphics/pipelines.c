@@ -7,33 +7,45 @@
 #include "../util/memkit.h"
 #include "../assets/assets.h"
 #include "../assets/assets_references.h"
+#include "../debug/log.h"
 
-tec_pipeline_data_t 
-tec_pipeline_create_program(char const * name, tec_vertex_shader_t * vert, tec_fragment_shader_t * frag, kinc_g4_vertex_structure_t vs, tec_pipeline_blending_e blend_mode)
+tec_assref_shader_program_t
+tec_pipeline_create_program
+(
+	tec_assets_storage_t * assets, 
+	char const * name, 
+	tec_assref_vertex_shader_t vert,
+	tec_assref_fragment_shader_t frag, 
+	kinc_g4_vertex_structure_t vs, 
+	tec_pipeline_blending_e blend_mode
+)
 {
-	kinc_g4_pipeline_t kpipe;
+	tec_assref_shader_program_t shader_location = tec_internal_assets_acquire_shader_program_free_slot(assets);
+	tec_pipeline_data_t * pipeline = tec_internal_assets_retrieve_shader_program_data_location(assets, shader_location);
 
-	tec_pipeline_data_t pipeline;
-	pipeline.name = name;
-	pipeline.vertex_structure = vs;
-	pipeline.pipeline = kpipe;
+	pipeline->name = name;
+	pipeline->vertex_structure = vs;
 
-	kinc_g4_pipeline_init(&pipeline.pipeline);
+	kinc_g4_pipeline_init(&pipeline->pipeline);
 
-	pipeline.pipeline.input_layout[0] = &pipeline.vertex_structure;
-	pipeline.pipeline.input_layout[1] = NULL;
-	pipeline.pipeline.vertex_shader = &vert;
-	pipeline.pipeline.fragment_shader = &frag;
+	pipeline->pipeline.input_layout[0] = &pipeline->vertex_structure;
+	pipeline->pipeline.input_layout[1] = NULL;
+	pipeline->pipeline.vertex_shader = &vert;
+	pipeline->pipeline.fragment_shader = &frag;
 
-	tec_pipeline_blend_mode_helper(&pipeline.pipeline, TEC_BLENDING_NORMAL);
+	tec_internal_pipeline_blend_mode_helper(&pipeline->pipeline, TEC_BLENDING_NORMAL);
 
-	return pipeline;
+	tec_log_info("Created shader program %s.", pipeline->name);
+
+	return shader_location;
 }
 
 void 
-tec_pipeline_compile_program(tec_pipeline_data_t * program)
+tec_pipeline_compile_program(tec_assets_storage_t * assets, tec_assref_shader_program_t program)
 {
-	kinc_g4_pipeline_compile(&program->pipeline);
+	tec_pipeline_data_t * pipe = tec_internal_assets_retrieve_shader_program_data_location(assets, program);
+	kinc_g4_pipeline_compile(&pipe->pipeline);
+	tec_log_info("Compiled shader program %s.", pipe->name);
 }
 
 void
