@@ -1,4 +1,4 @@
-#include "asset_manager.h"
+
 #include "../debug/log.h"
 #include "kinc/io/filereader.h"
 #include "../frequent.h"
@@ -6,11 +6,12 @@
 #include "kinc/graphics4/shader.h"
 #include "kinc/image.h"
 #include "kinc/graphics4/texture.h"
+#include "assets.h"
 
-#define TEC_LOG_MODULE_NAME "Asset Manager"
+#define TEC_LOG_MODULE_NAME "Assets"
 
 // local_func tec_byte_t *
-// memory_allocate(tec_asset_manager_storage_t * resources, size_t size)
+// memory_allocate(tec_assets_storage_t * resources, size_t size)
 // {
 
 // }
@@ -28,7 +29,7 @@ asset_can_be_loaded(char const * asset)
 	bool loadable = false;
 	if(kinc_file_reader_open(&reader, asset, KINC_FILE_TYPE_ASSET))
 	{
-		tec_log_info("Successfully opened asset \"%s\".", asset);
+		tec_log_info("Load ready: \"%s\" .", asset);
 		kinc_file_reader_close(&reader);
 		loadable = true;
 	}
@@ -93,7 +94,7 @@ PIPELINES AND MATERIALS
 ========================*/
 
 bool 
-tec_asset_manager_load_fragment(tec_asset_manager_storage_t * resources, char const * asset)
+tec_assets_load_fragment_shader(tec_assets_storage_t * resources, char const * asset)
 {
 	if (asset_can_be_loaded(asset))
 	{
@@ -110,7 +111,7 @@ tec_asset_manager_load_fragment(tec_asset_manager_storage_t * resources, char co
 }
 
 bool 
-tec_asset_manager_load_vertex(tec_asset_manager_storage_t * resources, char const * asset)
+tec_assets_load_vertex_shader(tec_assets_storage_t * resources, char const * asset)
 {
 	if (asset_can_be_loaded(asset))
 	{
@@ -127,14 +128,14 @@ tec_asset_manager_load_vertex(tec_asset_manager_storage_t * resources, char cons
 }
 
 bool 
-tec_asset_manager_register_pipeline(tec_asset_manager_storage_t * resources, tec_pipeline_data_t pipeline)
+tec_assets_register_compiled_pipeline(tec_assets_storage_t * resources, tec_pipeline_data_t pipeline)
 {
 	bfstack_tec_pipeline_data_t_64_push(&resources->pipelines, pipeline);
 	return true;
 }
 
 bool 
-tec_asset_manager_register_material(tec_asset_manager_storage_t * resources, tec_material_t material)
+tec_assets_register_material(tec_assets_storage_t * resources, tec_material_t material)
 {
 	bfstack_tec_material_t_64_push(&resources->materials, material);
 	return true;
@@ -147,7 +148,7 @@ IMAGES
 ========================*/
 
 bool 
-tec_asset_manager_load_image_to_texture(tec_asset_manager_storage_t * resources, char const * asset)
+tec_assets_load_image_to_texture(tec_assets_storage_t * resources, char const * asset)
 {
 	if (asset_can_be_loaded(asset))
 	{
@@ -175,13 +176,13 @@ AUDIO
 
 ========================*/
 bool 
-tec_asset_manager_load_sfx(tec_asset_manager_storage_t * resources, char const * asset)
+tec_assets_load_sfx(tec_assets_storage_t * resources, char const * asset)
 {
 
 }
 
 bool 
-tec_asset_manager_load_music(tec_asset_manager_storage_t * resources, char const * asset)
+tec_assets_load_music(tec_assets_storage_t * resources, char const * asset)
 {
 
 }
@@ -193,13 +194,13 @@ CONFIG/JSON/BYTE DATA
 
 ========================*/
 bool 
-tec_asset_manager_load_config(tec_asset_manager_storage_t * resources, char const * asset)
+tec_assets_load_config(tec_assets_storage_t * resources, char const * asset)
 {
 
 }
 
 bool 
-tec_asset_manager_load_json(tec_asset_manager_storage_t * resources, char const * asset)
+tec_assets_load_json(tec_assets_storage_t * resources, char const * asset)
 {
 
 }
@@ -211,94 +212,109 @@ ASSET RETRIEVAL
 
 */
 
-tec_fragment_shader_t * 
-tec_asset_manager_find_fragment(tec_asset_manager_storage_t * resources, char const * fragment_shader)
+tec_assets_reference_fragment_shader_t
+tec_assets_find_fragment_shader(tec_assets_storage_t * resources, char const * fragment_shader)
 {
 	int result = bfstack_tec_fragment_shader_t_16_search_linear(&resources->fragment_shaders, fragment_shader);
 
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find fragment shader \"%s\"", fragment_shader);
-		return NULL;
+		tec_assets_reference_fragment_shader_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		return ref;
 	}
 	else
 	{
 		tec_log_info("Located fragment shader \"%s\" in slot %d.", fragment_shader, result);
-		return bfstack_tec_fragment_shader_t_16_get_location(&resources->fragment_shaders, result);
+		size_t location = bfstack_tec_fragment_shader_t_16_get_location(&resources->fragment_shaders, result);
+		tec_assets_reference_fragment_shader_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		return ref;
 	}
 }
 
-tec_vertex_shader_t * 
-tec_asset_manager_find_vertex(tec_asset_manager_storage_t * resources, char const * vertex_shader)
+tec_assets_reference_vertex_shader_t
+tec_assets_find_vertex_shader(tec_assets_storage_t * resources, char const * vertex_shader)
 {
 	int result = bfstack_tec_vertex_shader_t_16_search_linear(&resources->vertex_shaders, vertex_shader);
 
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find vertex shader \"%s\"", vertex_shader);
-		return NULL;
+		tec_assets_reference_vertex_shader_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		return ref;
 	}
 	else
 	{
 		tec_log_info("Located vertex shader \"%s\" in slot %d.", vertex_shader, result);
-		return bfstack_tec_vertex_shader_t_16_get_location(&resources->vertex_shaders, result);
+		size_t location = bfstack_tec_vertex_shader_t_16_get_location(&resources->vertex_shaders, result);
+		tec_assets_reference_vertex_shader_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		return ref;
 	}
 }
 
-tec_pipeline_data_t * 
-tec_asset_manager_find_pipeline(tec_asset_manager_storage_t * resources, char const * pipeline)
+tec_assets_reference_compiled_pipeline_t
+tec_assets_find_compiled_pipeline(tec_assets_storage_t * resources, char const * pipeline)
 {
 	int result = bfstack_tec_pipeline_data_t_64_search_linear(&resources->pipelines, pipeline);
 
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find pipeline \"%s\"", pipeline);
-		return NULL;
+		tec_assets_reference_compiled_pipeline_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		return ref;
 	}
 	else
 	{
 		tec_log_info("Located pipeline \"%s\" in slot %d.", pipeline, result);
-		return bfstack_tec_pipeline_data_t_64_get_location(&resources->pipelines, result);
+		size_t location = bfstack_tec_pipeline_data_t_64_get_location(&resources->pipelines, result);
+		tec_assets_reference_compiled_pipeline_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		return ref;
 	}
 }
 
-tec_texture_t * 
-tec_asset_manager_find_texture(tec_asset_manager_storage_t * resources, char const * texture)
+tec_assets_reference_texture_t
+tec_assets_find_texture(tec_assets_storage_t * resources, char const * texture)
 {
 	int result = bfstack_tec_texture_t_64_search_linear(&resources->textures, texture);
 
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find texture \"%s\"", texture);
-		return NULL;
+		tec_assets_reference_texture_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		return ref;
 	}
 	else
 	{
 		tec_log_info("Located texture \"%s\" in slot %d.", texture, result);
-		return bfstack_tec_texture_t_64_get_location(&resources->textures, result);
+		size_t location = bfstack_tec_texture_t_64_get_location(&resources->textures, result);
+		tec_assets_reference_texture_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		return ref;
 	}
 }
 
-tec_material_t * 
-tec_asset_manager_find_material(tec_asset_manager_storage_t * resources, char const * material)
+tec_assets_reference_material_t
+tec_assets_find_material(tec_assets_storage_t * resources, char const * material)
 {
 	int result = bfstack_tec_material_t_64_search_linear(&resources->materials, material);
 
 	if (result == -1)
 	{
 		tec_log_warn("Couldn't find material \"%s\"", material);
-		return NULL;
+		tec_assets_reference_material_t ref = {.asset_location = SIZE_MAX, .status = TEC_ASSET_MISSING};
+		return ref;
 	}
 	else
 	{
 		tec_log_info("Located material \"%s\" in slot %d.", material, result);
-		return bfstack_tec_material_t_64_get_location(&resources->materials, result);
+		size_t location = bfstack_tec_material_t_64_get_location(&resources->materials, result);
+		tec_assets_reference_material_t ref = {.asset_location = location, .status = TEC_ASSET_PRESENT};
+		return ref;
 	}
 }
 
 
 void 
-tec_asset_manager_initialize(tec_asset_manager_storage_t * resources)
+tec_assets_initialize(tec_assets_storage_t * resources)
 {
 	tec_log_info("Initializing asset storage...");
 	bfstack_tec_texture_t_64_init(&resources->textures, "Texture Storage");
@@ -311,3 +327,4 @@ tec_asset_manager_initialize(tec_asset_manager_storage_t * resources)
 	//sfx
 	//music, etc.
 }
+
