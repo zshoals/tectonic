@@ -194,7 +194,7 @@ tec_renderer_draw(tec_renderer_context_t * ctx, tec_renderer_draw_mode_e draw_mo
 	kinc_g4_set_texture_magnification_filter(ctx->material->tex_data.texture_units[0], KINC_G4_MIPMAP_FILTER_POINT);
 	//kinc_g4_draw_indexed_vertices_from_to(ctx->ibo_offset, ctx->requested_draw_count);
 	//kinc_g4_draw_indexed_vertices_from_to(0, 6);
-	kinc_g4_draw_indexed_vertices_from_to(0, 3);
+	kinc_g4_draw_indexed_vertices();
 	
 	switch (draw_mode)
 	{

@@ -49,8 +49,8 @@ tec_g2_begin(tec_g2_context_t * context, tec_assets_storage_t * assets)
 	tec_material_t * matdata = tec_internal_assets_retrieve_material_data_location(active_assets, active_material);
 
 	if (first_run){
-	kinc_g4_index_buffer_init(&active_context->r_ctx.ibo, 6, KINC_G4_INDEX_BUFFER_FORMAT_32BIT, KINC_G4_USAGE_DYNAMIC);
-	kinc_g4_vertex_buffer_init(&active_context->r_ctx.vbo, 6, &matdata->pipeline->vertex_structure, KINC_G4_USAGE_DYNAMIC, 0);
+	kinc_g4_index_buffer_init(&active_context->r_ctx.ibo, 100, KINC_G4_INDEX_BUFFER_FORMAT_32BIT, KINC_G4_USAGE_DYNAMIC);
+	kinc_g4_vertex_buffer_init(&active_context->r_ctx.vbo, 100, &matdata->pipeline->vertex_structure, KINC_G4_USAGE_DYNAMIC, 0);
 	first_run = false;
 	}
 	active_context->r_ctx.v_data = kinc_g4_vertex_buffer_lock_all(&active_context->r_ctx.vbo);
@@ -82,16 +82,22 @@ tec_g2_draw_square(float cx, float cy, float size, tec_color_t color)
 	// push_vert(1, -1, 0.5, 1, 1, 1, 1, 1, 0);//br
 	// push_vert(-1, 1, 0.5, 1, 1, 1, 1, 0, 1);//tl
 
-	push_vert(0, 0, 10.5, 1, 1, 1, 1, 0, 0); //bl
-	push_vert(800, 600, 10.5, 1, 1, 1, 1, 1, 1);//br
-	push_vert(0, 600, 10.5, 1, 1, 1, 1, 0, 1);//tl
+	push_vert(0, 0, 10., 1, 1, 1, 1, 0, 0); //bl
+	push_vert(800, 600, 10., 1, 1, 1, 1, 1, 1);//br
+	push_vert(0, 600, 10., 1, 1, 1, 1, 0, 1);//tl
 	//push_vert(1, 1, 0.5, 1, 1, 1, 1, 1, 1);//bl
+	push_vert(0, 0, 10., 1, 1, 1, 1, 0, 0);
+	push_vert(800, 0, 10., 1, 1, 1, 1, 1, 0);
+	push_vert(800, 600, 10., 1, 1, 1, 1, 1, 1);
 
 	int * indexes = active_context->r_ctx.i_data;
 	size_t pos = 0;
 	indexes[pos++] = 0;
 	indexes[pos++] = 1;
 	indexes[pos++] = 2;
+	indexes[pos++] = 3;
+	indexes[pos++] = 4;
+	indexes[pos++] = 5;
 	//indexes[pos++] = 0;
 	//indexes[pos++] = 2;
 	//indexes[pos++] = 3;

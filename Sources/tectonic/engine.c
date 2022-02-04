@@ -146,7 +146,7 @@ default_asset_and_resource_initialization_routine(void)
 	//kinc_g4_vertex_structure_add(&vs, "pos", KINC_G4_VERTEX_DATA_F32_3X);
 	tec_assref_shader_program_t shader = tec_pipeline_create_program(&assets, "standard_texturizer", vert, frag, vs, TEC_BLENDING_NORMAL);
 	tec_pipeline_data_t * shad = tec_internal_assets_retrieve_shader_program_data_location(&assets, shader);
-	//shad->pipeline.cull_mode = KINC_G4_CULL_NOTHING;
+	shad->pipeline.cull_mode = KINC_G4_CULL_NOTHING;
 	tec_pipeline_compile_program(&assets, shader);
 
 	tec_assets_load_image_to_texture(&assets, "punch.png");
