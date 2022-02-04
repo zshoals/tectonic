@@ -18,9 +18,11 @@ tec_renderer_context
 {
 	kinc_g4_vertex_buffer_t vbo;
 	size_t vbo_offset;
+	float * v_data;
 
 	kinc_g4_index_buffer_t ibo;
 	size_t ibo_offset;
+	float * i_data;
 
 	size_t requested_draw_count;
 
@@ -41,4 +43,4 @@ tec_renderer_context_t;
 //then draw
 //state is implied by properly created sort keys?
 
-void tec_renderer_draw(tec_renderer_context_t context, tec_renderer_draw_mode_e draw_mode);
+void tec_renderer_draw(tec_renderer_context_t * context, tec_renderer_draw_mode_e draw_mode);
