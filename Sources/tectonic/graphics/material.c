@@ -7,6 +7,8 @@
 #include "../assets/assets.h"
 #include "../debug/log.h"
 
+#define TEC_LOG_MODULE_NAME "Materials"
+
 tec_assref_material_t 
 tec_material_create_material(tec_assets_storage_t * assets, char const * name, tec_assref_shader_program_t pipeline)
 {

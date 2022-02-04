@@ -146,10 +146,10 @@ default_asset_and_resource_initialization_routine(void)
 	tec_pipeline_compile_program(&assets, shader);
 
 	tec_assets_load_image_to_texture(&assets, "white1x1.png");
-	tec_assref_texture_t texture = tec_assets_find_texture(&assets, "white1x1.png");
+	tec_assref_texture_t texture = tec_assets_find_texture(&assets, "white1x2.png");
 
 	tec_assref_material_t material = tec_material_create_material(&assets, "Normal draw w/ time uniform", shader);
-	tec_material_assign_texture(&assets, material, "texSampler", texture, TEC_TEX_UNIT_SLOT_0);
+	tec_material_assign_texture(&assets, material, "tex", texture, TEC_TEX_UNIT_SLOT_0);
 	tec_material_uniform_data_u this_is_literally_the_time_right_now = {.float_values[0] = 1337.0};
 	tec_material_assign_uniform(&assets, material, "time", this_is_literally_the_time_right_now, TEC_UNIFORM_TYPE_FLOAT, TEC_UNIFORM_SLOT_0);
 	
