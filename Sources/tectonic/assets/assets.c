@@ -154,13 +154,16 @@ tec_assets_load_image_to_texture(tec_assets_storage_t * resources, char const * 
 	if (asset_can_be_loaded(asset))
 	{
 		kinc_image_t image;
+		tec_log_info("Attempting to open asset \"%s\".....", asset);
 		size_t size = kinc_image_init_from_file(&image, &resources->resource_loading_buffer, asset);
+		tec_log_info("Successfully opened and copied asset \"%s\".", asset);
 
 		//Note: These should probably avoid the copy by using "advance_head" just like pipeline and material acquisition
 		//But I'll leave it for the moment
 		tec_texture_t tex;
 		tex.name = asset;
 		kinc_g4_texture_init_from_image(&tex.texture, &image);
+		tec_log_info("Uploaded image \"%s\" to GPU.", asset);
 
 		//This should actually be executed in register texture?
 		bfstack_tec_texture_t_64_push(&resources->textures, tex);
