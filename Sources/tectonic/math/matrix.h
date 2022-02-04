@@ -4,11 +4,8 @@
 #include "kinc/math/matrix.h"
 #include <string.h>
 
-kinc_matrix4x4_t tec_matrix_convert(hmm_m4 matrix)
-{
-	kinc_matrix4x4_t out;
-	//Might work...
-	memcpy(&out, &matrix, 16);
+kinc_matrix4x4_t tec_matrix_convert(hmm_m4 matrix);
 
-	return out;
-}
+//It is a genuine mystery why this isn't in HMM to begin with.
+//It is actually but with a dumb name.
+hmm_m4 HMM_Mat4Identity(void);
