@@ -41,9 +41,9 @@ tec_pipeline_create_program
 	pipeline->pipeline.vertex_shader = &tec_internal_assets_retrieve_vertex_shader_data_location(assets, vert)->vert;
 	pipeline->pipeline.fragment_shader = &tec_internal_assets_retrieve_fragment_shader_data_location(assets, frag)->frag;
 
-	tec_internal_pipeline_blend_mode_helper(&pipeline->pipeline, TEC_BLENDING_NORMAL);
+	tec_internal_pipeline_blend_mode_helper(&pipeline->pipeline, blend_mode);
 
-	tec_log_info("Created shader program %s.", pipeline->name);
+	tec_log_info("Created shader program \"%s\".", pipeline->name);
 
 	return shader_location;
 }
@@ -53,7 +53,7 @@ tec_pipeline_compile_program(tec_assets_storage_t * assets, tec_assref_shader_pr
 {
 	tec_pipeline_data_t * pipe = tec_internal_assets_retrieve_shader_program_data_location(assets, program);
 	kinc_g4_pipeline_compile(&pipe->pipeline);
-	tec_log_info("Compiled shader program %s.", pipe->name);
+	tec_log_info("Compiled shader program \"%s\".", pipe->name);
 }
 
 void
