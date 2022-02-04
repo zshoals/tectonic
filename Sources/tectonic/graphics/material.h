@@ -36,6 +36,40 @@ tec_material_uniform_type_e;
 
 typedef enum
 {
+	TEC_TEX_UNIT_SLOT_0,
+	TEC_TEX_UNIT_SLOT_1,
+	TEC_TEX_UNIT_SLOT_2,
+	TEC_TEX_UNIT_SLOT_3,
+	TEC_TEX_UNIT_SLOT_4,
+	TEC_TEX_UNIT_SLOT_5,
+	TEC_TEX_UNIT_SLOT_6,
+	TEC_TEX_UNIT_SLOT_7,
+}
+tec_material_tex_unit_slot_e;
+
+typedef enum
+{
+	TEC_UNIFORM_SLOT_0,
+	TEC_UNIFORM_SLOT_1,
+	TEC_UNIFORM_SLOT_2,
+	TEC_UNIFORM_SLOT_3,
+	TEC_UNIFORM_SLOT_4,
+	TEC_UNIFORM_SLOT_5,
+	TEC_UNIFORM_SLOT_6,
+	TEC_UNIFORM_SLOT_7,
+	TEC_UNIFORM_SLOT_8,
+	TEC_UNIFORM_SLOT_9,
+	TEC_UNIFORM_SLOT_10,
+	TEC_UNIFORM_SLOT_11,
+	TEC_UNIFORM_SLOT_12,
+	TEC_UNIFORM_SLOT_13,
+	TEC_UNIFORM_SLOT_14,
+	TEC_UNIFORM_SLOT_15,
+}
+tec_material_uniform_slot_e;
+
+typedef enum
+{
 	TEC_TEXTURE_NULL,
 	TEC_TEXTURE_PRESENT,
 } 
@@ -88,6 +122,14 @@ tec_material_t;
 
 tec_assref_material_t tec_material_create_material(tec_assets_storage_t * assets, char const * name, tec_assref_shader_program_t pipeline);
 tec_assref_material_t tec_material_create_material_by_copy(tec_assets_storage_t * assets, char const * name, tec_assref_material_t original_material);
-void tec_material_assign_texture(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * tex_unit_name, tec_assref_texture_t tex, size_t slot);
-void tec_material_assign_uniform(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * uniform_name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot);
+void tec_material_assign_texture(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * tex_unit_name, tec_assref_texture_t tex, tec_material_tex_unit_slot_e slot);
+void tec_material_assign_uniform
+(
+	tec_assets_storage_t * assets, 
+	tec_assref_material_t mat, 
+	char const * uniform_name, 
+	tec_material_uniform_data_u data, 
+	tec_material_uniform_type_e type, 
+	tec_material_uniform_slot_e slot
+);
 void tec_material_update_uniform(tec_assets_storage_t * assets, tec_assref_material_t mat, tec_material_uniform_data_u data);

@@ -45,7 +45,7 @@ tec_material_create_material_by_copy(tec_assets_storage_t * assets, char const *
 }
 
 void 
-tec_material_assign_texture(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * tex_unit_name, tec_assref_texture_t tex, size_t slot)
+tec_material_assign_texture(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * tex_unit_name, tec_assref_texture_t tex, tec_material_tex_unit_slot_e slot)
 {
 	tec_texture_t * texture = tec_internal_assets_retrieve_texture_data_location(assets, tex);
 	tec_material_t * material = tec_internal_assets_retrieve_material_data_location(assets, mat);
@@ -57,13 +57,13 @@ tec_material_assign_texture(tec_assets_storage_t * assets, tec_assref_material_t
 }
 
 void 
-tec_material_assign_uniform(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * uniform_name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot)
+tec_material_assign_uniform(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * uniform_name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, tec_material_uniform_slot_e slot)
 {
 	tec_material_t * material = tec_internal_assets_retrieve_material_data_location(assets, mat);
 	material->uniforms[slot].name = uniform_name;
 	material->uniforms[slot].type = type;
 	material->uniforms[slot].data = data;
-	material->uniforms[slot].location = kinc_g4_pipeline_get_constant_location(&material->pipeline, uniform_name);
+	material->uniforms[slot].location = kinc_g4_pipeline_get_constant_location(&material->pipeline->pipeline, uniform_name);
 
 	tec_log_info("Linked uniform '%s' in material '%s'", uniform_name, material->name);
 }
@@ -85,6 +85,4 @@ tec_material_update_uniform(tec_assets_storage_t * assets, tec_assref_material_t
 			}
 		}
 	}
-
-
 }
