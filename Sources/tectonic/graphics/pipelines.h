@@ -9,8 +9,6 @@
 
 typedef struct tec_assets_storage tec_assets_storage_t;
 
-//typedef struct tec_assets_storage tec_assets_storage_t;
-
 /*! default hardcoded shader pipelines with various blending modes.
 We don't really need that much, so hardcoding it is the simply and obvious solution.
 */
