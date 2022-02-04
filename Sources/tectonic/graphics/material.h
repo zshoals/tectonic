@@ -4,9 +4,12 @@
 #include "kinc/math/matrix.h"
 #include "kinc/graphics4/constantlocation.h"
 #include "kinc/graphics4/textureunit.h"
+#include "../assets/assets_references.h"
 
+typedef struct tec_assets_storage tec_assets_storage_t;
 typedef struct kinc_g4_pipeline kinc_g4_pipeline_t;
 typedef struct kinc_g4_texture kinc_g4_texture_t;
+typedef struct tec_pipeline_data tec_pipeline_data_t;
 
 typedef enum
 {
@@ -77,13 +80,14 @@ tec_material_material
 {
 	char const * name;
 	tec_material_texture_data_t tex_data;
-	kinc_g4_pipeline_t * pipeline;
+	tec_pipeline_data_t * pipeline;
+	//This should be a bfstack too
 	tec_material_uniform_t uniforms[TEC_MATERIAL_MAX_UNIFORMS]; //Same as above
 }
 tec_material_t;
 
-void tec_material_initialize(tec_material_t * mat, char const * name, kinc_g4_pipeline_t * pipeline);
-//Currently, materials can only be assigned. Trying to null them or something will be bad news. Don't try it.
-void tec_material_assign_texture(tec_material_t * mat, char const * name,  kinc_g4_texture_t * texture, size_t slot);
-void tec_material_assign_uniform(tec_material_t * mat, char const * name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot);
-//Needs "update uniform", search for uniform, update it without affecting anything else
+tec_assref_material_t tec_material_create_material(tec_assets_storage_t * assets, char const * name, tec_assref_shader_program_t pipeline);
+tec_assref_material_t tec_material_create_material_by_copy(tec_assets_storage_t * assets, char const * name, tec_assref_material_t original_material);
+void tec_material_assign_texture(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * tex_unit_name, tec_assref_texture_t tex, size_t slot);
+void tec_material_assign_uniform(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * uniform_name, tec_material_uniform_data_u data, tec_material_uniform_type_e type, size_t slot);
+void tec_material_update_uniform(tec_assets_storage_t * assets, tec_assref_material_t mat, tec_material_uniform_data_u data);
