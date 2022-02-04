@@ -13,10 +13,12 @@ typedef struct tec_assets_storage tec_assets_storage_t;
 We don't really need that much, so hardcoding it is the simply and obvious solution.
 */
 
+#define TEC_SHADER_DATA_MAX_LENGTH 128
+
 typedef struct
 tec_vertex_shader
 {
-	tec_byte_t data[TEC_KILOBYTES(256)];
+	tec_byte_t data[TEC_KILOBYTES(TEC_SHADER_DATA_MAX_LENGTH)];
 	kinc_g4_shader_t vert;
 	size_t data_length;
 	char const * name;
@@ -26,7 +28,7 @@ tec_vertex_shader_t;
 typedef struct
 tec_fragment_shader
 {
-	tec_byte_t data[TEC_KILOBYTES(256)];
+	tec_byte_t data[TEC_KILOBYTES(TEC_SHADER_DATA_MAX_LENGTH)];
 	kinc_g4_shader_t frag;
 	size_t data_length;
 	char const * name;
