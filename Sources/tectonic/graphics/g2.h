@@ -18,12 +18,13 @@ tec_g2_context_t;
 
 //sets the context to use for drawing
 //Everything is automatically spritebatched
-void tec_g2_begin(tec_g2_context_t * context);
+void tec_g2_begin(tec_g2_context_t * context, tec_assets_storage_t * assets);
 //Releases context, probably ends drawing
 void tec_g2_end(void);
 
 
 void tec_g2_draw_rect(float cx, float cy, float size, tec_color_t color);
+void tec_g2_draw_square(float cx, float cy, float size, tec_color_t color);
 void tec_g2_draw_line(hmm_v2 p1, hmm_v2 p2, float thickness, tec_color_t color);
 
 void tec_g2_command_switch_rendertarget(int render_target_identifier /* what is this? */);

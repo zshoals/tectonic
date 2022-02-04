@@ -74,7 +74,7 @@ tec_engine_main_loop(void)
 		{
 			tec_timediff_begin(&render_timediff);
 
-			engine_loop_config.render_callback(&engine_context, accumulator /* should this subtract from something*/);
+			engine_loop_config.render_callback(&assets, &engine_context, accumulator /* should this subtract from something*/);
 
 			time_render = tec_timediff_end(&render_timediff);
 		}
@@ -140,18 +140,24 @@ default_asset_and_resource_initialization_routine(void)
 	tec_assref_fragment_shader_t frag = tec_assets_find_fragment_shader(&assets, "textured-standard.frag");
 	kinc_g4_vertex_structure_t vs;
 	kinc_g4_vertex_structure_init(&vs);
-	kinc_g4_vertex_structure_add(&vs, "vertexPosition", KINC_G4_VERTEX_DATA_FLOAT3);
-	kinc_g4_vertex_structure_add(&vs, "vertexColor", KINC_G4_VERTEX_DATA_FLOAT4);
+	kinc_g4_vertex_structure_add(&vs, "vertexPosition", KINC_G4_VERTEX_DATA_F32_3X);
+	kinc_g4_vertex_structure_add(&vs, "vertexColor", KINC_G4_VERTEX_DATA_F32_4X);
+	kinc_g4_vertex_structure_add(&vs, "vertexUV", KINC_G4_VERTEX_DATA_F32_2X);
+	//kinc_g4_vertex_structure_add(&vs, "pos", KINC_G4_VERTEX_DATA_F32_3X);
 	tec_assref_shader_program_t shader = tec_pipeline_create_program(&assets, "standard_texturizer", vert, frag, vs, TEC_BLENDING_NORMAL);
+	tec_pipeline_data_t * shad = tec_internal_assets_retrieve_shader_program_data_location(&assets, shader);
+	//shad->pipeline.cull_mode = KINC_G4_CULL_NOTHING;
 	tec_pipeline_compile_program(&assets, shader);
 
-	tec_assets_load_image_to_texture(&assets, "white1x1.png");
-	tec_assref_texture_t texture = tec_assets_find_texture(&assets, "white1x2.png");
+	tec_assets_load_image_to_texture(&assets, "punch.png");
+	tec_assref_texture_t texture = tec_assets_find_texture(&assets, "punch.png");
 
-	tec_assref_material_t material = tec_material_create_material(&assets, "Normal draw w/ time uniform", shader);
+	tec_assref_material_t material = tec_material_create_material(&assets, "Normal Draw", shader);
 	tec_material_assign_texture(&assets, material, "tex", texture, TEC_TEX_UNIT_SLOT_0);
-	tec_material_uniform_data_u this_is_literally_the_time_right_now = {.float_values[0] = 1337.0};
-	tec_material_assign_uniform(&assets, material, "time", this_is_literally_the_time_right_now, TEC_UNIFORM_TYPE_FLOAT, TEC_UNIFORM_SLOT_0);
+	kinc_matrix4x4_t newmat = tec_matrix_convert(HMM_Orthographic(0, 800, 600, 0, -5., -500.));
+	//tec_material_uniform_data_u udata = {.mat4_value = tec_matrix_convert(HMM_Mat4Identity())};
+	tec_material_uniform_data_u udata = {.mat4_value = newmat};
+	tec_material_assign_uniform(&assets, material, "projectionMatrix", udata, TEC_UNIFORM_TYPE_MAT4, TEC_UNIFORM_SLOT_0);
 	
 }
 
