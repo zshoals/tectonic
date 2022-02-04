@@ -18,7 +18,7 @@ tec_assref_status_e;
 
 
 typedef struct
-tec_assref_fragment
+tec_assref_fragment_shader
 {
 	size_t const asset_location;
 	tec_assref_status_e const status;
@@ -34,7 +34,7 @@ tec_assref_vertex_shader
 tec_assref_vertex_shader_t;
 
 typedef struct
-tec_assref_compiled_pipeline
+tec_assref_shader_program
 {
 	size_t const asset_location;
 	tec_assref_status_e const status;
