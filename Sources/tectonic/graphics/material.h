@@ -132,4 +132,4 @@ void tec_material_assign_uniform
 	tec_material_uniform_type_e type, 
 	tec_material_uniform_slot_e slot
 );
-void tec_material_update_uniform(tec_assets_storage_t * assets, tec_assref_material_t mat, tec_material_uniform_data_u data);
+void tec_material_update_uniform(tec_assets_storage_t * assets, tec_assref_material_t mat, char const * uniform_name, tec_material_uniform_data_u data);
