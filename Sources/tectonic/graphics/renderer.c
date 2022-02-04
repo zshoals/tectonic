@@ -3,6 +3,9 @@
 #include "../debug/log.h"
 #include "assert.h"
 #include "../frequent.h"
+#include "material.h"
+#include "pipelines.h"
+#include "texture.h"
 
 local_func void
 renderer_assign_uniforms(tec_material_t * mat)
@@ -127,97 +130,63 @@ renderer_assign_uniforms(tec_material_t * mat)
 	}
 }
 
-typedef struct
-tec_internal_renderer_context_cache
-{
-	kinc_g4_vertex_buffer_t * cached_vbo;
-	kinc_g4_index_buffer_t * cached_ibo;
-	kinc_g4_render_target_t * cached_surface;
-	tec_material_t * cached_material;
-}
-tec_internal_renderer_context_cache_t;
+// typedef struct
+// tec_internal_renderer_context_cache
+// {
+// 	kinc_g4_vertex_buffer_t * cached_vbo;
+// 	kinc_g4_index_buffer_t * cached_ibo;
+// 	kinc_g4_render_target_t * cached_surface;
+// 	tec_material_t * cached_material;
+// }
+// tec_internal_renderer_context_cache_t;
 
-local_data tec_internal_renderer_context_cache_t render_cache = {0};
+// local_data tec_internal_renderer_context_cache_t render_cache = {0};
 
-void
-cache_vbo_location(kinc_g4_vertex_buffer_t * vbo)
-{
-	render_cache.cached_vbo = vbo;
-}
+// void
+// cache_vbo_location(kinc_g4_vertex_buffer_t * vbo)
+// {
+// 	render_cache.cached_vbo = vbo;
+// }
 
-void
-cache_ibo_location(kinc_g4_index_buffer_t * ibo)
-{
-	render_cache.cached_ibo = ibo;
-}
+// void
+// cache_ibo_location(kinc_g4_index_buffer_t * ibo)
+// {
+// 	render_cache.cached_ibo = ibo;
+// }
 
-void
-cache_surface_location(kinc_g4_render_target_t * surface)
-{
-	render_cache.cached_surface = surface;
-}
+// void
+// cache_surface_location(kinc_g4_render_target_t * surface)
+// {
+// 	render_cache.cached_surface = surface;
+// }
 
-void
-cache_material_location(tec_material_t * mat)
-{
-	render_cache.cached_material = mat;
-}
+// void
+// cache_material_location(tec_material_t * mat)
+// {
+// 	render_cache.cached_material = mat;
+// }
 
 void 
 tec_renderer_draw(tec_renderer_context_t * ctx, tec_renderer_draw_mode_e draw_mode)
 {
-	//No material match, so we must refresh uniforms, textures, pipelines, etc.
-	//Could probably be broken down more but admittedly I'm a bit lazy
-	if (ctx->material != render_cache.cached_material) 
-	{
-		cache_material_location(ctx->material);
+	//Forget the caching for a moment
+	/*
+		setpipeline
+		settexture, just do 0 for now
+		assign uniforms
+		
+		EVENTUALLY, handle rendertarget switching
 
-		kinc_g4_set_pipeline(&ctx->material->pipeline);
+		assign VBO
+		assign IBO
 
-		for (int i = 0; i < TEC_MATERIAL_MAX_TEXTURE_UNITS; i++)
-		{
-			tec_material_texture_data_t * data = &ctx->material->tex_data;
-			if (data->present[i] == TEC_TEXTURE_PRESENT)
-			{
-				kinc_g4_set_texture(ctx->material->tex_data.texture_units[i], &ctx->material->tex_data.textures[i]);
-			}
-		}
+		set texture magnification filter, should be attached to each texture's slot in a material
+		draw from -> to indexed vertices
+	*/
 
-		renderer_assign_uniforms(ctx->material);
-	}
-
-	//The render target or framebuffer got swapped, so we need to set it now
-	if (ctx->surface != render_cache.cached_surface)
-	{
-		if (ctx->surface == NULL)
-		{
-			//No surface present in the context means that we want to draw to the framebuffer
-			cache_surface_location(NULL);
-			kinc_g4_restore_render_target(); 
-		}
-		else
-		{
-			//Set the appropriate render target to draw to
-			cache_surface_location(ctx->surface);
-			kinc_g4_set_render_targets(&ctx->surface, 1);
-		}
-	}
-
-	//The vertex buffer got swapped (very unlikely, excluding first run), so it needs updated
-	if (&ctx->vbo != render_cache.cached_vbo)
-	{
-		cache_vbo_location(&ctx->vbo);
-		kinc_g4_set_vertex_buffer(&ctx->vbo);
-	}
-
-	//The index buffer got swapped (also very unlikely), so it needs updated
-	if (&ctx->ibo != render_cache.cached_ibo)
-	{
-		cache_ibo_location(&ctx->ibo);
-		kinc_g4_set_index_buffer(&ctx->ibo);
-	}
-
+	kinc_g4_set_pipeline(&ctx->material->pipeline->pipeline);
 	//Mag filter needs set up in the context, maybe needs hashed also
+	//This is actual a material configuration, I get it now.
 	kinc_g4_set_texture_magnification_filter(ctx->material->tex_data.texture_units[0], KINC_G4_MIPMAP_FILTER_POINT);
 	kinc_g4_draw_indexed_vertices_from_to(ctx->ibo_offset, ctx->requested_draw_count);
 	
