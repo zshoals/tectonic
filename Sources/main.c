@@ -12,19 +12,31 @@
 #include "tectonic/lib/stc/ccommon.h"
 #include "tectonic/cvars.h"
 #include "tectonic/debug/log.h"
+#include "tectonic/graphics/g2.h"
+#include "tectonic/frequent.h"
+#include "tectonic/assets/assets.h"
 
 #define TEC_LOG_MODULE_NAME "Main"
+
+local_data tec_g2_context_t g2;
 
 void 
 game_update(tec_engine_context_t * engine_context, double dt) 
 {
-	kinc_log(KINC_LOG_LEVEL_INFO, "RT %f", tec_engine_get_render_time());
+	//kinc_log(KINC_LOG_LEVEL_INFO, "RT %f", tec_engine_get_render_time());
 }
 
 void 
-game_render(tec_engine_context_t * engine_context /*Should really just be render context only*/, double alpha) 
+game_render(tec_assets_storage_t * assets, tec_engine_context_t * engine_context /*Should really just be render context only*/, double alpha) 
 {
-	kinc_g4_swap_buffers();
+	//Possible error points:
+	//	Orthomatrix
+	//	Tri winding
+	// Issue with clearing?
+	//Issue with framebuffer initialization?
+	tec_g2_begin(&g2, assets);
+	tec_g2_draw_square(0, 0, 0, 0);
+	tec_g2_end();
 }
 
 int 
@@ -63,7 +75,7 @@ kickstart(int argc, char** argv)
 	{
 		.color_bits = 32,
 		.depth_bits = 16,
-		.frequency = 1337, // This struct member is completely useless, does nothing
+		.frequency = 60, // This struct member is completely useless, does nothing
 		.samples_per_pixel = 1,
 		.stencil_bits = 8,
 		.vertical_sync = config_vsync,
