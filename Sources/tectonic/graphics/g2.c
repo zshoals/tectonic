@@ -34,10 +34,24 @@ push_vert(float x, float y, float z, float r, float g, float b, float a, float u
 	verts[counter++] = v;
 }
 
+void 
+tec_g2_initialize(tec_g2_context_t * context)
+{
+	tec_assref_material_t active_material = tec_assets_find_material(active_assets, "Normal Draw");
+	tec_material_t * matdata = tec_internal_assets_retrieve_material_data_location(active_assets, active_material);
+	kinc_g4_index_buffer_init(&active_context->r_ctx.ibo_textured, TEC_G2_MAX_INDICES, KINC_G4_INDEX_BUFFER_FORMAT_16BIT, KINC_G4_USAGE_DYNAMIC);
+	kinc_g4_vertex_buffer_init(&active_context->r_ctx.vbo_textured, TEC_G2_MAX_VERTS, &matdata->pipeline->vertex_structure, KINC_G4_USAGE_DYNAMIC, 0);
+
+	//Projection is linked up to normal draw for now...
+	active_context->r_ctx.material = matdata;
+}
+
 //Provide a context to be used for the drawing cycle
 void 
 tec_g2_begin(tec_g2_context_t * context, tec_assets_storage_t * assets)
 {
+	//Matching kinc_g4_end(0) is in renderer.c
+	//Kind of bad design, but should g2 be handling the buffer swap?
 	kinc_g4_begin(0);
 	kinc_g4_clear(KINC_G4_CLEAR_COLOR, 0, 0.0f, 0);
 	assert(context != NULL && "Submitted g2 context was NULL and it definitely can't be that.");
@@ -45,20 +59,10 @@ tec_g2_begin(tec_g2_context_t * context, tec_assets_storage_t * assets)
 	active_context = context;
 	active_assets = assets;
 	//kinc_g4_restore_render_target();
-	tec_assref_material_t active_material = tec_assets_find_material(active_assets, "Normal Draw");
-	tec_material_t * matdata = tec_internal_assets_retrieve_material_data_location(active_assets, active_material);
 
-	if (first_run){
-	kinc_g4_index_buffer_init(&active_context->r_ctx.ibo, 100, KINC_G4_INDEX_BUFFER_FORMAT_32BIT, KINC_G4_USAGE_DYNAMIC);
-	kinc_g4_vertex_buffer_init(&active_context->r_ctx.vbo, 100, &matdata->pipeline->vertex_structure, KINC_G4_USAGE_DYNAMIC, 0);
-	first_run = false;
-	}
-	active_context->r_ctx.v_data = kinc_g4_vertex_buffer_lock_all(&active_context->r_ctx.vbo);
+	active_context->r_ctx.v_data = kinc_g4_vertex_buffer_lock_all(&active_context->r_ctx.vbo_textured);
 	
 	active_context->r_ctx.i_data = kinc_g4_index_buffer_lock(&active_context->r_ctx.ibo);
-
-	//Projection is linked up to normal draw for now...
-	active_context->r_ctx.material = matdata;
 }
 
 //Releases context, probably ends drawing
@@ -66,7 +70,7 @@ void
 tec_g2_end(void)
 {
 	assert(active_context != NULL && "Begin before you end again!");
-	kinc_g4_vertex_buffer_unlock_all(&active_context->r_ctx.vbo);
+	kinc_g4_vertex_buffer_unlock_all(&active_context->r_ctx.vbo_textured);
 	kinc_g4_index_buffer_unlock(&active_context->r_ctx.ibo);
 
 	//The big one.
