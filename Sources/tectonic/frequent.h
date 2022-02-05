@@ -8,3 +8,5 @@
 //Macro expander
 #define TEC_EXPANDER_IMPL(ex) #ex
 #define TEC_EXPANDER(ex) TEC_EXPANDER_IMPL(ex)
+
+typedef unsigned int uint;
