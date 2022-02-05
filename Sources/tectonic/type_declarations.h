@@ -1,7 +1,5 @@
 #pragma once
 
-#include "ds/bfstack.h"
-
 #define TEC_MAX_SHADERS 16
 #define TEC_MAX_TEXTURES 64
 #define TEC_MAX_MATERIALS 64
