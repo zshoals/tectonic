@@ -19,6 +19,7 @@ tec_json_config_load_file(tec_json_config_state_t * config, char const * filenam
 		//assert(filesize < sizeof(buffer) && "tec_json_config overran character buffer. Config file is too big?");
 		kinc_file_reader_read(&reader, &buffer, filesize);
 		kinc_file_reader_close(&reader);
+		//Hack
 
 		struct json_value_s * json = json_parse(&buffer, filesize);
 		assert(json != 0 && "Error parsing JSON configuration file.");
