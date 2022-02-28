@@ -152,7 +152,7 @@ default_asset_and_resource_initialization_routine(void)
 	tec_assets_load_image_to_texture(&assets, "punch.png");
 	tec_assref_texture_t texture = tec_assets_find_texture(&assets, "punch.png");
 
-	tec_assref_material_t material = tec_material_create_material(&assets, "Normal Draw", shader);
+	tec_assref_material_t material = tec_material_create_material(&assets, "DEFAULT_TEXTURED", shader);
 	tec_material_assign_texture(&assets, material, "tex", texture, TEC_TEX_UNIT_SLOT_0);
 	kinc_matrix4x4_t newmat = tec_matrix_convert(HMM_Orthographic(0, 800, 600, 0, -5., -500.));
 	//tec_material_uniform_data_u udata = {.mat4_value = tec_matrix_convert(HMM_Mat4Identity())};

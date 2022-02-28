@@ -51,4 +51,4 @@ tec_renderer_context_t;
 
 //We should have an array of VBOs. One gets pushed whenever there is a new vertex structure
 void renderer_create_and_cache_new_vbo(void);
-void tec_renderer_draw(tec_renderer_context_t * context, tec_renderer_draw_mode_e draw_mode);
+void tec_renderer_draw(tec_renderer_context_t * context);

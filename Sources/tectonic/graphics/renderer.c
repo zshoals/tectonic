@@ -167,7 +167,7 @@ renderer_assign_uniforms(tec_material_t * mat)
 // }
 
 void 
-tec_renderer_draw(tec_renderer_context_t * ctx, tec_renderer_draw_mode_e draw_mode)
+tec_renderer_draw(tec_renderer_context_t * ctx)
 {
 	//Forget the caching for a moment
 	/*
@@ -187,29 +187,12 @@ tec_renderer_draw(tec_renderer_context_t * ctx, tec_renderer_draw_mode_e draw_mo
 	kinc_g4_set_pipeline(&ctx->material->pipeline->pipeline);
 	kinc_g4_set_texture(ctx->material->tex_data.texture_units[0], ctx->material->tex_data.textures[0]);
 	renderer_assign_uniforms(ctx->material);
-	kinc_g4_set_vertex_buffer(&ctx->vbo);
-	kinc_g4_set_index_buffer(&ctx->ibo);
+	kinc_g4_set_vertex_buffer(&ctx->vbo_textured);
+	kinc_g4_set_index_buffer(&ctx->ibo_textured);
 	//Mag filter needs set up in the context, maybe needs hashed also
 	//This is actual a material configuration, I get it now.
 	kinc_g4_set_texture_magnification_filter(ctx->material->tex_data.texture_units[0], KINC_G4_MIPMAP_FILTER_POINT);
 	//kinc_g4_draw_indexed_vertices_from_to(ctx->ibo_offset, ctx->requested_draw_count);
 	//kinc_g4_draw_indexed_vertices_from_to(0, 6);
 	kinc_g4_draw_indexed_vertices();
-	
-	switch (draw_mode)
-	{
-		case TEC_RENDERER_CONTINUE_DRAW:
-			//Do nothing, we still have to draw
-			break;
-		case TEC_RENDERER_DRAW_THEN_SWAP_BUFFER:
-			//We're done, swap the buffers and end
-			kinc_g4_end(0);
-			kinc_g4_swap_buffers();
-			break;
-		default:
-			//This assert saved me
-			//We must always assert switch cases, end of story.
-			assert(0 && "Somehow reached the default case in tec_renderer draw, should not be possible");
-			break;
-	}
 }

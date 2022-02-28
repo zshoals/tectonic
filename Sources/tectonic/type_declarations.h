@@ -4,6 +4,7 @@
 #define TEC_MAX_TEXTURES 64
 #define TEC_MAX_MATERIALS 64
 #define TEC_MAX_PIPELINES 64
+#define TEC_MAX_DRAW_COMMANDS 
 
 #define template_type tec_pipeline_data_t
 #define template_array_size TEC_MAX_PIPELINES
@@ -29,3 +30,4 @@
 #define template_array_size TEC_MAX_MATERIALS
 #define template_searchable
 #include "ds/bfstack.h"
+
