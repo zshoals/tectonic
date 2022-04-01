@@ -7,7 +7,6 @@
 
 #define template_type tec_draw_command_t
 #define template_array_size TEC_MAX_DRAW_COMMANDS
-#
 
 typedef struct
 tec_sprite_data
