@@ -17,18 +17,12 @@ typedef struct
 tec_renderer_context
 {
 	kinc_g4_vertex_buffer_t vbo_textured;
-	kinc_g4_vertex_buffer_t vbo_lightmap;
 	size_t vbo_textured_offset;
-	size_t vbo_lightmap_offset;
 	float * v_textured_data;
-	float * v_lightmap_data;
 
 	kinc_g4_index_buffer_t ibo_textured;
-	kinc_g4_index_buffer_t ibo_lightmap;
 	size_t ibo_textured_offset;
-	size_t ibo_lightmap_offset;
 	float * i_textured_data;
-	float * i_lightmap_data;
 
 	size_t requested_draw_count;
 
