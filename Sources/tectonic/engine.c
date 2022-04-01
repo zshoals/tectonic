@@ -72,6 +72,7 @@ tec_engine_main_loop(void)
 
 		//Full render cycle
 		{
+			//Does not necessarily work; the point at which work is actually done is arbitrarily decided by the graphics backend. Have to time between frames.
 			tec_timediff_begin(&render_timediff);
 
 			engine_loop_config.render_callback(&assets, &engine_context, accumulator /* should this subtract from something*/);
