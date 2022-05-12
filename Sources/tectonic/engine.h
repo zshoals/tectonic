@@ -1,7 +1,6 @@
 #pragma once
 
 #include "kinc/window.h"
-#include "util/time.h"
 
 typedef struct tec_assets_storage tec_assets_storage_t;
 
@@ -10,7 +9,7 @@ typedef struct tec_assets_storage tec_assets_storage_t;
 typedef struct
 tec_engine_context
 {
-	tec_time_t logic_timedata;
+	int temp;
 	//Render context
 	//Keyboard context
 	//Mouse context
