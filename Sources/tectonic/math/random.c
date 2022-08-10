@@ -1,9 +1,8 @@
 #include "random.h"
-#include "../frequent.h"
 
-local_data tec_random_state_t random;
+static tec_random_state_t random;
 
-local_func inline uint32_t 
+static inline uint32_t 
 raw32()
 {
 	enum {BARREL_SHIFT = 21, RSHIFT = 9, LSHIFT = 3};//good sets include {21,9,3},{15,8,3}; older versions used {25,8,3} which wasn't as good

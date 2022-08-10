@@ -10,15 +10,8 @@
 #include "tectonic/engine.h"
 
 #include "tectonic/lib/stc/ccommon.h"
-#include "tectonic/cvars.h"
-#include "tectonic/debug/log.h"
-#include "tectonic/graphics/g2.h"
-#include "tectonic/frequent.h"
-#include "tectonic/assets/assets.h"
 
 #define TEC_LOG_MODULE_NAME "Main"
-
-local_data tec_g2_context_t g2;
 
 void 
 game_update(tec_engine_context_t * engine_context, double dt) 
@@ -34,16 +27,12 @@ game_render(tec_assets_storage_t * assets, tec_engine_context_t * engine_context
 	//	Tri winding
 	// Issue with clearing?
 	//Issue with framebuffer initialization?
-	tec_g2_begin(&g2, assets);
-	tec_g2_draw_square(0, 0, 0, 0);
-	tec_g2_end();
 }
 
 int 
 kickstart(int argc, char** argv) 
 {
 	kinc_display_init();
-	tec_internal_cvars_set_all_default();
 
 	char const * config_title = "Tectonic Project";
 	int config_window_width = 800;

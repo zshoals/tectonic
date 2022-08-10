@@ -3,6 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
+                "${workspaceFolder}/Sources",
                 "C:\\HaxeLibraries\\Kinc\\Sources",
                 "C:\\HaxeLibraries\\Kinc\\Backends\\System\\Windows\\Sources",
                 "C:\\HaxeLibraries\\Kinc\\Backends\\System\\Microsoft\\Sources",

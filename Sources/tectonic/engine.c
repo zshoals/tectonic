@@ -21,7 +21,7 @@
 
 static tec_engine_context_t engine_context;
 
-static tec_assets_storage_t assets;
+//static tec_assets_storage_t assets;
 
 
 static tec_engine_loop_configuration_t engine_loop_config;
@@ -51,7 +51,7 @@ tec_engine_main_loop(void)
 
 		//Full render cycle
 		{
-			engine_loop_config.render_callback(&assets, &engine_context, accumulator /* should this subtract from something*/);
+			//engine_loop_config.render_callback(&assets, &engine_context, accumulator /* should this subtract from something*/);
 		}
 	}
 	//Kinc_stop()
@@ -68,6 +68,8 @@ tec_engine_quake
 	kinc_init(window_options->title, window_options->width, window_options->height, window_options, framebuffer_options);
 
 	tec_random_init(0x86aef51a, 0x9134b3eb, 0xf2517abf);
+
+	engine_loop_config = *loop_config;
 
 	kinc_set_update_callback(&tec_engine_main_loop);
 	kinc_start();

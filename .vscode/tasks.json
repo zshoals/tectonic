@@ -6,9 +6,8 @@
 		{
 			"label": "Kinc: Build for Windows (VS2019)",
 			"type": "shell",
-			"command": "node",
+			"command": "C:/HaxeLibraries/Kinc/make.bat",
 			"args": [
-				"C:/HaxeLibraries/Kinc/make.js",
 				"windows",
 				"-v",
 				"vs2019",
@@ -22,9 +21,8 @@
 		{
 			"label": "Kinc: Build for Windows (VS2019) NoShaders",
 			"type": "shell",
-			"command": "node",
+			"command": "C:/HaxeLibraries/Kinc/make.bat",
 			"args": [
-				"C:/HaxeLibraries/Kinc/make.js",
 				"windows",
 				"--noshaders",
 				"-v",

@@ -1,7 +1,6 @@
 #include "color.h"
-#include "../frequent.h"
 
-local_func int 
+static int 
 color_clamp(int value, int min, int max)
 {
 	if (value < min)
@@ -16,14 +15,14 @@ color_clamp(int value, int min, int max)
 	return value;
 }
 
-local_func tec_color_t
+static tec_color_t
 pack_then_rotate(tec_color_t value, int add, int shift)
 {
 	value += add;
 	return value <<= shift;
 }
 
-local_func int
+static int
 unpack(tec_color_t color, int mask, int shift)
 {
 	color &= mask;
