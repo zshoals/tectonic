@@ -4,7 +4,7 @@
 
 bool allocator_internal_is_power_of_two(size_t value)
 {
-	V_ALWAYS_CHECK_IS_TRUE(value > 1, "Expected a power of two alignment while allocating memory");
+	ENSURE_TRUE(value > 1, "Expected a power of two alignment while allocating memory");
 	return (value & (value - 1)) == 0;
 }
 
@@ -20,9 +20,9 @@ uintptr_t allocator_internal_align_forward(uintptr_t current_position, size_t al
 
 allocator_t allocator_create(uchar * memory_buffer, size_t memory_buffer_size, allocator_mode_e alloc_mode)
 {
-	V_ALWAYS_CHECK_IS_TRUE(memory_buffer != NULL, "Tried to create an allocator with a null memory buffer");
-	V_ALWAYS_CHECK_IS_TRUE(memory_buffer_size > 0, "Mem buffer size must be greater than 0");
-	V_ALWAYS_CHECK_IS_TRUE((uintptr_t)memory_buffer % DEFAULT_ALIGNMENT == 0, "Tried to create an allocator with a non-default aligned memory region");
+	ENSURE_TRUE(memory_buffer != NULL, "Tried to create an allocator with a null memory buffer");
+	ENSURE_TRUE(memory_buffer_size > 0, "Mem buffer size must be greater than 0");
+	ENSURE_TRUE((uintptr_t)memory_buffer % DEFAULT_ALIGNMENT == 0, "Tried to create an allocator with a non-default aligned memory region");
 	switch (alloc_mode)
 	{
 		case ALLOCATOR_MODE_ARENA:
@@ -34,7 +34,7 @@ allocator_t allocator_create(uchar * memory_buffer, size_t memory_buffer_size, a
 			};
 			break;
 		default:
-			V_ALWAYS_KILL_NOW("Incorrect allocator mode while creating an allocator");
+			ENSURE_KILL_NOW("Incorrect allocator mode while creating an allocator");
 	}
 };
 
