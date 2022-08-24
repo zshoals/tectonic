@@ -2,8 +2,10 @@
 
 #include "kinc/system.h"
 #include "kinc/log.h"
+#include "tectonic/simd/simd-ext.h"
 
 #include <string.h>
+#include <stdio.h>
 
 #include "lib/stc/ccommon.h"
 #include "kinc/io/filewriter.h"
@@ -54,7 +56,8 @@ tec_engine_main_loop(void)
 			//engine_loop_config.render_callback(&assets, &engine_context, accumulator /* should this subtract from something*/);
 		}
 	}
-	//Kinc_stop()
+	
+	kinc_stop();
 }
 
 void 

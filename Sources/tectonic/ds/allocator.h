@@ -12,7 +12,6 @@ typedef enum
 }
 allocator_mode_e;
 
-
 typedef struct allocator
 {
 	size_t const memory_size;

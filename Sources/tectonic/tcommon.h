@@ -24,3 +24,6 @@ typedef unsigned int uint;
 
 #define TEC_CONCAT_IMPL(A, B) A##B
 #define TEC_CONCAT(A, B) TEC_CONCAT_IMPL(A, B)
+
+#define CAST(TYPE) (TYPE)
+#define DEREF(PTR) *(PTR)
