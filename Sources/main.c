@@ -13,14 +13,12 @@
 
 #define TEC_LOG_MODULE_NAME "Main"
 
-void 
-game_update(tec_engine_context_t * engine_context, double dt) 
+void game_update(tec_engine_context_t * engine_context, double dt) 
 {
 	//kinc_log(KINC_LOG_LEVEL_INFO, "RT %f", tec_engine_get_render_time());
 }
 
-void 
-game_render(tec_assets_storage_t * assets, tec_engine_context_t * engine_context /*Should really just be render context only*/, double alpha) 
+void game_render(tec_assets_storage_t * assets, tec_engine_context_t * engine_context /*Should really just be render context only*/, double alpha) 
 {
 	//Possible error points:
 	//	Orthomatrix
@@ -29,9 +27,13 @@ game_render(tec_assets_storage_t * assets, tec_engine_context_t * engine_context
 	//Issue with framebuffer initialization?
 }
 
-int 
-kickstart(int argc, char** argv) 
+int kickstart(int argc, char** argv) 
 {
+	//First, run our tests and stuff if they are enabled
+
+	tbf_run_all_tests();
+
+	//========TESTS END=========
 	kinc_display_init();
 
 	char const * config_title = "Tectonic Project";
