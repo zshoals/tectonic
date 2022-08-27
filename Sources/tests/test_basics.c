@@ -5,51 +5,55 @@
 #include "trial_by_fire.h"
 
 
-void test_all_integer_basics(void)
+void test_all_integer_basic_operations(void)
 {
-	TEST("Int Addition", test_integer_addition);
-	TEST("Int Subtraction", test_integer_subtraction);
-	TEST("Int Division", test_integer_division);
-	TEST("Int Multiplication", test_integer_multiplication);
+
+	TEST("INT ADDITION",
+	{
+		int a = 1;
+		int b = 2;
+		int result = a + b;
+		EXPECTING(
+			result == 3,
+			"Proper addition because it's built into the language itself",
+			"Somehow the incorrect value came out of what we just did"
+		);
+	});
+
+	TEST("INT SUBTRACTION",
+	{
+		int a = 580;
+		int b = 80;
+		int result = a - b;
+		EXPECTING(
+			result == 500,
+			"Proper subtraction because it's built into the language itself",
+			"Somehow the incorrect value came out of what we just did"
+		);
+	});
+
+	TEST("INT MULTIPLICATION",
+	{
+		int a = 55;
+		int b = 3;
+		int result = a * b;
+		EXPECTING(
+			result == 165,
+			"Proper multiplication because it's built into the language itself",
+			"Somehow the incorrect value came out of what we just did"
+		);
+	});
+
+	TEST("INT DIVISION",
+	{
+		int a = 300;
+		int b = 150;
+		int result = a / b;
+		EXPECTING(
+			result == 2,
+			"Proper division because it's built into the language itself",
+			"Somehow the incorrect value came out of what we just did"
+		);
+	});
+
 }
-
-bool test_integer_addition(void)
-{
-	int a = 99;
-	int b = 1;
-	int result = a + b;
-	assert(result == 100);
-
-	return true;
-}
-
-bool test_integer_subtraction(void)
-{
-	int a = 580;
-	int b = 80;
-	int result = a - b;
-	assert(result == 500);
-
-	return true;
-}
-
-bool test_integer_division(void)
-{
-	int a = 1000;
-	int b = 500;
-	int result = a / b;
-	assert(result == 2);
-
-	return true;
-}
-
-bool test_integer_multiplication(void)
-{
-	int a = 10;
-	int b = 6;
-	int result = a * b;
-	assert(result == 60);
-
-	return true;
-}
-

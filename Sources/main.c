@@ -29,9 +29,11 @@ void game_render(tec_assets_storage_t * assets, tec_engine_context_t * engine_co
 
 int kickstart(int argc, char** argv) 
 {
-	//First, run our tests and stuff if they are enabled
+	//=======RUN ALL TESTS======
 
-	tbf_run_all_tests();
+	#ifndef TEC_DISABLE_TESTS
+		tbf_run_all_tests();
+	#endif
 
 	//========TESTS END=========
 	kinc_display_init();

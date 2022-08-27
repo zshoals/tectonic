@@ -18,26 +18,25 @@
 typedef struct tbf_test
 {
 	char const * active_test_name;
-	bool test_actually_exists;
 }
 tbf_test_t;
 
 static tbf_test_t active_test = {0};
 
-//Simple testing function. All tests should return a value of "true" when complete.
-//Provide a name for the test, and a function taking no parameters, without parenthesis on the function
-//Note, The bad path is unlikely to be hit because the compiler will just get angry. It's here just in case though.
+//To use, create a function to run various tests, then add test cases as follows:
+/*
+	TEST("EXAMPLE NAME",
+	{
+		Do stuff in here...
+		assert(Thing == True);
+	});
+*/
+#define EXPECTING(EXPR, EXPECTED_MESSAGE, ERR_MESSAGE) do {\
+	assert( (("Expected: " EXPECTED_MESSAGE), ("Errored: " ERR_MESSAGE), (EXPR)) );\
+} while (0)
+
 #define TEST(TEST_NAME, TEST_FUNCTION) do { \
 	active_test.active_test_name = TEST_NAME; \
-	active_test.test_actually_exists = false; \
-	active_test.test_actually_exists = TEST_FUNCTION(); \
-	if (active_test.test_actually_exists) \
-	{ \
-		kinc_log(KINC_LOG_LEVEL_INFO, "Testing::%s::success.", active_test.active_test_name); \
-	} \
-	else \
-	{ \
-		kinc_log(KINC_LOG_LEVEL_ERROR, "MALFORMED TEST, DIDN'T RETURN TRUE OR INCORRECT TEST FUNCTION!!"); \
-		assert(0); \
-	} \
+	TEST_FUNCTION; \
+	kinc_log(KINC_LOG_LEVEL_INFO, "Testing::%s --> Success.", active_test.active_test_name);\
 } while (0)

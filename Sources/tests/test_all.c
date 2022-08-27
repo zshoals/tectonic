@@ -7,5 +7,5 @@
 
 void tbf_run_all_tests(void)
 {
-	test_all_integer_basics();
+	test_all_integer_basic_operations();
 }
