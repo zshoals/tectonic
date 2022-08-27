@@ -1,9 +1,5 @@
-#include <assert.h>
-#include <stdbool.h>
-
 #include "test_basics.h"
 #include "trial_by_fire.h"
-
 
 void test_all_integer_basic_operations(void)
 {
