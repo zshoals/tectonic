@@ -16,7 +16,7 @@
 	TEST("EXAMPLE NAME",
 	{
 		Do stuff in here...
-		assert(Thing == True);
+		EXPECTING(Thing == True, Expected_Message, Possible_Issues_Message);
 	});
 */
 #define TEST(TEST_NAME, TEST_FUNCTION) do { \
