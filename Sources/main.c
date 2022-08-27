@@ -8,6 +8,7 @@
 #include "kinc/graphics4/graphics.h"
 
 #include "tectonic/engine.h"
+#include "tests/test_all.h"
 
 #include "tectonic/lib/stc/ccommon.h"
 
@@ -33,6 +34,8 @@ int kickstart(int argc, char** argv)
 
 	#ifndef TEC_DISABLE_TESTS
 		tbf_run_all_tests();
+		//we can return right here if we really want to
+		//return 0;
 	#endif
 
 	//========TESTS END=========

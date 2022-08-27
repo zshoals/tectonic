@@ -38,7 +38,7 @@ static inline bitflags32_t tec_bits_unset(bitflags32_t flags, bitflags32_t mask)
 
 static inline bool tec_bits_has_all_flags(bitflags32_t flags, bitflags32_t mask)
 {
-	return (flags & mask) == mask;
+	return (flags & mask) == flags;
 }
 
 static inline bool tec_bits_has_any_flag(bitflags32_t flags, bitflags32_t mask)

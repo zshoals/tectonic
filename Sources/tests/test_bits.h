@@ -1,4 +1,4 @@
 
 #pragma once
 
-#include "tectonic/util/bits.h"
+void test_all_bit_operations(void);

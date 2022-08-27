@@ -7,9 +7,8 @@
 #include <assert.h>
 #include "kinc/log.h"
 
-
 #define EXPECTING(EXPR, EXPECTED_MESSAGE, ERR_MESSAGE) do {\
-	assert( (("Expected: " EXPECTED_MESSAGE), ("Errored: " ERR_MESSAGE), (EXPR)) );\
+	assert( (("Expected: " EXPECTED_MESSAGE), ("Possible Issues: " ERR_MESSAGE), (EXPR)) );\
 } while (0)
 
 //To use, create a function called by main/some program to run a group of tests, then add test cases as follows:
