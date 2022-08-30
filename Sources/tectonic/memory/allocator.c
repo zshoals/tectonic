@@ -83,5 +83,12 @@ void * allocator_aligned_malloc(allocator_t * a, size_t target_alignment, size_t
 
 void allocator_free_all(allocator_t * a)
 {
-	a->memory_top_offset = 0;
+	switch (a->mode)
+	{
+		case ALLOCATOR_MODE_ARENA:
+			a->memory_top_offset = 0;
+			break;
+		default:
+			ENSURE_UNREACHABLE("Incorrect allocator mode while freeing all memory");
+	}
 };
