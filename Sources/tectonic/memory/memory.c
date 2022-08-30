@@ -4,6 +4,8 @@
 #include "allocator.h"
 #include "tectonic/validation.h"
 
+static tec_global_memory_t program_memory = {0};
+
 void init_global_memory_buffers(size_t frame_memory_size, size_t level_memory_size, size_t permanent_memory_size)
 {
 	program_memory.frame_memory = malloc(frame_memory_size);

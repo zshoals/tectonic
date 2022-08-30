@@ -23,8 +23,6 @@ typedef struct tec_global_memory
 }
 tec_global_memory_t;
 
-static tec_global_memory_t program_memory = {0};
-
 void init_global_memory_buffers(size_t frame_memory_size, size_t level_memory_size, size_t permanent_memory_size);
 allocator_t * default_frame_allocator(void);
 void reset_frame_allocator_memory(void);
