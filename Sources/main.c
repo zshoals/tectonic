@@ -15,6 +15,8 @@
 #include "tectonic/lib/stc/ccommon.h"
 #include "tectonic/validation.h"
 
+#include "tectonic/memory/memory.h"
+
 #define TEC_LOG_MODULE_NAME "Main"
 
 void game_update(tec_engine_context_t * engine_context, double dt) 
@@ -42,6 +44,9 @@ int kickstart(int argc, char** argv)
 	#endif
 
 	//========TESTS END=========
+	//TODO(zshoals): THIS NEEDS TO BE IN THE RIGHT LOCATION, NOT HERE REALLY
+	//Although it's not a big deal to be here either I guess, but I think it should be in our engine layer
+	// init_global_memory_buffers(TEC_MEGABYTES(10), TEC_MEGABYTES(10), TEC_MEGABYTES(10));
 	kinc_display_init();
 
 	char const * config_title = "Tectonic Project";
