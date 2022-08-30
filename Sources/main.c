@@ -1,5 +1,7 @@
 #include <stdbool.h>
 #include <assert.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "kinc/window.h"
 #include "kinc/system.h"
@@ -11,6 +13,7 @@
 #include "tests/test_all.h"
 
 #include "tectonic/lib/stc/ccommon.h"
+#include "tectonic/validation.h"
 
 #define TEC_LOG_MODULE_NAME "Main"
 
@@ -25,7 +28,7 @@ void game_render(tec_assets_storage_t * assets, tec_engine_context_t * engine_co
 	//	Orthomatrix
 	//	Tri winding
 	// Issue with clearing?
-	//Issue with framebuffer initialization?
+	// Issue with framebuffer initialization?
 }
 
 int kickstart(int argc, char** argv) 
