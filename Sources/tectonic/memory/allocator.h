@@ -1,9 +1,6 @@
 #pragma once
 
 #include "tectonic/tcommon.h"
-#include "tectonic/memory/memory.h"
-
-struct allocator;
 
 enum {DEFAULT_ALIGNMENT = 16};
 
@@ -15,9 +12,9 @@ allocator_mode_e;
 
 typedef struct allocator
 {
-	size_t const memory_size;
-	tec_bytes * const memory_origin;
-	allocator_mode_e const mode;
+	size_t memory_size;
+	tec_bytes * memory_origin;
+	allocator_mode_e mode;
 
 	union memory_arena
 	{

@@ -83,6 +83,7 @@ void * allocator_aligned_malloc(allocator_t * a, size_t target_alignment, size_t
 
 void allocator_free_all(allocator_t * a)
 {
+	ENSURE_PTR_NOT_NULL(a, "Tried to free an allocator, but it was null");
 	switch (a->mode)
 	{
 		case ALLOCATOR_MODE_ARENA:
