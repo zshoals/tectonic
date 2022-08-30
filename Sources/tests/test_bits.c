@@ -1,10 +1,12 @@
 #include "test_bits.h"
 #include "trial_by_fire.h"
+#include "kinc/log.h"
 
 #include "tectonic/util/bits.h"
 
 void test_all_bit_operations(void)
 {
+	kinc_log(KINC_LOG_LEVEL_INFO, "====Test Group: Bits====");
 
 	TEST("Simple Bit Extraction",
 	{

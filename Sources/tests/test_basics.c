@@ -3,6 +3,7 @@
 
 void test_all_integer_basic_operations(void)
 {
+	kinc_log(KINC_LOG_LEVEL_INFO, "====Test Group: Basic Integer Math (Control Group)====");
 
 	TEST("INT ADDITION",
 	{
