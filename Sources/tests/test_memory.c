@@ -34,6 +34,15 @@ void test_all_memory_operations(void)
 		kinc_log(KINC_LOG_LEVEL_INFO, "TEST LOG: Here's some added integers from an allocator: %d, %d, %d, %d", ints[0], ints[1], ints[2], ints[3]);
 
 		EXPECTING(
+			(uintptr_t)&ints[0] % alignof(int) == 0 &&
+			(uintptr_t)&ints[1] % alignof(int) == 0 &&
+			(uintptr_t)&ints[2] % alignof(int) == 0 &&
+			(uintptr_t)&ints[3] % alignof(int) == 0,
+			"All ints should be aligned to an appropriate memory address",
+			""
+		);
+
+		EXPECTING(
 			mem.memory_top_offset == sizeof(int) * 4,
 			"Should have had a memory offset of 4 ints, as that's what we allocated",
 			""
