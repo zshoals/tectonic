@@ -46,6 +46,8 @@ int kickstart(int argc, char** argv)
 	//========TESTS END=========
 	//TODO(zshoals): THIS NEEDS TO BE IN THE RIGHT LOCATION, NOT HERE REALLY
 	//Although it's not a big deal to be here either I guess, but I think it should be in our engine layer
+	//Also, it works completely fine, looking good so far.
+
 	// init_global_memory_buffers(TEC_MEGABYTES(10), TEC_MEGABYTES(10), TEC_MEGABYTES(10));
 	kinc_display_init();
 

@@ -57,7 +57,7 @@ tec_engine_main_loop(void)
 		}
 	}
 	
-	kinc_stop();
+	// kinc_stop();
 }
 
 void 
