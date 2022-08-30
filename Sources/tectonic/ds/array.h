@@ -4,7 +4,7 @@
 #include "dscommon.h"
 
 #define ds_prefix array_
-#define ds_type int //TODO(colorful): Remove me
+#define ds_type int //TODO(zshoals): Remove me
 #ifndef ds_tag
 	#define ds_tag ds_type
 #endif

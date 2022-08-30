@@ -39,7 +39,7 @@ allocator_t allocator_create(tec_bytes * memory_buffer, size_t memory_buffer_siz
 	}
 };
 
-//TODO(Zach): Stack buffers aren't guaranteed to be aligned for 128 bytes, we literally ran into this issue in a test
+//TODO(zshoals): Stack buffers aren't guaranteed to be aligned for 128 bytes, we literally ran into this issue in a test
 //Probably applies to malloc also. We'll need to add an option to force this I suppose
 //This is sort of an issue, we are only "aligned" for some cases, we can't really force alignment for something bigger than
 //16 right now
@@ -47,7 +47,7 @@ allocator_t allocator_create(tec_bytes * memory_buffer, size_t memory_buffer_siz
 
 void * allocator_aligned_malloc(allocator_t * a, size_t target_alignment, size_t elem_size, size_t elem_count)
 {
-	//TODO(Zach): We should probably do debug messages or something here
+	//TODO(zshoals): We should probably do debug messages or something here
 	//Some sort of memory tracking...
 	ENSURE_PTR_NOT_NULL(a, "Provided allocator was null");
 	ENSURE_TRUE(allocator_internal_is_power_of_two(target_alignment), "Target alignment needs to be a valid power of 2");
