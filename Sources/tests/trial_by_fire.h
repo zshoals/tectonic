@@ -23,3 +23,10 @@
 	TEST_FUNCTION; \
 	kinc_log(KINC_LOG_LEVEL_INFO, "Testing::%s --> Success.", TEST_NAME);\
 } while (0)
+
+//Another way to structure tests, but kind of problematic with regards to errors.
+//Also, might run into issues with a max amount of characters in a macro or something
+// #define TEST_GROUP(GROUP_NAME, TESTS) do { \
+// 	kinc_log(KINC_LOG_LEVEL_INFO, "====Test Group: %s====", GROUP_NAME); \
+// 	TESTS; \
+// } while (0)
