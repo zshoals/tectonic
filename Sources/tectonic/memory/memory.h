@@ -10,16 +10,13 @@
 
 //Source: https://stackoverflow.com/a/28464194
 //Hopefully portable way to find alignment in C99
-#define alignof(type) offsetof(struct { char c; type d; }, d)
+#define tec_alignof(type) offsetof(struct { char c; type d; }, d)
 
 typedef struct tec_global_memory
 {
 	allocator_t default_frame_allocator_storage;
 	allocator_t default_level_allocator_storage;
 	allocator_t default_permanent_allocator_storage;
-	tec_bytes * frame_memory;
-	tec_bytes * level_memory;
-	tec_bytes * permanent_memory;
 }
 tec_global_memory_t;
 

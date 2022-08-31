@@ -27,4 +27,4 @@ allocator_t;
 allocator_t allocator_create(tec_bytes * memory_buffer, size_t memory_buffer_size, allocator_mode_e alloc_mode);
 void * allocator_aligned_malloc(allocator_t * a, size_t target_alignment, size_t elem_size, size_t elem_count);
 void allocator_free_all(allocator_t * a);
-#define allocator_malloc(ALLOCATOR, TYPE, COUNT) allocator_aligned_malloc((ALLOCATOR), alignof(TYPE), sizeof(TYPE), (COUNT))
+#define allocator_malloc(ALLOCATOR, TYPE, COUNT) allocator_aligned_malloc((ALLOCATOR), tec_alignof(TYPE), sizeof(TYPE), (COUNT))
