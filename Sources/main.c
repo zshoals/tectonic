@@ -84,7 +84,7 @@ int kickstart(int argc, char** argv)
 	{
 		.color_bits = 32,
 		.depth_bits = 16,
-		.frequency = 60, // This struct member is completely useless, does nothing
+		.frequency = 60, // Apparently controls fullscreen framerate...weird?
 		.samples_per_pixel = 1,
 		.stencil_bits = 8,
 		.vertical_sync = config_vsync,

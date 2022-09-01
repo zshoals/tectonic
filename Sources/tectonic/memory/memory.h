@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
-#include "tectonic/tcommon.h"
+#include "mem_types.h"
 #include "allocator.h"
 
 #define TEC_KILOBYTES(AMOUNT) ((AMOUNT) * 1024)

@@ -1,6 +1,9 @@
+#include <stdint.h>
+
 #include "allocator.h"
 #include "tectonic/validation.h"
 #include "tectonic/tcommon.h"
+#include "mem_types.h"
 #include "kinc/log.h"
 
 bool allocator_internal_is_power_of_two(size_t value)

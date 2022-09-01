@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tectonic/tcommon.h"
+#include "mem_types.h"
 
 enum {DEFAULT_ALIGNMENT = 16};
 

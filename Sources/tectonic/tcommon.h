@@ -19,8 +19,6 @@ typedef double f64;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-typedef unsigned char tec_bytes;
-
 #define TEC_STRINGIFY_IMPL(X) #X
 #define TEC_STRINGIFY(X) TEC_STRINGIFY_IMPL(X)
 
