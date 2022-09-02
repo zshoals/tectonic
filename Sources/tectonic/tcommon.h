@@ -27,3 +27,6 @@ typedef unsigned int uint;
 
 #define CAST(TYPE) (TYPE)
 #define DEREF(PTR) *(PTR)
+
+#define for_range(STOP) for (size_t _i = 0; _i < (STOP); ++_i)
+#define for_range_var(CAPTURE, STOP) for (size_t (CAPTURE) = 0; (CAPTURE) < (STOP); ++(CAPTURE))
