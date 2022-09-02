@@ -5,7 +5,7 @@
 
 #define ds_prefix stack_
 
-#define ds_type int
+// #define ds_type int
 #ifndef ds_tag
 	#define ds_tag ds_type
 #endif
