@@ -39,9 +39,32 @@ void test_all_tec_string_operations(void)
 
 		tec_string_t combo = tec_string_append(&mem, a, b);
 
+		kinc_log(KINC_LOG_LEVEL_INFO, "Quick String Out Test: %s", tec_string_cstr(&mem, combo));
 		EXPECTING(
 			combo.length == 8,
 			"Strings combined should match a length of 8",
+			""
+		);
+	});
+
+	TEST("Comparing strings",
+	{
+		tec_bytes buffer[1024] = {0};
+		allocator_t mem = allocator_create(&buffer[0], 1024, ALLOCATOR_MODE_ARENA);
+
+		tec_string_t a = tec_string_create(&mem, "Absolute fool!");
+		tec_string_t b = tec_string_create(&mem, "Absolute fool!");
+		tec_string_t c = tec_string_create(&mem, "Moron!");
+
+		EXPECTING(
+			tec_string_equals(a, b),
+			"Same strings should match even if allocated in different memory regions",
+			""
+		);
+
+		EXPECTING(
+			!tec_string_equals(a, c),
+			"Different strings should not match at all, obviously",
 			""
 		);
 	});
