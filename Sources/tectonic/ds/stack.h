@@ -5,7 +5,11 @@
 
 #define ds_prefix stack_
 
-// #define ds_type int
+#ifndef ds_type
+	//Fallback so things will actually compile even if the user has not set a type
+	#define ds_type int
+#endif
+
 #ifndef ds_tag
 	#define ds_tag ds_type
 #endif

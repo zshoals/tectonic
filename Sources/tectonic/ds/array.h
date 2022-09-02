@@ -64,7 +64,7 @@ static inline ds_type * ds_func(_get_mut_unsafe)(ds_self_t const * array, size_t
 {
 	DEBUG_ENSURE_PTR_NOT_NULL(array, "Array was null while accessing index");
 
-	tec_internal_array_bounds_check(index, array->length);
+	tec_internal_array_bounds_check_debug_only(index, array->length);
 	return &array->data[index];
 }
 
