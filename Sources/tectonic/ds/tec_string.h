@@ -14,7 +14,7 @@ tec_string_t;
 
 typedef struct tec_stringview
 {
-	char const * strview;
+	char const * str;
 	size_t length;
 }
 tec_stringview_t;

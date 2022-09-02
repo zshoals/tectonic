@@ -68,4 +68,28 @@ void test_all_tec_string_operations(void)
 			""
 		);
 	});
+
+	TEST("Find a string",
+	{
+		tec_bytes buffer[1024] = {0};
+		allocator_t mem = allocator_create(&buffer[0], 1024, ALLOCATOR_MODE_ARENA);
+
+		tec_string_t source = tec_string_create(&mem, "Hello, Jackson!");
+		tec_string_t fail_source = tec_string_create(&mem, "Bobbington Couruso, noooo!");
+		tec_string_t search = tec_string_create(&mem, "Jack");
+
+		tec_stringview_t result = tec_string_find(source, search);
+
+		EXPECTING(
+			strncmp(result.str, search.str, 4) == 0,
+			"Strings should match if the appropriate substring was extracted from find",
+			""
+		);
+
+		EXPECTING(
+			strncmp(result.str, fail_source.str, fail_source.length),
+			"Strings should be the same as a match was not found anywhere",
+			""
+		);
+	});
 }

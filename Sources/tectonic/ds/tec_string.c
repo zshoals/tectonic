@@ -40,7 +40,27 @@ tec_string_t tec_string_copy(allocator_t * allocator, tec_string_t source)
 
 tec_stringview_t tec_string_find(tec_string_t const haystack, tec_string_t const needle)
 {
-	ENSURE_UNIMPLEMENTED();
+	size_t substring_start = 0;
+
+	for (size_t i = 0; i < haystack.length; ++i)
+	{
+		if (haystack.str[i] == needle.str[0])
+		{
+			//Skip idx 0, we already matched
+			for (size_t j = 1; j < needle.length; ++j)
+			{
+				if (haystack.str[i + j] != needle.str[j]) break;
+				if (j == needle.length - 1) substring_start = i;
+			}
+		}
+	}
+
+	//Todo(zshoals): This is flawed. We don't really have a way to indicate that a match wasn't found
+	//We should change this to some sort of "string find result" struct or something.
+	return (tec_stringview_t){
+		.str = &haystack.str[substring_start],
+		.length = haystack.length - substring_start
+	};
 }
 
 char const * tec_string_cstr(allocator_t * allocator, tec_string_t source)
