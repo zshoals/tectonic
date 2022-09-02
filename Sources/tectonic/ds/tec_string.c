@@ -28,6 +28,16 @@ tec_string_t tec_string_append(allocator_t * allocator, tec_string_t source, tec
 	return output;
 }
 
+tec_string_t tec_string_copy(allocator_t * allocator, tec_string_t source)
+{
+	tec_string_t output = {0};
+	output.length = source.length;
+	output.str = allocator_malloc(allocator, char, output.length);
+	strncpy(output.str, source.str, output.length);
+
+	return output;
+}
+
 tec_stringview_t tec_string_find(tec_string_t const haystack, tec_string_t const needle)
 {
 	ENSURE_UNIMPLEMENTED();
