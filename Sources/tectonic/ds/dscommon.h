@@ -1,6 +1,8 @@
 #pragma once
 
 #include "tectonic/tcommon.h"
+#include "tectonic/validation.h"
+#include "tectonic/memory/allocator.h"
 
 //Container name + user-defined tag
 //IE dynarray_intptr
