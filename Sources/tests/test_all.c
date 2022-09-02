@@ -6,6 +6,7 @@
 #include "test_bits.h"
 #include "test_memory.h"
 #include "test_generic_array.h"
+#include "test_tec_string.h"
 
 //============================================
 #include "kinc/log.h"
@@ -18,6 +19,7 @@ void tbf_run_all_tests(void)
 	test_all_bit_operations();
 	test_all_memory_operations();
 	test_all_generic_array_functions();
+	test_all_tec_string_operations();
 
 	kinc_log(KINC_LOG_LEVEL_INFO, "[ Testing completed successfully. ]");
 }
