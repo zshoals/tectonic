@@ -8,6 +8,8 @@
 
 tec_string_t tec_string_create(allocator_t * allocator, char const * string)
 {
+	DEBUG_ENSURE_PTR_NOT_NULL(allocator, "Allocator was null");
+
 	tec_string_t output = {0};
 	output.length = strlen(string);
 	output.str = allocator_malloc(allocator, char, output.length);
@@ -18,6 +20,8 @@ tec_string_t tec_string_create(allocator_t * allocator, char const * string)
 
 tec_string_t tec_string_append(allocator_t * allocator, tec_string_t source, tec_string_t appendage)
 {
+	DEBUG_ENSURE_PTR_NOT_NULL(allocator, "Allocator was null");
+
 	tec_string_t output = {0};
 	output.length = source.length + appendage.length;
 	output.str = allocator_malloc(allocator, char, output.length);
@@ -30,6 +34,8 @@ tec_string_t tec_string_append(allocator_t * allocator, tec_string_t source, tec
 
 tec_string_t tec_string_copy(allocator_t * allocator, tec_string_t source)
 {
+	DEBUG_ENSURE_PTR_NOT_NULL(allocator, "Allocator was null");
+
 	tec_string_t output = {0};
 	output.length = source.length;
 	output.str = allocator_malloc(allocator, char, output.length);
@@ -65,6 +71,8 @@ tec_stringview_t tec_string_find(tec_string_t const haystack, tec_string_t const
 
 char const * tec_string_cstr(allocator_t * allocator, tec_string_t source)
 {
+	DEBUG_ENSURE_PTR_NOT_NULL(allocator, "Allocator was null");
+
 	char * output = allocator_malloc(allocator, char, source.length + 1);
 	strncpy(output, source.str, source.length);
 	output[source.length] = '\0';
