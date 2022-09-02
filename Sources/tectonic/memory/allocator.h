@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mem_types.h"
+#include "tectonic/memory/mem_common.h"
 
 enum {DEFAULT_ALIGNMENT = 16};
 
@@ -22,7 +22,6 @@ typedef struct allocator
 	};
 }
 allocator_t;
-
 
 allocator_t allocator_create(tec_bytes * memory_buffer, size_t memory_buffer_size, allocator_mode_e alloc_mode);
 void * allocator_aligned_malloc(allocator_t * a, size_t target_alignment, size_t elem_size, size_t elem_count);
