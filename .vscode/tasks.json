@@ -34,6 +34,20 @@
 			"group": "build",
 			// Use the standard MS compiler pattern to detect errors, warnings and infos
 			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Kinc: Remake Build Files",
+			"type": "shell",
+			"command": "C:/HaxeLibraries/Kinc/make.bat",
+			"args": [
+				"windows",
+				"--noshaders",
+				"-v",
+				"vs2019",
+
+			],
+			"group": "build",
+			"problemMatcher": "$msCompile"
 		}
 	]
 }
