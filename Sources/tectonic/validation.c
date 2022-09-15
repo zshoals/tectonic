@@ -18,7 +18,7 @@ void tec_validation_ensure_int_gt(long long a, long long b, char const * message
 	}
 	else
 	{
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %lld greater than %lld", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a > b, 0) );
@@ -33,7 +33,7 @@ void tec_validation_ensure_int_gte(long long a, long long b, char const * messag
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %lld greater than or equal to %lld", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a >= b, 0) );
@@ -48,7 +48,7 @@ void tec_validation_ensure_int_lt(long long a, long long b, char const * message
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %lld less than %lld", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a < b, 0) );
@@ -63,7 +63,7 @@ void tec_validation_ensure_int_lte(long long a, long long b, char const * messag
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %lld less than or equal to %lld", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a <= b, 0) );
@@ -78,7 +78,7 @@ void tec_validation_ensure_int_equals(long long a, long long b, char const * mes
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %lld equals %lld", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a == b, 0) );
@@ -92,7 +92,7 @@ void tec_validation_ensure_int_in_range(long long value, long long lower, long l
 	}
 	else
 	{
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %lld to be in range of lower range %lld and upper range %lld.", value, lower, upper);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, lower <= value && value < upper, 0) );
@@ -113,7 +113,7 @@ void tec_validation_ensure_uint_gt(unsigned long long a, unsigned long long b, c
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %llu greater than %llu", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a > b, 0) );
@@ -128,7 +128,7 @@ void tec_validation_ensure_uint_gte(unsigned long long a, unsigned long long b, 
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %llu greater than or equal to %llu", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a >= b, 0) );
@@ -143,7 +143,7 @@ void tec_validation_ensure_uint_lt(unsigned long long a, unsigned long long b, c
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %llu less than %llu", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a < b, 0) );
@@ -158,7 +158,7 @@ void tec_validation_ensure_uint_lte(unsigned long long a, unsigned long long b, 
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %llu less than or equal to %llu", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a <= b, 0) );
@@ -173,7 +173,7 @@ void tec_validation_ensure_uint_equals(unsigned long long a, unsigned long long 
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %llu equals %llu", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a == b, 0) );
@@ -188,7 +188,7 @@ void tec_validation_ensure_uint_in_range(unsigned long long value, unsigned long
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected value %llu to be in range of lower range %llu and upper range %llu", value, lower, upper);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, lower <= value && value < upper, 0) );
@@ -208,7 +208,7 @@ void tec_validation_ensure_float_gt(long double a, long double b, char const * m
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %Lf greater than %Lf", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a > b, 0) );
@@ -223,7 +223,7 @@ void tec_validation_ensure_float_gte(long double a, long double b, char const * 
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %Lf greater than or equal to %Lf", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a >= b || fabs(a - b) < TEC_VALIDATION_FLOAT_EPSILON, 0) );
@@ -238,7 +238,7 @@ void tec_validation_ensure_float_lt(long double a, long double b, char const * m
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %Lf less than %Lf", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a < b, 0) );
@@ -253,7 +253,7 @@ void tec_validation_ensure_float_lte(long double a, long double b, char const * 
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %Lf less than or equal to %Lf", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, a <= b || fabs(a - b) < TEC_VALIDATION_FLOAT_EPSILON, 0) );
@@ -268,7 +268,7 @@ void tec_validation_ensure_float_equals(long double a, long double b, char const
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %Lf equals %Lf", a, b);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, fabs(a - b) < TEC_VALIDATION_FLOAT_EPSILON, 0) );
@@ -283,7 +283,7 @@ void tec_validation_ensure_float_in_range(long double value, long double lower, 
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Expected %Lf in the range of lower range %Lf and upper range %Lf", value, lower, upper);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, ((lower <= value || fabs(lower - value) < TEC_VALIDATION_FLOAT_EPSILON) && value < upper), 0) );
@@ -303,7 +303,7 @@ void tec_validation_ensure_ptr_not_null(void * ptr, char const * message, char c
 	else
 	{
 
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Pointer was null!");
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, ptr, 0) );
@@ -317,7 +317,7 @@ void tec_validation_ensure_ptr_is_null(void * ptr, char const * message, char co
 	}
 	else
 	{
-		kinc_log(KINC_LOG_LEVEL_ERROR, "ASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
 		kinc_log(KINC_LOG_LEVEL_ERROR, "Pointer was not null!");
 		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
 		assert( (message, !ptr, 0) );

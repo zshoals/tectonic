@@ -19,6 +19,8 @@
 #include "lib/HandmadeMath.h"
 #include "math/random.h"
 
+#include "validation.h"
+
 #define TEC_LOG_MODULE_NAME "Engine"
 
 static tec_engine_context_t engine_context;

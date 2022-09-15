@@ -97,6 +97,9 @@ void tec_validation_ensure_ptr_is_null(void * ptr, char const * message, char co
 
 
 //These assertions are never disabled, even in release builds
+//An important note: These may need have a different assert mechanism, otherwise it may enter a debugmode state
+//in release to clients (not good!). Might have to change these to abort() or something instead,
+//maybe with some sort of crash message box.
 #define ENSURE_TRUE(Expression, Message) assert(( (Message), (Expression) ))
 #define ENSURE_FALSE(Expression, Message) assert(( (Message), !(Expression) ))
 
