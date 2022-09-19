@@ -2,13 +2,20 @@
 
 #include "tectonic/tcommon.h"
 #include "tectonic/validation.h"
-#include "tectonic/memory/allocator.h"
 
 //Container name + user-defined tag
 //IE dynarray_intptr
 #define ds_self TEC_CONCAT(ds_prefix, ds_tag)
 #define ds_self_t TEC_CONCAT(ds_self, _t)
 #define ds_func(name) TEC_CONCAT(ds_self, name)
+
+//Interesting idea; foreach_array loop? We can maybe reverse the capture and size_t iterator type
+//TODO(zshoals): Appears to work alright, however this is NOT SETUP FOR ARRAYS YET AND NEEDS FIXED
+//Should be located in the actual array type data structure. Cool implementation!
+#define foreach_array(CAPTURE, TYPE, ARRAY)\
+	size_t TEC_CONCAT(_tec_iterator_i_, __LINE__) = 0;\
+	const size_t TEC_CONCAT(_tec_iterator_end_, __LINE__) = ARRAY->length;\
+	for (TYPE * CAPTURE = NULL; CAPTURE = &ARRAY[TEC_CONCAT(_tec_iterator_i_, __LINE__)], i < TEC_CONCAT(_tec_iterator_end_, __LINE__); ++TEC_CONCAT(_tec_i, __LINE__) )
 
 static inline void tec_internal_array_bounds_check(size_t index, size_t array_length)
 {
