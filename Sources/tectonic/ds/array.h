@@ -1,6 +1,7 @@
 //Do not use pragma once here, this file is intended to be reincluded multiple times
 
 #include "dscommon.h"
+#include "allocator.h"
 
 #define ds_prefix array_
 // #define ds_type 
