@@ -110,6 +110,7 @@ void tec_validation_ensure_ptr_is_null(void * ptr, char const * message, char co
 #define ENSURE_INT_EQUALS(A, B, Message) tec_validation_ensure_int_equals(A, B, Message, __FILE__, __LINE__)
 #define ENSURE_INT_IN_RANGE(Value, Lower, Upper, Message) tec_validation_ensure_int_in_range(Value, Lower, Upper, Message, __FILE__, __LINE__)
 #define ENSURE_INT_GTZERO(Value, Message) tec_validation_ensure_int_gt(Value, 0, Message, __FILE__, __LINE__)
+#define ENSURE_INT_GTEZERO(Value, Message) tec_validation_ensure_int_gte(Value, 0, Message, __FILE__, __LINE__)
 
 #define ENSURE_UINT_GT(A, B, Message) tec_validation_ensure_uint_gt(A, B, Message, __FILE__, __LINE__)
 #define ENSURE_UINT_GTE(A, B, Message) tec_validation_ensure_uint_gte(A, B, Message, __FILE__, __LINE__)
@@ -118,6 +119,7 @@ void tec_validation_ensure_ptr_is_null(void * ptr, char const * message, char co
 #define ENSURE_UINT_EQUALS(A, B, Message) tec_validation_ensure_uint_equals(A, B, Message, __FILE__, __LINE__)
 #define ENSURE_UINT_IN_RANGE(Value, Lower, Upper, Message) tec_validation_ensure_uint_in_range(Value, Lower, Upper, Message,  __FILE__, __LINE__)
 #define ENSURE_UINT_GTZERO(Value, Message) tec_validation_ensure_uint_gt(Value, 0, Message, __FILE__, __LINE__)
+#define ENSURE_UINT_GTEZERO(Value, Message) tec_validation_ensure_uint_gte(Value, 0, Message, __FILE__, __LINE__)
 
 #define ENSURE_FLOAT_GT(A, B, Message) tec_validation_ensure_float_gt(A, B, Message, __FILE__, __LINE__)
 #define ENSURE_FLOAT_GTE(A, B, Message) tec_validation_ensure_float_gte(A, B, Message, __FILE__, __LINE__)
