@@ -2,7 +2,7 @@
 #pragma once
 
 #include <string.h>
-#include "tectonic/tcommon.h"
+#include <stdint.h>
 
 /*
 	Taken from: https://github.com/tylov/STC/blob/master/include/stc/ccommon.h
@@ -28,4 +28,3 @@ static inline uint64_t c_fasthash(const void* key, size_t len) {
     while (--len) h = (h << 10) - h + *x++;
     return _c_ROTL(h, 26) ^ h;
 }
-
