@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <string.h>
 #include "tectonic/tcommon.h"
 #include "exd.h"
 
@@ -26,18 +27,15 @@ static inline u16 entset_internal_compute_block_idx(u16 idx)
 static inline u16 entset_internal_compute_inner_block_idx(u16 idx)
 {
 	u16 idx_remainder = idx & (ENTSET_BLOCK_SIZE - 1);
-	return idx_remainder;
+	return 1 << idx_remainder;
 }
 
 static inline void entset_init(entset_t * set)
 {
-	for_entset(i)
-	{
-		set->bits[i] = 0;
-	}
+	memset(set, 0, sizeof(*set));
 }
 
-static inline void entset_init_from(entset_t * destination, entset_t * source)
+static inline void entset_init_from(entset_t * destination, entset_t const * source)
 {
 	for_entset(i)
 	{
@@ -45,36 +43,40 @@ static inline void entset_init_from(entset_t * destination, entset_t * source)
 	}
 }
 
-static inline bool entset_slot_is_set(entset_t * set, u16 idx)
+static inline bool entset_slot_is_set(entset_t const * set, u16 idx)
 {
 	u16 block = entset_internal_compute_block_idx(idx);
-	u16 inner_block_offset = entset_internal_compute_inner_block_idx(idx);
+	u16 inner_block_mask = entset_internal_compute_inner_block_idx(idx);
 
-	return set->bits[block] & (1 << inner_block_offset);
+	return set->bits[block] & inner_block_mask;
+}
+
+static inline bool entset_slot_is_not_set(entset_t const * set, u16 idx)
+{
+	return !(entset_slot_is_Set(set, idx));
 }
 
 static inline void entset_set_slot(entset_t * set, u16 idx)
 {
-	//Dunno if this is right, I'm tired
-	set->bits[entset_internal_compute_block_idx(idx)] = 1 << entset_internal_compute_inner_block_idx(idx);
+	set->bits[entset_internal_compute_block_idx(idx)] |= entset_internal_compute_inner_block_idx(idx);
 }
 
 static inline void entset_clear_slot(entset_t * set, u16 idx)
 {
-	set->bits[entset_internal_compute_block_idx(idx)] &= ~(1 << entset_internal_compute_inner_block_idx(idx));
+	set->bits[entset_internal_compute_block_idx(idx)] &= ~(entset_internal_compute_inner_block_idx(idx));
 }
 
-static inline void entset_and_slot(entset_t * a, entset_t * b, u16 idx)
+static inline void entset_and_slot(entset_t * a, entset_t const * b, u16 idx)
 {
 	a->bits[idx] &= b->bits[idx];
 }
 
-static inline void entset_or_slot(entset_t * a, entset_t * b, u16 idx)
+static inline void entset_or_slot(entset_t * a, entset_t const * b, u16 idx)
 {
 	a->bits[idx] |= b->bits[idx];
 }
 
-static inline void entset_not_slot(entset_t * a, entset_t * b, u16 idx)
+static inline void entset_not_slot(entset_t * a, entset_t const * b, u16 idx)
 {
 	a->bits[idx] &= ~(b->bits[idx]);
 }
