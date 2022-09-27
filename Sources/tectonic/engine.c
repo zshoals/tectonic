@@ -99,9 +99,18 @@ tec_engine_quake
 
 
 	entity_t entA = entity_manifest_get_first_free(world);
+	entity_t entB = entity_manifest_get_first_free(world);
+	entity_t entC = entity_manifest_get_first_free(world);
+	entity_t entD = entity_manifest_get_first_free(world);
 
 	position_t * posA = genarray_set(positions, position_t, entA);
 	rotation_t * rotA = genarray_set(rotations, rotation_t, entA);
+	position_t * posB = genarray_set(positions, position_t, entB);
+	rotation_t * rotB = genarray_set(rotations, rotation_t, entB);
+	position_t * posC = genarray_set(positions, position_t, entC);
+	rotation_t * rotC = genarray_set(rotations, rotation_t, entC);
+	position_t * posD = genarray_set(positions, position_t, entD);
+	rotation_t * rotD = genarray_set(rotations, rotation_t, entD);
 
 	posA->x = 918;
 	posA->y = 9355323;
