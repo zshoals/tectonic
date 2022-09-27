@@ -16,7 +16,7 @@ entity_manifest_t;
 
 void entity_manifest_init(entity_manifest_t * ents);
 entity_t entity_manifest_resolve_slot(entity_manifest_t * ents, u16 id);
-void entity_manifest_get_first_free(entity_manifest_t * ents);
+entity_t entity_manifest_get_first_free(entity_manifest_t * ents);
 void entity_manifest_free_entity(entity_manifest_t * ents, entity_t ent);
 bool entity_manifest_entity_is_current(entity_manifest_t * ents, entity_t ent);
 u64 entity_manifest_current_highest_generation(entity_manifest_t * ents);

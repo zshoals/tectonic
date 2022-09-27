@@ -11,7 +11,10 @@ void entity_manifest_init(entity_manifest_t * ents)
 	for(size_t i = 0; i < EXD_MAX_ENTITIES; ++i)
 	{
 		ents->entities[i] = i;
-		ents->freelist[EXD_MAX_ENTITIES - i] = (i + 1) & EXD_MAX_ENTITIES;
+		//Some adjustments to force the free list to be filled in reverse order
+		//With the 0th element being an INVALID_ENTITY
+		//Popping a value off the back results in a handle to entity idx 1, followed by 2, etc.
+		ents->freelist[EXD_MAX_ENTITIES - 1 - i] = (i + 1) & EXD_MAX_ENTITIES_MASK;
 	}
 
 	ents->first_free = EXD_MAX_ENTITIES - 1;
@@ -23,7 +26,7 @@ entity_t entity_manifest_resolve_slot(entity_manifest_t * ents, u16 id)
 	return ents->entities[id];
 }
 
-void entity_manifest_get_first_free(entity_manifest_t * ents)
+entity_t entity_manifest_get_first_free(entity_manifest_t * ents)
 {
 	DEBUG_ENSURE_UINT_GTZERO(ents->first_free, "Decrementing this entset value would result in an underflow while getting first free ent");
 	size_t first_free_idx = ents->freelist[ents->first_free];
