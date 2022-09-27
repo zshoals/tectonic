@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
-#include "tectonic/memory/allocator.h"
+#include "tectonic/ds/allocator.h"
 
 typedef struct tec_string
 {

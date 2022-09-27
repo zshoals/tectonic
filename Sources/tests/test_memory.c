@@ -6,7 +6,7 @@
 #include "trial_by_fire.h"
 
 #include "tectonic/memory/memory.h"
-#include "tectonic/memory/allocator.h"
+#include "tectonic/ds/allocator.h"
 
 #include "kinc/log.h"
 

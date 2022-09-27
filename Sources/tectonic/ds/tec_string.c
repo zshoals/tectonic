@@ -3,7 +3,7 @@
 #include "tectonic/ds/tec_string.h"
 #include "tectonic/tcommon.h"
 #include "tectonic/validation.h"
-#include "tectonic/memory/allocator.h"
+#include "tectonic/ds/allocator.h"
 
 
 tec_string_t tec_string_create(allocator_t * allocator, char const * string)
