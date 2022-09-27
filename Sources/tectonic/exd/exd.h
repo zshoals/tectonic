@@ -7,7 +7,7 @@
 #include "tectonic/validation.h"
 
 #ifndef EXD_MAX_ENTITIES
-	#define EXD_MAX_ENTITIES -1337
+	#define EXD_MAX_ENTITIES (1 << 13)
 	//This is basically an error so a max entity count of -1337 will probably explode
 #endif
 #define EXD_MAX_ENTITIES_MASK (EXD_MAX_ENTITIES - 1)
@@ -17,7 +17,7 @@
 typedef u64 entity_t;
 
 #define EXD_ENTITY_ID_BITS 13
-#define EXD_ENTITY_ID_MASK (1 << EXD_ENTITY_ID_BITS)
+#define EXD_ENTITY_ID_MASK ((1 << EXD_ENTITY_ID_BITS) - 1)
 #define EXD_ENTITY_GENERATION_BITS (64 - EXD_ENTITY_ID_BITS)
 
 #define EXD_ENTITY_GENERATION(ENTITY) ((ENTITY) >> EXD_ENTITY_ID_BITS)
