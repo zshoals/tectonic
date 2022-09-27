@@ -33,11 +33,11 @@ static inline void * genarray_internal_compute_location_unsafe(genarray_t * comp
 	return CAST(void *)data_offset;
 }
 
-void genarray_init(genarray_t * components, allocator_t * mem, size_t per_element_size, size_t count)
+void genarray_init(genarray_t * components, allocator_t * mem, size_t per_element_size)
 {
 	entset_init(&components->entity_list);
 	components->per_element_size = per_element_size;
-	if (count == 0)
+	if (per_element_size == 0)
 	{
 		//Special case; this is a tag
 		components->data = NULL;
@@ -45,8 +45,13 @@ void genarray_init(genarray_t * components, allocator_t * mem, size_t per_elemen
 	else
 	{
 		//TODO(zshoals): hardcoding the alignment here is a bit omegalul
-		components->data = allocator_aligned_malloc(mem, 32, per_element_size, count);
+		components->data = allocator_aligned_malloc(mem, 16, per_element_size, EXD_MAX_ENTITIES);
 	}
+}
+
+void genarray_init_as_tag_container(genarray_t * components, allocator_t * mem)
+{
+	genarray_init(components, mem, 0);
 }
 
 void genarray_clear(genarray_t * components)
@@ -56,22 +61,45 @@ void genarray_clear(genarray_t * components)
 
 void const * genarray_untyped_get(genarray_t * components, entity_t ent)
 {
+	ENSURE_PTR_NOT_NULL(components->data, "Tried to access Tag-type genarray data.");
 	return genarray_internal_compute_location(components, ent);
 }
 
 void const * genarray_untyped_get_unsafe(genarray_t * components, entity_t ent)
 {
+	ENSURE_PTR_NOT_NULL(components->data, "Tried to access Tag-type genarray data.");
 	return genarray_internal_compute_location_unsafe(components, ent);
 }
 
 void * genarray_untyped_get_mut(genarray_t * components, entity_t ent)
 {
+	ENSURE_PTR_NOT_NULL(components->data, "Tried to access Tag-type genarray data.");
 	return genarray_internal_compute_location(components, ent);
 }
 
 void * genarray_untyped_get_mut_unsafe(genarray_t * components, entity_t ent)
 {
+	ENSURE_PTR_NOT_NULL(components->data, "Tried to access Tag-type genarray data.");
 	return genarray_internal_compute_location_unsafe(components, ent);
 }
 
 
+void * genarray_untyped_set(genarray_t * components, entity_t ent)
+{
+	DEBUG_ENSURE_UINT_GTZERO(ent, "Entity ID was invalid while attempting to set a component array.");
+	ENSURE_PTR_NOT_NULL(components->data, "Tried to access Tag-type genarray data.");
+	entset_set_slot(&components->entity_list, EXD_ENTITY_ID(ent));
+	return genarray_untyped_get_mut_unsafe(components, ent);
+}
+
+void genarray_untyped_unset(genarray_t * components, entity_t ent)
+{
+	DEBUG_ENSURE_UINT_GTZERO(ent, "Entity ID was invalid while attempting to unset a component array.");
+	ENSURE_PTR_NOT_NULL(components->data, "Tried to access Tag-type genarray data.");
+	entset_clear_slot(&components->entity_list, EXD_ENTITY_ID(ent));
+}
+
+bool genarray_untyped_has(genarray_t * components, entity_t ent)
+{
+	return entset_slot_is_set(&components->entity_list, EXD_ENTITY_ID(ent));
+}
