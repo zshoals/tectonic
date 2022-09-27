@@ -18,6 +18,11 @@ void entity_manifest_init(entity_manifest_t * ents)
 	entset_init(&ents->entities_in_use);
 }
 
+entity_t entity_manifest_resolve_slot(entity_manifest_t * ents, u16 id)
+{
+	return ents->entities[id];
+}
+
 void entity_manifest_get_first_free(entity_manifest_t * ents)
 {
 	DEBUG_ENSURE_UINT_GTZERO(ents->first_free, "Decrementing this entset value would result in an underflow while getting first free ent");

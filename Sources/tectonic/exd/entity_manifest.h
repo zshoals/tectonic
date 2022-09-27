@@ -5,8 +5,6 @@
 #include "exd.h"
 #include "entset.h"
 
-#define EXD_MAX_ENTITIES 9999
-
 typedef struct entity_manifest
 {
 	entity_t entities[EXD_MAX_ENTITIES];
@@ -17,6 +15,7 @@ typedef struct entity_manifest
 entity_manifest_t;
 
 void entity_manifest_init(entity_manifest_t * ents);
+entity_t entity_manifest_resolve_slot(entity_manifest_t * ents, u16 id);
 void entity_manifest_get_first_free(entity_manifest_t * ents);
 void entity_manifest_free_entity(entity_manifest_t * ents, entity_t ent);
 bool entity_manifest_entity_is_current(entity_manifest_t * ents, entity_t ent);
