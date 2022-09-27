@@ -16,7 +16,7 @@ typedef struct entset
 }
 entset_t;
 
-#define for_entset(ITER_NAME) for(size_t ITER_NAME = 0; ITER_NAME < EXD_MAX_ENTITIES; ++ITER_NAME)
+#define for_entset(ITER_NAME) for(size_t ITER_NAME = 0; ITER_NAME < EXD_MAX_ENTITIES / ENTSET_BLOCK_SIZE; ++ITER_NAME)
 
 static inline u16 entset_internal_compute_block_idx(u16 idx)
 {
@@ -53,7 +53,7 @@ static inline bool entset_slot_is_set(entset_t const * set, u16 idx)
 
 static inline bool entset_slot_is_not_set(entset_t const * set, u16 idx)
 {
-	return !(entset_slot_is_Set(set, idx));
+	return !(entset_slot_is_set(set, idx));
 }
 
 static inline void entset_set_slot(entset_t * set, u16 idx)
