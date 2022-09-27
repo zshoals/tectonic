@@ -33,9 +33,3 @@ static inline entity_t exd_increment_entity_generation(entity_t ent)
 
 	return upshifted_generation | EXD_ENTITY_ID(ent);
 }
-
-typedef struct exd_world
-{
-	entity_manifest_t * entities;
-}
-exd_world_t;
