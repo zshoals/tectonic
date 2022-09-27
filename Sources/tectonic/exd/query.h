@@ -14,11 +14,19 @@ typedef struct query
 } 
 query_t;
 
+typedef struct entity_iter
+{
+	query_t * q;
+	u16 current_idx;
+}
+entity_iter_t;
+
+
 #define query_build(QUERY_NAME, ENTITIES_MANIFEST, ITER_NAME) \
-	query_t __LOC_#QUERY_NAME; \
-	query_t * QUERY_NAME = &__LOC_#QUERY_NAME;\
+	query_t __LOC_##QUERY_NAME; \
+	query_t * QUERY_NAME = &__LOC_##QUERY_NAME;\
 	QUERY_NAME->entities_list = ENTITIES_MANIFEST;\
-	entset_init_from(&QUERY_NAME->matching_entities, &ENTITIES_MANIFEST->entities); \
+	entset_init_from(&QUERY_NAME->matching_entities, &ENTITIES_MANIFEST->entities_in_use); \
 	for_entset(ITER_NAME)
 
 #define query_INCLUDE(QUERY, COMPONENT, ITER_NAME) \
@@ -39,29 +47,24 @@ static inline entity_iter_t query_compile(query_t * query)
 	};
 }
 
-
-typedef struct entity_iter
-{
-	query_t * q;
-	u16 current_idx;
-}
-entity_iter_t;
-
 //The u16 ent handle needs to be the actual entity id now in u64; when iterating, we want to be able to store the id
 #define foreach_entities(ENT_HANDLE, ENTITY_ITER_PTR)\
 	for(entity_t ENT_HANDLE = entity_iter_next(ENTITY_ITER_PTR); ENT_HANDLE; ENT_HANDLE = entity_iter_next(ENTITY_ITER_PTR) )
 
-static inline entity_t entity_iter_next(entity_manifest_t * ents, entity_iter_t * it)
+static inline entity_t entity_iter_next(entity_iter_t * it)
 {
 	//Progress forward through the entire bitset until we encounter a live entity (a bit that is set, literally!)
-	while (entset_slot_is_not_set(it->q, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
+	while (entset_slot_is_not_set(&it->q->matching_entities, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
 	{
-		//TODO(zshoals): we need to actually retrieve the entity handle here as we do in fact need the generation now 
 		it->current_idx++;
 	}
 
 	//If we exceed max_entities, we return 0 by masking against max_entities to signal that we're done with the loop
-	return entity_manifest_resolve_slot(it->q->entities_list, it->current_idx & EXD_MAX_ENTITIES_MASK);
+	entity_t slot = entity_manifest_resolve_slot(it->q->entities_list, EXD_ENTITY_ID(it->current_idx));
+
+	it->current_idx++;
+
+	return slot;
 }
 
 //Usage Examples below:
