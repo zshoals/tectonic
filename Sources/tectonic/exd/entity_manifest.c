@@ -44,8 +44,8 @@ void entity_manifest_free_entity(entity_manifest_t * ents, entity_t ent)
 	DEBUG_ENSURE_UINT_GTZERO(EXD_ENTITY_ID(ent), "Attempted to free an invalid entity (INVALID_ENTITY, aka 0)");
 
 	ents->first_free++;
-	ents->freelist[ents->first_free] = ent;
-	entset_clear_slot(&ents->entities_in_use, ent);
+	ents->freelist[ents->first_free - EXD_ENTITY_ID(ent)] = ent;
+	entset_clear_slot(&ents->entities_in_use, EXD_ENTITY_ID(ent));
 	entity_manifest_increment_entity_generation(ents, ent);
 }
 

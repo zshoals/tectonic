@@ -98,23 +98,16 @@ tec_engine_quake
 	genarray_init(movables, a, 0);
 
 
-	entity_t entA = entity_manifest_get_first_free(world);
-	entity_t entB = entity_manifest_get_first_free(world);
-	entity_t entC = entity_manifest_get_first_free(world);
-	entity_t entD = entity_manifest_get_first_free(world);
+	//TODO(zshoals): We have to solve the entity kill problem.
+	//Without it none of this does anything :(
 
-	position_t * posA = genarray_set(positions, position_t, entA);
-	rotation_t * rotA = genarray_set(rotations, rotation_t, entA);
-	position_t * posB = genarray_set(positions, position_t, entB);
-	rotation_t * rotB = genarray_set(rotations, rotation_t, entB);
-	position_t * posC = genarray_set(positions, position_t, entC);
-	rotation_t * rotC = genarray_set(rotations, rotation_t, entC);
-	position_t * posD = genarray_set(positions, position_t, entD);
-	rotation_t * rotD = genarray_set(rotations, rotation_t, entD);
-
-	posA->x = 918;
-	posA->y = 9355323;
-	rotA->degrees = 350.04;
+	
+	for (size_t i = 0; i < 9000; ++i)
+	{
+		entity_t ent = entity_manifest_get_first_free(world);
+		kinc_log(KINC_LOG_LEVEL_INFO, "EntID: %zu", ent);
+		entity_manifest_free_entity(world, ent);
+	}
 
 	query_build(q, world, i)
 	{
