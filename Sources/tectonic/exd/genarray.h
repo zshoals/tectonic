@@ -15,10 +15,10 @@ typedef struct genarray
 }
 genarray_t;
 
-#define genarray_get(GENARRAY, ENTITY, TYPE) (TYPE const *)(genarray_untyped_get(GENARRAY, ENTITY))
-#define genarray_get_unsafe(GENARRAY, ENTITY, TYPE) (TYPE const *)(genarray_untyped_get_unsafe(GENARRAY, ENTITY))
-#define genarray_get_mut(GENARRAY, ENTITY, TYPE) (TYPE *)(genarray_untyped_get_mut(GENARRAY, ENTITY))
-#define genarray_get_mut_unsafe(GENARRAY, ENTITY, TYPE) (TYPE *)(genarray_untyped_get_mut_unsafe(GENARRAY, ENTITY))
+#define genarray_get(GENARRAY, TYPE, ENTITY) (TYPE const *)(genarray_untyped_get(GENARRAY, ENTITY))
+#define genarray_get_unsafe(GENARRAY, TYPE, ENTITY) (TYPE const *)(genarray_untyped_get_unsafe(GENARRAY, ENTITY))
+#define genarray_get_mut(GENARRAY, TYPE, ENTITY) (TYPE *)(genarray_untyped_get_mut(GENARRAY, ENTITY))
+#define genarray_get_mut_unsafe(GENARRAY, TYPE, ENTITY) (TYPE *)(genarray_untyped_get_mut_unsafe(GENARRAY, ENTITY))
 
 void genarray_init(genarray_t * components, allocator_t * mem, size_t per_element_size, size_t count);
 void genarray_clear(genarray_t * components);
