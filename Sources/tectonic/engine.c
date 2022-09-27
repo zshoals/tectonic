@@ -20,6 +20,16 @@
 #include "math/random.h"
 
 #include "validation.h"
+#include "tectonic/memory/memory.h"
+
+#define EXD_MAX_ENTITIES (1 << 13)
+
+#include "tectonic/exd/entity_manifest.h"
+#include "tectonic/exd/genarray.h"
+#include "tectonic/exd/query.h"
+
+#include "game/components/position.h"
+#include "game/components/rotation.h"
 
 #define TEC_LOG_MODULE_NAME "Engine"
 
@@ -75,6 +85,47 @@ tec_engine_quake
 	tec_random_init(0x86aef51a, 0x9134b3eb, 0xf2517abf);
 
 	engine_loop_config = *loop_config;
+
+	allocator_t * a = default_permanent_allocator();
+	entity_manifest_t * world = allocator_malloc(a, entity_manifest_t, 1);
+	genarray_t * positions = allocator_malloc(a, genarray_t, 1);
+	genarray_t * rotations = allocator_malloc(a, genarray_t, 1);
+	genarray_t * movables = allocator_malloc(a, genarray_t, 1);
+
+	entity_manifest_init(world);
+	genarray_init(positions, a, sizeof(position_t));
+	genarray_init(rotations, a, sizeof(rotation_t));
+	genarray_init(movables, a, 0);
+
+
+	entity_t entA = entity_manifest_get_first_free(world);
+
+	position_t * posA = genarray_set(positions, position_t, entA);
+	rotation_t * rotA = genarray_set(rotations, rotation_t, entA);
+
+	posA->x = 918;
+	posA->y = 9355323;
+	rotA->degrees = 350.04;
+
+	query_build(q, world, i)
+	{
+		query_INCLUDE(q, positions, i);
+	}
+
+	entity_iter_t it = query_compile(q);
+
+
+	u32 counter = 0;
+
+	foreach_entities(ent, &it)
+	{
+		if (counter > 10000) ENSURE_UNREACHABLE("Infinite");
+		position_t * pos_in_iter = genarray_get_mut(positions, position_t, ent);
+		int x = pos_in_iter->x;
+		int y = pos_in_iter->y;
+		kinc_log(KINC_LOG_LEVEL_INFO, "ENTA POSITIONS: %d, %d", x, y);
+		counter++;
+	}
 
 	kinc_set_update_callback(&tec_engine_main_loop);
 	kinc_start();
