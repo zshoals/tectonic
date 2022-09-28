@@ -56,6 +56,8 @@ static inline entity_t entity_iter_next(entity_iter_t * it)
 	//Progress forward through the entire bitset until we encounter a live entity (a bit that is set, literally!)
 	while (entset_slot_is_not_set(&it->q->matching_entities, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
 	{
+		//TODO(zshoals): My brain is fried but we're skipping an index when our data is packed because of that second
+		//idx++ call down below this one, just gotta figure out how to organize this iterator right...
 		it->current_idx++;
 	}
 

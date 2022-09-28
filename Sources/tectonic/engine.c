@@ -102,11 +102,21 @@ tec_engine_quake
 	//Without it none of this does anything :(
 
 	
-	for (size_t i = 0; i < 9000; ++i)
+	for (size_t i = 0; i < 800; ++i)
 	{
 		entity_t ent = entity_manifest_get_first_free(world);
-		kinc_log(KINC_LOG_LEVEL_INFO, "EntID: %zu", ent);
-		entity_manifest_free_entity(world, ent);
+		position_t * pos = genarray_set(positions, position_t, ent);
+		rotation_t * rot = genarray_set(rotations, rotation_t, ent);
+
+		pos->x = 11;
+		pos->y = 11111;
+
+		// entity_t ent2 = entity_manifest_get_first_free(world);
+		// position_t * pos2 = genarray_set(positions, position_t, ent2);
+		// rotation_t * rot2 = genarray_set(rotations, rotation_t, ent2);
+
+		// pos2->x = 9999;
+		// pos2->y = 99999;
 	}
 
 	query_build(q, world, i)
@@ -125,7 +135,7 @@ tec_engine_quake
 		position_t * pos_in_iter = genarray_get_mut(positions, position_t, ent);
 		int x = pos_in_iter->x;
 		int y = pos_in_iter->y;
-		kinc_log(KINC_LOG_LEVEL_INFO, "ENTA POSITIONS: %d, %d", x, y);
+		kinc_log(KINC_LOG_LEVEL_INFO, "ENTA POSITIONS: %d, %d, COUNTER: %zu", x, y, counter);
 		counter++;
 	}
 
