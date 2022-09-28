@@ -54,5 +54,5 @@ entity_t exd_entity_iter_next(exd_entity_iter_t * it)
 	it->current_index++;
 
 	//Mask off by max entities, which results in a 0 index which also means we've broken our iter loop
-	return exd_entity_list_resolve_index(&it->q->world->entities, enabled_entity_slot) & EXD_MAX_ENTITIES_MASK;
+	return exd_entity_list_resolve_index(&it->q->world->entities, enabled_entity_slot);
 }
