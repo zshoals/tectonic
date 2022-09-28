@@ -83,7 +83,3 @@ bool exd_component_has(exd_component_t * comps, entity_t id)
 
 	return exd_entset_slot_is_set(&comps->in_use_components, id);
 }
-
-
-
-

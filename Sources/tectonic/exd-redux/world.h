@@ -47,12 +47,4 @@ exd_world_t * exd_world_get_global_world_for_shorthand_access();
 #define exd_comp_get_mut(COMPONENT_IDX, ENTITY) exd_world_component_get_mut(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 #define exd_comp_set(COMPONENT_IDX, ENTITY) exd_world_component_set(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 
-
-
 //Ideas for additional functions: Report max entities in use, ents free, total component usage, etc.
-
-//Ex shorthand interface
-// exd_ent_new();
-// exd_ent_kill(ent);
-// exd_comp_get(position, ent);
-// exd_comp_set(position, ent);

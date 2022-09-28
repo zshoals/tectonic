@@ -5,7 +5,7 @@
 
 //=================================
 //
-//			64 bit operations
+//      64 bit operations
 //
 //=================================
 
@@ -52,7 +52,7 @@ static inline u64 exd_bits64_increment_upper(u64 a, u8 pivot)
 
 //=================================
 //
-//			32 bit operations
+//       32 bit operations
 //
 //=================================
 
