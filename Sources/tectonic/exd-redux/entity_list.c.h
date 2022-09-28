@@ -3,8 +3,9 @@
 
 entity_t exd_entity_list_resolve_index(exd_entity_list_t * manifest, u16 idx)
 {
+	//NOTE: An index equivalent to EXD_MAX_ENTITIES is permitted but resolves to an INVALID_ENTITY
 	assert(idx <= EXD_MAX_ENTITIES);
-	return manifest->entity_references[idx];
+	return manifest->entity_references[idx & EXD_MAX_ENTITIES_MASK];
 }
 
 void exd_entity_list_init(exd_entity_list_t * manifest, allocator_t * mem)
