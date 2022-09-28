@@ -11,16 +11,19 @@ void exd_query_init_from(exd_query_t * q, exd_world_t * world, allocator_t * mem
 
 void exd_query_include(exd_query_t * q, size_t component_index)
 {
+	assert(component_index < q->world->current_max_components);
 	exd_entset_and(&q->matcher, &q->world->component_arrays[component_index].in_use_components);
 }
 
 void exd_query_optional_include(exd_query_t * q, size_t component_index)
 {
+	assert(component_index < q->world->current_max_components);
 	exd_entset_or(&q->matcher, &q->world->component_arrays[component_index].in_use_components);
 }
 
 void exd_query_exclude(exd_query_t * q, size_t component_index)
 {
+	assert(component_index < q->world->current_max_components);
 	exd_entset_not(&q->matcher, &q->world->component_arrays[component_index].in_use_components);
 }
 

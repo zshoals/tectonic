@@ -97,7 +97,6 @@ tec_engine_quake
 	exd_world_t * world = allocator_malloc(a, exd_world_t, 1);
 	exd_world_init(world, a);
 
-	//TODO(zshoals): This isn't getting stored properly, something with ptr to ptr maybe
 	exd_world_set_global_world_for_shorthand_access(world);
 
 	exd_world_component_create_component_storage(world, position_t, COMP_POSITION);
@@ -119,8 +118,10 @@ tec_engine_quake
 	exd_query_t q = {0};
 	// exd_query_init_from(&q, world, a);
 	exd_query_init_fast(&q, a);
-	exd_query_include(&q, COMP_POSITION);
-	exd_query_include(&q, COMP_ROTATION);
+	{ 
+		exd_query_include(&q, COMP_POSITION);
+		exd_query_include(&q, COMP_ROTATION);
+	}
 	exd_entity_iter_t it = exd_query_compile(&q);
 
 	//TODO(zshoals): The freelist isn't returning the correct enthandle (8191 instead of 1) so fix that
