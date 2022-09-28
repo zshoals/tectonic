@@ -102,7 +102,7 @@ tec_engine_quake
 	exd_world_component_create_component_storage(world, position_t, COMP_POSITION);
 	exd_world_component_create_component_storage(world, rotation_t, COMP_ROTATION);
 
-	for (size_t i = 0; i < EXD_MAX_ENTITIES - 1; ++i)
+	for (size_t i = 0; i < 400; ++i)
 	{
 		entity_t entD = exd_ent_new();
 		position_t * pos = exd_comp_set(COMP_POSITION, entD);
@@ -120,7 +120,7 @@ tec_engine_quake
 	exd_query_init_fast(&q, a);
 	{ 
 		exd_query_include(&q, COMP_POSITION);
-		exd_query_include(&q, COMP_ROTATION);
+		exd_query_optional_include(&q, COMP_ROTATION);
 	}
 	exd_entity_iter_t it = exd_query_compile(&q);
 

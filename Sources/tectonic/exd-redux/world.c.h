@@ -9,6 +9,14 @@
 
 void exd_world_init(exd_world_t * world, allocator_t * mem)
 {
+	//Entsets assume we're working with at least 32 entities
+	assert(EXD_MAX_ENTITIES > 32);
+	//Certain entity slot indices assume no more than 65536 entries (using u16 indexing)
+	//Not that this ECS would hold up with regards to memory usage at that point
+	assert(EXD_MAX_ENTITIES < 65536);
+	//EXD_MAX_ENTITIES must be a power of 2 as well due to various bit operations
+	assert(EXD_MAX_ENTITIES & (EXD_MAX_ENTITIES - 1) == 0);
+
 	kinc_log(KINC_LOG_LEVEL_INFO, "Max Ents: %d", EXD_MAX_ENTITIES);
 	world->current_max_components = 0;
 	world->mem = mem;
@@ -17,6 +25,8 @@ void exd_world_init(exd_world_t * world, allocator_t * mem)
 
 void exd_world_component_create_sized_component_storage(exd_world_t * world, size_t per_element_size, size_t component_idx)
 {
+	assert(world->current_max_components < EXD_MAX_COMPONENTS);
+
 	exd_component_init(&world->component_arrays[component_idx], per_element_size, world->mem);
 	world->current_max_components++;
 }
