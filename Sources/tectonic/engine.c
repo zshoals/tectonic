@@ -22,11 +22,8 @@
 #include "validation.h"
 #include "tectonic/memory/memory.h"
 
-#define EXD_MAX_ENTITIES (1 << 13)
-
-#include "tectonic/exd/entity_manifest.h"
-#include "tectonic/exd/genarray.h"
-#include "tectonic/exd/query.h"
+#include "tectonic/exd-redux/world.h"
+#include "tectonic/exd-redux/world_query.h"
 
 #include "game/components/position.h"
 #include "game/components/rotation.h"
@@ -72,6 +69,15 @@ tec_engine_main_loop(void)
 	// kinc_stop();
 }
 
+typedef enum
+{
+	COMP_POSITION,
+	COMP_ROTATION,
+	COMP_MOVABLE,
+	COMP_WHATEVER
+}
+exd_component_e;
+
 void 
 tec_engine_quake
 (
@@ -87,56 +93,43 @@ tec_engine_quake
 	engine_loop_config = *loop_config;
 
 	allocator_t * a = default_permanent_allocator();
-	entity_manifest_t * world = allocator_malloc(a, entity_manifest_t, 1);
-	genarray_t * positions = allocator_malloc(a, genarray_t, 1);
-	genarray_t * rotations = allocator_malloc(a, genarray_t, 1);
-	genarray_t * movables = allocator_malloc(a, genarray_t, 1);
 
-	entity_manifest_init(world);
-	genarray_init(positions, a, sizeof(position_t));
-	genarray_init(rotations, a, sizeof(rotation_t));
-	genarray_init(movables, a, 0);
+	exd_world_t * world = allocator_malloc(a, exd_world_t, 1);
+	exd_world_init(world, a);
 
+	//TODO(zshoals): This isn't getting stored properly, something with ptr to ptr maybe
+	exd_world_set_global_world_for_shorthand_access(world);
 
-	//TODO(zshoals): We have to solve the entity kill problem.
-	//Without it none of this does anything :(
+	exd_world_component_create_component_storage(world, position_t, COMP_POSITION);
+	exd_world_component_create_component_storage(world, rotation_t, COMP_ROTATION);
 
-	
-	for (size_t i = 0; i < 800; ++i)
+	for (size_t i = 0; i < EXD_MAX_ENTITIES - 1; ++i)
 	{
-		entity_t ent = entity_manifest_get_first_free(world);
-		position_t * pos = genarray_set(positions, position_t, ent);
-		rotation_t * rot = genarray_set(rotations, rotation_t, ent);
+		entity_t entD = exd_ent_new();
+		position_t * pos = exd_comp_set(COMP_POSITION, entD);
+		pos->x = tec_random_get_in(-5, 6);
+		pos->y = tec_random_get_in(-1, 5);
 
-		pos->x = 11;
-		pos->y = 11111;
+		if (i == 4000) exd_comp_set(COMP_ROTATION, entD);
 
-		// entity_t ent2 = entity_manifest_get_first_free(world);
-		// position_t * pos2 = genarray_set(positions, position_t, ent2);
-		// rotation_t * rot2 = genarray_set(rotations, rotation_t, ent2);
-
-		// pos2->x = 9999;
-		// pos2->y = 99999;
+		u64 generation = EXD_ENTITY_GENERATION(entD);
+		kinc_log(KINC_LOG_LEVEL_INFO, "Generations: %zu", generation);
 	}
 
-	query_build(q, world, i)
+	exd_query_t q = {0};
+	// exd_query_init_from(&q, world, a);
+	exd_query_init_fast(&q, a);
+	exd_query_include(&q, COMP_POSITION);
+	exd_query_include(&q, COMP_ROTATION);
+	exd_entity_iter_t it = exd_query_compile(&q);
+
+	//TODO(zshoals): The freelist isn't returning the correct enthandle (8191 instead of 1) so fix that
+	//This loop goes infinite, maybe because of ent_list "resolve index" or bad iter
+	foreach_entity(ent, &it)
 	{
-		query_INCLUDE(q, positions, i);
-	}
-
-	entity_iter_t it = query_compile(q);
-
-
-	u32 counter = 0;
-
-	foreach_entities(ent, &it)
-	{
-		if (counter > 10000) ENSURE_UNREACHABLE("Infinite");
-		position_t * pos_in_iter = genarray_get_mut(positions, position_t, ent);
-		int x = pos_in_iter->x;
-		int y = pos_in_iter->y;
-		kinc_log(KINC_LOG_LEVEL_INFO, "ENTA POSITIONS: %d, %d, COUNTER: %zu", x, y, counter);
-		counter++;
+		// position_t const * pos = exd_comp_get(0, entA);
+		position_t const * posENT = exd_comp_get(COMP_POSITION, ent);
+		kinc_log(KINC_LOG_LEVEL_INFO, "X: %d, Y: %d", posENT->x, posENT->y);
 	}
 
 	kinc_set_update_callback(&tec_engine_main_loop);

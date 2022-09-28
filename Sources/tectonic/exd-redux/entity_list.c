@@ -1,6 +1,12 @@
 #include "entity_list.h"
 #include "exd-common.h"
 
+entity_t exd_entity_list_resolve_index(exd_entity_list_t * manifest, u16 idx)
+{
+	assert(idx <= EXD_MAX_ENTITIES);
+	return manifest->entity_references[idx];
+}
+
 void exd_entity_list_init(exd_entity_list_t * manifest, allocator_t * mem)
 {
 	manifest->entity_references = allocator_malloc(mem, entity_t, EXD_MAX_ENTITIES);
@@ -16,7 +22,7 @@ void exd_entity_list_init(exd_entity_list_t * manifest, allocator_t * mem)
 entity_t exd_entity_list_get_new_entity(exd_entity_list_t * manifest)
 {
 	u16 freeslot = exd_freelist_get_free_id(&manifest->available_entities);
-	entity_t id = manifest->entity_references[freeslot];
+	entity_t id = exd_entity_list_resolve_index(manifest, freeslot);
 	exd_entset_set_slot(&manifest->entity_states, id);
 
 	return id;
@@ -47,10 +53,4 @@ bool exd_entity_list_is_entity_valid(exd_entity_list_t * manifest, entity_t id)
 	bool generations_match = manifest->entity_references[EXD_ENTITY_ID(id)] == id;
 
 	return is_alive && generations_match;
-}
-
-entity_t exd_entity_list_resolve_index(exd_entity_list_t * manifest, u16 idx)
-{
-	assert(idx < EXD_MAX_ENTITIES);
-	return manifest->entity_references[idx];
 }

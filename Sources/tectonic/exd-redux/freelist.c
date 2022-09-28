@@ -7,12 +7,12 @@ void exd_freelist_init(exd_freelist_t * list, allocator_t * mem)
 	list->first_free_idx = EXD_MAX_ENTITIES - 1;
 
 	list->free_entity_slots = allocator_malloc(mem, u16, EXD_MAX_ENTITIES);
-	for (size_t i = EXD_MAX_ENTITIES; i > 0; --i)
+	for (size_t i = 0; i < EXD_MAX_ENTITIES; ++i)
 	{
 		//We want our array filled backwards with an INVALID_ENTITY at slot 0 on the free list
 		//Example array: [0, 8191, 8190, 8189.....3, 2, 1]
 		//We pop elements off the back and then push them back onto the back. We're out of IDs if we encounter ID 0
-		list->free_entity_slots[i] = i & EXD_ID_MASK;
+		list->free_entity_slots[i] = (EXD_MAX_ENTITIES - i) & EXD_MAX_ENTITIES_MASK;
 	}
 }
 

@@ -1,8 +1,6 @@
 #pragma once
 
-#ifndef EXD_MAX_ENTITIES
-	#define EXD_MAX_ENTITIES (1 << 13)
-#endif
+#include "exd-config.h"
 
 #define EXD_MAX_ENTITIES_MASK (EXD_MAX_ENTITIES - 1)
 

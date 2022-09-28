@@ -12,13 +12,13 @@
 static inline u64 exd_bits64_and(u64 a, u64 b) { return a & b; }
 static inline u64 exd_bits64_or(u64 a, u64 b) { return a | b; }
 static inline u64 exd_bits64_not(u64 a) { return ~a; }
+static inline u64 exd_bits64_rotate_left(u64 a, u8 rotL) { return (a << rotL); }
+static inline u64 exd_bits64_rotate_right(u64 a, u8 rotR) { return (a >> rotR); }
 static inline u64 exd_bits64_mask_from_rotate_left(u8 shift)
 {
 	// assert(shift != 0);
 	return exd_bits64_rotate_left(1, shift) - 1;
 }
-static inline u64 exd_bits64_rotate_left(u64 a, u8 rotL) { return (a << rotL); }
-static inline u64 exd_bits64_rotate_right(u64 a, u8 rotR) { return (a >> rotR); }
 static inline u64 exd_bits64_extract_lower_bits(u64 a, u8 pivot)
 {
 	u64 mask = exd_bits64_mask_from_rotate_left(pivot);

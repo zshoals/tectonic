@@ -70,7 +70,7 @@ void * exd_component_untyped_set(exd_component_t * comps, entity_t id)
 
 void exd_component_clear(exd_component_t * comps, entity_t id)
 {
-	assert(EXD_ENTITY_ID(id) < EXD_MAX_ENTITIES);
+	assert(EXD_ENTITY_ID(id) < EXD_MAX_ENTITIES && id != EXD_INVALID_ENTITY);
 	//Note: It's ok to clear an entity even if it doesn't currently have anything
 	//This probably makes entity deletion easier
 
@@ -79,7 +79,7 @@ void exd_component_clear(exd_component_t * comps, entity_t id)
 
 bool exd_component_has(exd_component_t * comps, entity_t id)
 {
-	assert(EXD_ENTITY_ID(id) < EXD_MAX_ENTITIES);
+	assert(EXD_ENTITY_ID(id) < EXD_MAX_ENTITIES && id != EXD_INVALID_ENTITY);
 
 	return exd_entset_slot_is_set(&comps->in_use_components, id);
 }
