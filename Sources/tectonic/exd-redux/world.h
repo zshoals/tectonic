@@ -23,21 +23,21 @@ void exd_world_component_create_sized_component_storage(exd_world_t * world, siz
 #define exd_world_component_create_component_storage(WORLD, TYPE, COMPONENT_IDX) exd_world_component_create_sized_component_storage(WORLD, sizeof(TYPE), COMPONENT_IDX)
 void exd_world_component_tag_create_storage(exd_world_t * world, size_t component_idx);
 
-bool exd_world_entity_has(exd_world_t * world, size_t component_idx, entity_t ent);
-bool exd_world_entity_is_valid(exd_world_t * world, entity_t ent);
+bool exd_world_entity_has(exd_world_t * world, size_t component_idx, exd_entity_t ent);
+bool exd_world_entity_is_valid(exd_world_t * world, exd_entity_t ent);
 
-entity_t exd_world_entity_new(exd_world_t * world);
-void exd_world_entity_kill(exd_world_t * world, entity_t ent);
+exd_entity_t exd_world_entity_new(exd_world_t * world);
+void exd_world_entity_kill(exd_world_t * world, exd_entity_t ent);
 
-void const * exd_world_component_get(exd_world_t * world, size_t component_idx, entity_t ent);
-void * exd_world_component_get_mut(exd_world_t * world, size_t component_idx, entity_t ent);
+void const * exd_world_component_get(exd_world_t * world, size_t component_idx, exd_entity_t ent);
+void * exd_world_component_get_mut(exd_world_t * world, size_t component_idx, exd_entity_t ent);
 
 //Note: The unsafe component accessors skip the generation check
 //These are safe to use as long as they're used by entities resolved by a world query
 void const * exd_world_component_get_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent);
 void  * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent);
 
-void * exd_world_component_set(exd_world_t * world, size_t component_idx, entity_t ent);
+void * exd_world_component_set(exd_world_t * world, size_t component_idx, exd_entity_t ent);
 
 
 //============================================

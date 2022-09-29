@@ -7,12 +7,12 @@
 #include "exd-math.h"
 #include "bits.h"
 
-static inline u64 exd_entset_internal_compute_array_idx(entity_t id)
+static inline u64 exd_entset_internal_compute_array_idx(exd_entity_t id)
 {
 	return exd_math_pow2_divide(EXD_ENTITY_ID(id), EXD_ENTSET_BITWIDTH_SHIFT);
 }
 
-static inline u32 exd_entset_internal_compute_entity_slot_mask(entity_t id)
+static inline u32 exd_entset_internal_compute_entity_slot_mask(exd_entity_t id)
 {
 	u8 offset_in_block = exd_math_pow2_modulo(EXD_ENTITY_ID(id), EXD_ENTSET_BITWIDTH_SHIFT);
 	u32 slot_mask = exd_bits32_rotate_left(1, offset_in_block);
@@ -34,12 +34,12 @@ void exd_entset_copy_data_from(exd_entset_t * destination, exd_entset_t * source
 	}
 }
 
-void exd_entset_set_slot(exd_entset_t * ents, entity_t slot)
+void exd_entset_set_slot(exd_entset_t * ents, exd_entity_t slot)
 {
 	ents->bitset[exd_entset_internal_compute_array_idx(slot)] |= exd_entset_internal_compute_entity_slot_mask(slot);
 }
 
-void exd_entset_clear_slot(exd_entset_t * ents, entity_t slot)
+void exd_entset_clear_slot(exd_entset_t * ents, exd_entity_t slot)
 {
 	ents->bitset[exd_entset_internal_compute_array_idx(slot)] &= ~(exd_entset_internal_compute_entity_slot_mask(slot));
 }
@@ -68,14 +68,14 @@ void exd_entset_not(exd_entset_t * destination, exd_entset_t * source)
 	}
 }
 
-bool exd_entset_slot_is_set(exd_entset_t * ents, entity_t slot)
+bool exd_entset_slot_is_set(exd_entset_t * ents, exd_entity_t slot)
 {
 	u32 slot_mask = exd_entset_internal_compute_entity_slot_mask(slot);
 	u64 index = exd_entset_internal_compute_array_idx(slot);
 	return ents->bitset[index] & slot_mask;
 }
 
-bool exd_entset_slot_is_not_set(exd_entset_t * ents, entity_t slot)
+bool exd_entset_slot_is_not_set(exd_entset_t * ents, exd_entity_t slot)
 {
 	return !(exd_entset_slot_is_set(ents, slot));
 }

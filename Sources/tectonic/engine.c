@@ -104,7 +104,7 @@ tec_engine_quake
 
 	for (size_t i = 0; i < 4005; ++i)
 	{
-		entity_t entD = exd_ent_new();
+		exd_entity_t entD = exd_ent_new();
 		position_t * pos = exd_comp_set(COMP_POSITION, entD);
 		pos->x = 9999;
 		pos->y = 350280;
