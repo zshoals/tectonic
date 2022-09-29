@@ -124,15 +124,13 @@ tec_engine_quake
 		exd_query_include(&q, COMP_POSITION);
 		exd_query_include(&q, COMP_ROTATION);
 	}
-	exd_entity_iter_t it = exd_query_compile(&q);
+	exd_query_iter_t it = exd_query_compile(&q);
 
-	//TODO(zshoals): The freelist isn't returning the correct enthandle (8191 instead of 1) so fix that
-	//This loop goes infinite, maybe because of ent_list "resolve index" or bad iter
 	foreach_entity(ent, &it)
 	{
 		// position_t const * pos = exd_comp_get(0, entA);
-		position_t const * posENT = exd_comp_get_unsafe(COMP_POSITION, ent);
-		rotation_t const * rotENT = exd_comp_get_unsafe(COMP_ROTATION, ent);
+		position_t const * posENT = exd_comp_get_via_iter(COMP_POSITION, ent);
+		rotation_t const * rotENT = exd_comp_get_via_iter(COMP_ROTATION, ent);
 		kinc_log(KINC_LOG_LEVEL_INFO, "X: %d, Y: %d, ROT: %f", posENT->x, posENT->y, rotENT->degrees);
 	}
 

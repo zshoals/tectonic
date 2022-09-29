@@ -27,9 +27,9 @@ void exd_query_exclude(exd_query_t * q, size_t component_index)
 	exd_entset_not(&q->matcher, &q->world->component_arrays[component_index].in_use_components);
 }
 
-exd_entity_iter_t exd_query_compile(exd_query_t * q)
+exd_query_iter_t exd_query_compile(exd_query_t * q)
 {
-	return (exd_entity_iter_t){
+	return (exd_query_iter_t){
 		.q = q,
 		.current_index = 0
 	};
@@ -41,7 +41,7 @@ exd_entity_iter_t exd_query_compile(exd_query_t * q)
 //          Entity iter ops
 //====================================
 
-entity_t exd_entity_iter_next(exd_entity_iter_t * it)
+exd_iterable_entity_t exd_query_iter_next(exd_query_iter_t * it)
 {
 	exd_entset_t * iteration_list = &it->q->matcher;
 
@@ -54,5 +54,7 @@ entity_t exd_entity_iter_next(exd_entity_iter_t * it)
 	it->current_index++;
 
 	//Mask off by max entities, which results in a 0 index which also means we've broken our iter loop
-	return exd_entity_list_resolve_index(&it->q->world->entities, enabled_entity_slot);
+	return (exd_iterable_entity_t){
+		.id = exd_entity_list_resolve_index(&it->q->world->entities, enabled_entity_slot)
+	};
 }

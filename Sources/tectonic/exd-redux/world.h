@@ -6,6 +6,7 @@
 #include "component_data.h"
 #include "tectonic/ds/allocator.h"
 #include "entity.h"
+#include "iterable_entity.h"
 
 typedef struct exd_world
 {
@@ -33,8 +34,8 @@ void * exd_world_component_get_mut(exd_world_t * world, size_t component_idx, en
 
 //Note: The unsafe component accessors skip the generation check
 //These are safe to use as long as they're used by entities resolved by a world query
-void const * exd_world_component_get_unsafe(exd_world_t * world, size_t component_idx, entity_t ent);
-void  * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, entity_t ent);
+void const * exd_world_component_get_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent);
+void  * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent);
 
 void * exd_world_component_set(exd_world_t * world, size_t component_idx, entity_t ent);
 
@@ -48,6 +49,7 @@ exd_world_t * exd_world_get_global_world_for_shorthand_access();
 
 #define exd_ent_new() exd_world_entity_new(exd_world_get_global_world_for_shorthand_access())
 #define exd_ent_kill(ENTITY) exd_world_entity_kill(exd_world_get_global_world_for_shorthand_access(), ENTITY)
+#define exd_ent_iter_to_norm(ITERABLE_ENTITY) exd_iterable_entity_to_normal_entity(ITERABLE_ENTITY)
 
 #define exd_ent_has(COMPONENT_IDX, ENTITY) exd_world_entity_has(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 #define exd_ent_valid(ENTITY) exd_world_entity_is_valid(exd_world_get_global_world_for_shorthand_access(), ENTITY)
@@ -55,8 +57,8 @@ exd_world_t * exd_world_get_global_world_for_shorthand_access();
 #define exd_comp_get(COMPONENT_IDX, ENTITY) exd_world_component_get(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 #define exd_comp_get_mut(COMPONENT_IDX, ENTITY) exd_world_component_get_mut(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 
-#define exd_comp_get_unsafe(COMPONENT_IDX, ENTITY) exd_world_component_get_unsafe(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
-#define exd_comp_get_mut_unsafe(COMPONENT_IDX, ENTITY) exd_world_component_get_mut_unsafe(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
+#define exd_comp_get_via_iter(COMPONENT_IDX, ITERABLE_ENTITY) exd_world_component_get_unsafe(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ITERABLE_ENTITY)
+#define exd_comp_get_mut_via_iter(COMPONENT_IDX, ITERABLE_ENTITY) exd_world_component_get_mut_unsafe(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ITERABLE_ENTITY)
 
 #define exd_comp_set(COMPONENT_IDX, ENTITY) exd_world_component_set(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 
