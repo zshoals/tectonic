@@ -36,23 +36,6 @@ void exd_world_component_tag_create_storage(exd_world_t * world, size_t componen
 	exd_world_component_create_sized_component_storage(world, 0, component_idx);
 }
 
-void const * exd_world_component_get(exd_world_t * world, size_t component_idx, entity_t ent)
-{
-	//TODO(zshoals): Typing it as void is an unfortunate hack...
-	//Getting the appropriate type out of world may not be super trivial, so skip it for now.
-	return exd_component_get(&world->component_arrays[component_idx], void, ent);
-}
-
-void * exd_world_component_get_mut(exd_world_t * world, size_t component_idx, entity_t ent)
-{
-	return exd_component_get_mut(&world->component_arrays[component_idx], void, ent);
-}
-
-void * exd_world_component_set(exd_world_t * world, size_t component_idx, entity_t ent)
-{
-	return exd_component_set(&world->component_arrays[component_idx], void, ent);
-}
-
 bool exd_world_entity_has(exd_world_t * world, size_t component_idx, entity_t ent)
 {
 	return exd_component_has(&world->component_arrays[component_idx], ent);
@@ -86,6 +69,39 @@ void exd_world_entity_kill(exd_world_t * world, entity_t ent)
 		kinc_log(KINC_LOG_LEVEL_INFO, "Warning: Tried to kill an invalid entity %zu. Current ent state was %zu", ent, world_reference_entity);
 	}
 }
+
+void const * exd_world_component_get(exd_world_t * world, size_t component_idx, entity_t ent)
+{
+	//Note: Right now we just assert if we try and get generation mismatch, which seems correct
+	//However, maybe it's ok to return null data in the case of an invalid access. Not sure yet.
+	assert(exd_world_entity_is_valid(world, ent));
+	//TODO(zshoals): Typing it as void is an unfortunate hack...
+	//Getting the appropriate type out of world may not be super trivial, so skip it for now.
+	return exd_component_get(&world->component_arrays[component_idx], void, ent);
+}
+
+void * exd_world_component_get_mut(exd_world_t * world, size_t component_idx, entity_t ent)
+{
+	assert(exd_world_entity_is_valid(world, ent));
+	return exd_component_get_mut(&world->component_arrays[component_idx], void, ent);
+}
+
+void const * exd_world_component_get_unsafe(exd_world_t * world, size_t component_idx, entity_t ent)
+{
+	return exd_component_get(&world->component_arrays[component_idx], void, ent);
+}
+
+void  * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, entity_t ent)
+{
+	return exd_component_get_mut(&world->component_arrays[component_idx], void, ent);
+}
+
+
+void * exd_world_component_set(exd_world_t * world, size_t component_idx, entity_t ent)
+{
+	return exd_component_set(&world->component_arrays[component_idx], void, ent);
+}
+
 
 //================================
 // Shorthand accessor
