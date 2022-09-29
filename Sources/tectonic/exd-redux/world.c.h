@@ -15,7 +15,7 @@ void exd_world_init(exd_world_t * world, allocator_t * mem)
 	//Not that this ECS would hold up with regards to memory usage at that point
 	assert(EXD_MAX_ENTITIES < 65536);
 	//EXD_MAX_ENTITIES must be a power of 2 as well due to various bit operations
-	assert(EXD_MAX_ENTITIES & (EXD_MAX_ENTITIES - 1) == 0);
+	assert((EXD_MAX_ENTITIES & (EXD_MAX_ENTITIES - 1)) == 0);
 
 	kinc_log(KINC_LOG_LEVEL_INFO, "Max Ents: %d", EXD_MAX_ENTITIES);
 	world->current_max_components = 0;
