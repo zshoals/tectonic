@@ -102,17 +102,19 @@ tec_engine_quake
 	exd_world_component_create_component_storage(world, position_t, COMP_POSITION);
 	exd_world_component_create_component_storage(world, rotation_t, COMP_ROTATION);
 
-	for (size_t i = 0; i < 400; ++i)
+	for (size_t i = 0; i < 4005; ++i)
 	{
 		entity_t entD = exd_ent_new();
 		position_t * pos = exd_comp_set(COMP_POSITION, entD);
-		pos->x = tec_random_get_in(-5, 6);
-		pos->y = tec_random_get_in(-1, 5);
+		pos->x = 9999;
+		pos->y = 350280;
 
-		if (i == 4000) exd_comp_set(COMP_ROTATION, entD);
+		if (i == 4000) 
+		{
+			rotation_t * rot = exd_comp_set(COMP_ROTATION, entD);
+			rot->degrees = 33.023;
+		}
 
-		u64 generation = EXD_ENTITY_GENERATION(entD);
-		kinc_log(KINC_LOG_LEVEL_INFO, "Generations: %zu", generation);
 	}
 
 	exd_query_t q = {0};
@@ -120,7 +122,7 @@ tec_engine_quake
 	exd_query_init_fast(&q, a);
 	{ 
 		exd_query_include(&q, COMP_POSITION);
-		exd_query_optional_include(&q, COMP_ROTATION);
+		exd_query_include(&q, COMP_ROTATION);
 	}
 	exd_entity_iter_t it = exd_query_compile(&q);
 
@@ -129,8 +131,9 @@ tec_engine_quake
 	foreach_entity(ent, &it)
 	{
 		// position_t const * pos = exd_comp_get(0, entA);
-		position_t const * posENT = exd_comp_get(COMP_POSITION, ent);
-		kinc_log(KINC_LOG_LEVEL_INFO, "X: %d, Y: %d", posENT->x, posENT->y);
+		position_t const * posENT = exd_comp_get_unsafe(COMP_POSITION, ent);
+		rotation_t const * rotENT = exd_comp_get_unsafe(COMP_ROTATION, ent);
+		kinc_log(KINC_LOG_LEVEL_INFO, "X: %d, Y: %d, ROT: %f", posENT->x, posENT->y, rotENT->degrees);
 	}
 
 	kinc_set_update_callback(&tec_engine_main_loop);
