@@ -14,10 +14,6 @@ static inline u64 exd_entset_internal_compute_array_idx(entity_t id)
 
 static inline u32 exd_entset_internal_compute_entity_slot_mask(entity_t id)
 {
-	//TODO(zshoals): This EXD_ENTSET_BITWIDTH just looks like a bug????
-	//How does this program even work?
-	//It might actually be right? This mod mods all 32 bits in the int?
-	//Check tomorrow
 	u8 offset_in_block = exd_math_pow2_modulo(EXD_ENTITY_ID(id), EXD_ENTSET_BITWIDTH_SHIFT);
 	u32 slot_mask = exd_bits32_rotate_left(1, offset_in_block);
 	return slot_mask;
