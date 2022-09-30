@@ -44,6 +44,11 @@ void exd_entset_clear_slot(exd_entset_t * ents, exd_entity_t slot)
 	ents->bitset[exd_entset_internal_compute_array_idx(slot)] &= ~(exd_entset_internal_compute_entity_slot_mask(slot));
 }
 
+bool exd_entset_entity_block_is_empty(exd_entset_t * ents, exd_entity_t slot)
+{
+	return ents->bitset[exd_entset_internal_compute_array_idx(slot)] == 0;
+}
+
 void exd_entset_and(exd_entset_t * destination, exd_entset_t * source)
 {
 	exd_for_range_var(i, EXD_ENTSET_ELEMENT_COUNT)

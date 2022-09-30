@@ -79,6 +79,14 @@ exd_iterable_entity_t exd_query_iter_next(exd_query_iter_t * it)
 {
 	exd_entset_t * iteration_list = &it->q->matcher;
 
+	//We want to make an attempt to skip empty blocks entire via an if check,
+	//if the block is empty move on
+
+	while(exd_entset_entity_block_is_empty(iteration_list, it->current_index) && it->current_index < EXD_MAX_ENTITIES)
+	{
+		it->current_index += EXD_ENTSET_BITWIDTH;
+	}
+
 	while(exd_entset_slot_is_not_set(iteration_list, it->current_index) && it->current_index < EXD_MAX_ENTITIES)
 	{
 		it->current_index++;
