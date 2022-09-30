@@ -137,12 +137,12 @@ tec_engine_quake
 	}
 
 	exd_world_comp_get_result_t check_result = exd_comp_get_checked(COMP_ROTATION, saved);
-	if (check_result.result == COMP_RESULT_SUCCESS)
+	if (check_result.result == EXD_GET_COMP_RESULT_SUCCESS)
 	{
 		position_t const * checked = check_result.component;
 		kinc_log(KINC_LOG_LEVEL_INFO, "Successful Ent Save: X: %d, Y: %d", checked->x, checked->y );
 	}
-	else if (check_result.result == COMP_RESULT_MISSING_COMPONENT)
+	else if (check_result.result == EXD_GET_COMP_RESULT_MISSING_COMPONENT)
 	{
 		kinc_log(KINC_LOG_LEVEL_INFO, "Missing!");
 	}

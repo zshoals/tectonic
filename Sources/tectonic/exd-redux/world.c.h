@@ -79,17 +79,17 @@ exd_world_comp_get_result_t exd_world_component_get(exd_world_t * world, size_t 
 
 	if (!exd_world_entity_is_valid(world, ent))
 	{
-		status.result = COMP_RESULT_INVALID_ENTITY;
+		status.result = EXD_GET_COMP_RESULT_INVALID_ENTITY;
 		status.component = NULL;
 	}
 	else if (!exd_world_entity_has(world, component_idx, ent))
 	{
-		status.result = COMP_RESULT_MISSING_COMPONENT;
+		status.result = EXD_GET_COMP_RESULT_MISSING_COMPONENT;
 		status.component = NULL;
 	}
 	else
 	{
-		status.result = COMP_RESULT_SUCCESS;
+		status.result = EXD_GET_COMP_RESULT_SUCCESS;
 
 		//TODO(zshoals): Typing it as void is an unfortunate hack...
 		//Getting the appropriate type out of world may not be super trivial, so skip it for now.
@@ -107,17 +107,17 @@ exd_world_comp_get_mut_result_t exd_world_component_get_mut(exd_world_t * world,
 
 	if (!exd_world_entity_is_valid(world, ent))
 	{
-		status.result = COMP_RESULT_INVALID_ENTITY;
+		status.result = EXD_GET_COMP_RESULT_INVALID_ENTITY;
 		status.component = NULL;
 	}
 	else if (!exd_world_entity_has(world, component_idx, ent))
 	{
-		status.result = COMP_RESULT_MISSING_COMPONENT;
+		status.result = EXD_GET_COMP_RESULT_MISSING_COMPONENT;
 		status.component = NULL;
 	}
 	else
 	{
-		status.result = COMP_RESULT_SUCCESS;
+		status.result = EXD_GET_COMP_RESULT_SUCCESS;
 		status.component = exd_component_get_mut(&world->component_arrays[component_idx], void, ent);
 	}
 	
