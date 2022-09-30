@@ -30,7 +30,6 @@ typedef struct exd_query_iter
 }
 exd_query_iter_t;
 
-
 void exd_query_init_from(exd_query_t * q, exd_world_t * world, allocator_t * mem);
 #define exd_query_init_fast(QUERY_PTR, ALLOCATOR_PTR) exd_query_init_from(QUERY_PTR, exd_world_get_global_world_for_shorthand_access(), ALLOCATOR_PTR)
 void exd_query_include(exd_query_t * q, size_t component_index);
