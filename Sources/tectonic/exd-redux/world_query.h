@@ -12,6 +12,17 @@ typedef struct exd_query
 }
 exd_query_t;
 
+#define EXD_QUERY_MAX_OPTIONAL_COMPONENT_MERGE 4
+
+typedef struct exd_query_optional_group
+{
+	exd_entset_t matcher;
+	exd_entset_t * optionals[EXD_QUERY_MAX_OPTIONAL_COMPONENT_MERGE];
+	size_t optionals_count;
+	exd_world_t * world;
+}
+exd_query_optional_group_t;
+
 typedef struct exd_query_iter
 {
 	exd_query_t * q;
@@ -23,9 +34,14 @@ exd_query_iter_t;
 void exd_query_init_from(exd_query_t * q, exd_world_t * world, allocator_t * mem);
 #define exd_query_init_fast(QUERY_PTR, ALLOCATOR_PTR) exd_query_init_from(QUERY_PTR, exd_world_get_global_world_for_shorthand_access(), ALLOCATOR_PTR)
 void exd_query_include(exd_query_t * q, size_t component_index);
-void exd_query_optional_include(exd_query_t * q, size_t component_index);
 void exd_query_exclude(exd_query_t * q, size_t component_index);
+void exd_query_merge_optional_group(exd_query_t * q, exd_query_optional_group_t * optionals);
 exd_query_iter_t exd_query_compile(exd_query_t * q);
+
+void exd_query_optional_group_init(exd_query_optional_group_t * optionals, exd_world_t * world, allocator_t * mem);
+#define exd_query_optional_group_init_fast(OPTIONAL_GROUP_PTR, ALLOCATOR_PTR) exd_query_optional_group_init(OPTIONAL_GROUP_PTR, exd_world_get_global_world_for_shorthand_access(), ALLOCATOR_PTR)
+void exd_query_optional_group_push(exd_query_optional_group_t * optionals, size_t component_index);
+void exd_query_optional_group_compile(exd_query_optional_group_t * optionals);
 
 //===========================================
 //VVVVVV Query iteration convenience VVVVVVVV

@@ -15,16 +15,16 @@ void exd_query_include(exd_query_t * q, size_t component_index)
 	exd_entset_and(&q->matcher, &q->world->component_arrays[component_index].in_use_components);
 }
 
-void exd_query_optional_include(exd_query_t * q, size_t component_index)
-{
-	assert(component_index < q->world->current_max_components);
-	exd_entset_or(&q->matcher, &q->world->component_arrays[component_index].in_use_components);
-}
-
 void exd_query_exclude(exd_query_t * q, size_t component_index)
 {
 	assert(component_index < q->world->current_max_components);
 	exd_entset_not(&q->matcher, &q->world->component_arrays[component_index].in_use_components);
+}
+
+void exd_query_merge_optional_group(exd_query_t * q, exd_query_optional_group_t * optionals)
+{
+	assert(optionals->optionals_count > 1);
+	exd_entset_and(&q->matcher, optionals->optionals[0]);
 }
 
 exd_query_iter_t exd_query_compile(exd_query_t * q)
@@ -33,6 +33,40 @@ exd_query_iter_t exd_query_compile(exd_query_t * q)
 		.q = q,
 		.current_index = 0
 	};
+}
+
+//====================================
+//     Optional component queries
+//====================================
+
+void exd_query_optional_group_init(exd_query_optional_group_t * optionals, exd_world_t * world, allocator_t * mem)
+{
+	exd_entset_init(&optionals->matcher, mem);
+	optionals->world = world;
+	optionals->optionals_count = 0;
+}
+
+void exd_query_optional_group_push(exd_query_optional_group_t * optionals, size_t component_index)
+{
+	assert(component_index < optionals->world->current_max_components);
+	assert(optionals->optionals_count < EXD_QUERY_MAX_OPTIONAL_COMPONENT_MERGE);
+
+	optionals->optionals[optionals->optionals_count] = &optionals->world->component_arrays[component_index].in_use_components;
+	optionals->optionals_count++;
+}
+
+void exd_query_optional_group_compile(exd_query_optional_group_t * optionals)
+{
+	//It only makes sense to have an optional group if we're combining at least two component bitsets
+	assert(optionals->optionals_count > 1);
+
+	exd_entset_copy_data_from(&optionals->matcher, optionals->optionals[0]);
+
+	//Note: Skip index 0, as we're using that as the base entset for matching already
+	for (size_t i = 1; i < optionals->optionals_count; ++i)
+	{
+		exd_entset_or(&optionals->matcher, optionals->optionals[i]);
+	}
 }
 
 
