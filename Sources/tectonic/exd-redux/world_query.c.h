@@ -53,7 +53,6 @@ exd_iterable_entity_t exd_query_iter_next(exd_query_iter_t * it)
 	u16 enabled_entity_slot = it->current_index;
 	it->current_index++;
 
-	//Mask off by max entities, which results in a 0 index which also means we've broken our iter loop
 	return (exd_iterable_entity_t){
 		.id = exd_entity_list_resolve_index(&it->q->world->entities, enabled_entity_slot)
 	};
