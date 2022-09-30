@@ -20,7 +20,8 @@ void exd_entset_copy_data_from(exd_entset_t * destination, exd_entset_t * source
 void exd_entset_set_slot(exd_entset_t * ents, exd_entity_t slot);
 void exd_entset_clear_slot(exd_entset_t * ents, exd_entity_t slot);
 
-bool exd_entset_is_block_empty(exd_entset_t * ents, exd_entity_t slot);
+bool exd_entset_block_is_empty(exd_entset_t * ents, exd_entity_t slot);
+bool exd_entset_block_is_full(exd_entset_t * ents, exd_entity_t slot);
 
 void exd_entset_and(exd_entset_t * destination, exd_entset_t * source);
 void exd_entset_or(exd_entset_t * destination, exd_entset_t * source);
