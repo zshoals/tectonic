@@ -43,7 +43,7 @@ void exd_world_init(exd_world_t * world, allocator_t * mem);
 
 void exd_world_component_create_sized_component_storage(exd_world_t * world, size_t per_element_size, size_t component_idx);
 #define exd_world_component_create_component_storage(WORLD, TYPE, COMPONENT_IDX) exd_world_component_create_sized_component_storage(WORLD, sizeof(TYPE), COMPONENT_IDX)
-void exd_world_component_tag_create_storage(exd_world_t * world, size_t component_idx);
+void exd_world_component_create_tag_storage(exd_world_t * world, size_t component_idx);
 
 bool exd_world_entity_has(exd_world_t * world, size_t component_idx, exd_entity_t ent);
 bool exd_world_entity_is_valid(exd_world_t * world, exd_entity_t ent);

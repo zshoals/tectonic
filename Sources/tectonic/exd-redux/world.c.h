@@ -31,7 +31,7 @@ void exd_world_component_create_sized_component_storage(exd_world_t * world, siz
 	world->current_max_components++;
 }
 
-void exd_world_component_tag_create_storage(exd_world_t * world, size_t component_idx)
+void exd_world_component_create_tag_storage(exd_world_t * world, size_t component_idx)
 {
 	exd_world_component_create_sized_component_storage(world, 0, component_idx);
 }
