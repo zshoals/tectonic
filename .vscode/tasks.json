@@ -36,6 +36,23 @@
 			"problemMatcher": "$msCompile"
 		},
 		{
+			"label": "Kinc (Release): Build for Windows (VS2019) NoShaders",
+			"type": "shell",
+			"command": "C:/HaxeLibraries/Kinc/make.bat",
+			"args": [
+				"windows",
+				"--noshaders",
+				"-v",
+				"vs2019",
+				"--compile",
+				// "--debug",
+
+			],
+			"group": "build",
+			// Use the standard MS compiler pattern to detect errors, warnings and infos
+			"problemMatcher": "$msCompile"
+		},
+		{
 			"label": "Kinc: Remake Build Files",
 			"type": "shell",
 			"command": "C:/HaxeLibraries/Kinc/make.bat",

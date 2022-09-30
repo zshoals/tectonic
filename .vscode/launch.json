@@ -29,6 +29,19 @@
 				"moduleLoad": false,
 				"trace": true
 			}
+		},
+		{
+			"name": "Kinc (Release): Launch (NoShader)",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment\\Tectonic.exe",
+			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment",
+			"preLaunchTask": "Kinc (Release): Build for Windows (VS2019) NoShaders",
+			"console": "newExternalWindow",
+			"logging": {
+				"moduleLoad": false,
+				"trace": true
+			}
 		}		
 	]
 }
