@@ -24,7 +24,7 @@ void exd_query_exclude(exd_query_t * q, size_t component_index)
 void exd_query_merge_optional_group(exd_query_t * q, exd_query_optional_group_t * optionals)
 {
 	assert(optionals->optionals_count > 1);
-	exd_entset_and(&q->matcher, optionals->optionals[0]);
+	exd_entset_and(&q->matcher, &optionals->matcher);
 }
 
 exd_query_iter_t exd_query_compile(exd_query_t * q)
