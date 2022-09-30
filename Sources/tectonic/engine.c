@@ -104,7 +104,7 @@ tec_engine_quake
 
 	exd_entity_t saved = EXD_INVALID_ENTITY;
 
-	for (size_t i = 0; i < 8000; ++i)
+	for (size_t i = 0; i < 1005; ++i)
 	{
 		exd_entity_t entD = exd_ent_new();
 		saved = entD;
@@ -112,7 +112,7 @@ tec_engine_quake
 		pos->x = 9999;
 		pos->y = 350280;
 
-		if (i == 4000) 
+		if (i == 1000) 
 		{
 			rotation_t * rot = exd_comp_set(COMP_ROTATION, entD);
 			rot->degrees = 33.023;
@@ -129,7 +129,7 @@ tec_engine_quake
 	}
 	exd_query_iter_t it = exd_query_compile(&q);
 
-	double start_time = kinc_time();
+	long double start_time = kinc_time();
 	foreach_entity(ent, &it)
 	{
 		// position_t const * pos = exd_comp_get(0, entA);
