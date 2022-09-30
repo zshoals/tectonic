@@ -17,6 +17,28 @@ typedef struct exd_world
 }
 exd_world_t;
 
+typedef enum
+{
+	COMP_RESULT_SUCCESS,
+	COMP_RESULT_INVALID_ENTITY,
+	COMP_RESULT_MISSING_COMPONENT
+}
+exd_world_comp_result_state_e;
+
+typedef struct exd_world_comp_get_result
+{
+	exd_world_comp_result_state_e result;
+	void const * component;
+}
+exd_world_comp_get_result_t;
+
+typedef struct exd_world_comp_get_mut_result
+{
+	exd_world_comp_result_state_e result;
+	void * component;
+}
+exd_world_comp_get_mut_result_t;
+
 void exd_world_init(exd_world_t * world, allocator_t * mem);
 
 void exd_world_component_create_sized_component_storage(exd_world_t * world, size_t per_element_size, size_t component_idx);
@@ -29,8 +51,8 @@ bool exd_world_entity_is_valid(exd_world_t * world, exd_entity_t ent);
 exd_entity_t exd_world_entity_new(exd_world_t * world);
 void exd_world_entity_kill(exd_world_t * world, exd_entity_t ent);
 
-void const * exd_world_component_get(exd_world_t * world, size_t component_idx, exd_entity_t ent);
-void * exd_world_component_get_mut(exd_world_t * world, size_t component_idx, exd_entity_t ent);
+exd_world_comp_get_result_t exd_world_component_get(exd_world_t * world, size_t component_idx, exd_entity_t ent);
+exd_world_comp_get_mut_result_t exd_world_component_get_mut(exd_world_t * world, size_t component_idx, exd_entity_t ent);
 
 //Note: The unsafe component accessors skip the generation check
 //These are safe to use as long as they're used by entities resolved by a world query

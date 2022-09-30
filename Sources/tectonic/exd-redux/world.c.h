@@ -38,6 +38,7 @@ void exd_world_component_tag_create_storage(exd_world_t * world, size_t componen
 
 bool exd_world_entity_has(exd_world_t * world, size_t component_idx, exd_entity_t ent)
 {
+	assert(component_idx < world->current_max_components);
 	return exd_component_has(&world->component_arrays[component_idx], ent);
 }
 
@@ -70,32 +71,71 @@ void exd_world_entity_kill(exd_world_t * world, exd_entity_t ent)
 	}
 }
 
-void const * exd_world_component_get(exd_world_t * world, size_t component_idx, exd_entity_t ent)
+exd_world_comp_get_result_t exd_world_component_get(exd_world_t * world, size_t component_idx, exd_entity_t ent)
 {
-	//Note: Right now we just assert if we try and get generation mismatch, which seems correct
-	//However, maybe it's ok to return null data in the case of an invalid access. Not sure yet.
-	//Might be a good idea to return a struct with whether or not the access is safe, and the data ptr
-	//data ptr null if entity wasn't valid + bool indicates invalid check
-	assert(exd_world_entity_is_valid(world, ent));
-	//TODO(zshoals): Typing it as void is an unfortunate hack...
-	//Getting the appropriate type out of world may not be super trivial, so skip it for now.
-	return exd_component_get(&world->component_arrays[component_idx], void, ent);
+	assert(component_idx < world->current_max_components);
+
+	exd_world_comp_get_result_t status = {0};
+
+	if (!exd_world_entity_is_valid(world, ent))
+	{
+		status.result = COMP_RESULT_INVALID_ENTITY;
+		status.component = NULL;
+	}
+	else if (!exd_world_entity_has(world, component_idx, ent))
+	{
+		status.result = COMP_RESULT_MISSING_COMPONENT;
+		status.component = NULL;
+	}
+	else
+	{
+		status.result = COMP_RESULT_SUCCESS;
+
+		//TODO(zshoals): Typing it as void is an unfortunate hack...
+		//Getting the appropriate type out of world may not be super trivial, so skip it for now.
+		status.component = exd_component_get(&world->component_arrays[component_idx], void, ent);
+	}
+	
+	return status;
 }
 
-void * exd_world_component_get_mut(exd_world_t * world, size_t component_idx, exd_entity_t ent)
+exd_world_comp_get_mut_result_t exd_world_component_get_mut(exd_world_t * world, size_t component_idx, exd_entity_t ent)
 {
-	assert(exd_world_entity_is_valid(world, ent));
-	return exd_component_get_mut(&world->component_arrays[component_idx], void, ent);
+	assert(component_idx < world->current_max_components);
+
+	exd_world_comp_get_mut_result_t status = {0};
+
+	if (!exd_world_entity_is_valid(world, ent))
+	{
+		status.result = COMP_RESULT_INVALID_ENTITY;
+		status.component = NULL;
+	}
+	else if (!exd_world_entity_has(world, component_idx, ent))
+	{
+		status.result = COMP_RESULT_MISSING_COMPONENT;
+		status.component = NULL;
+	}
+	else
+	{
+		status.result = COMP_RESULT_SUCCESS;
+		status.component = exd_component_get_mut(&world->component_arrays[component_idx], void, ent);
+	}
+	
+	return status;
 }
 
 void const * exd_world_component_get_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent)
 {
+	assert(component_idx < world->current_max_components);
+
 	exd_entity_t unchecked_ent = exd_iterable_entity_to_normal_entity(ent);
 	return exd_component_get(&world->component_arrays[component_idx], void, unchecked_ent);
 }
 
 void * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent)
 {
+	assert(component_idx < world->current_max_components);
+
 	exd_entity_t unchecked_ent = exd_iterable_entity_to_normal_entity(ent);
 	return exd_component_get_mut(&world->component_arrays[component_idx], void, unchecked_ent);
 }
@@ -103,6 +143,8 @@ void * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_
 
 void * exd_world_component_set(exd_world_t * world, size_t component_idx, exd_entity_t ent)
 {
+	assert(component_idx < world->current_max_components);
+
 	return exd_component_set(&world->component_arrays[component_idx], void, ent);
 }
 

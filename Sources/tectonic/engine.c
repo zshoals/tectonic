@@ -102,9 +102,11 @@ tec_engine_quake
 	exd_world_component_create_component_storage(world, position_t, COMP_POSITION);
 	exd_world_component_create_component_storage(world, rotation_t, COMP_ROTATION);
 
+	exd_entity_t saved = EXD_INVALID_ENTITY;
 	for (size_t i = 0; i < 4005; ++i)
 	{
 		exd_entity_t entD = exd_ent_new();
+		saved = entD;
 		position_t * pos = exd_comp_set(COMP_POSITION, entD);
 		pos->x = 9999;
 		pos->y = 350280;
@@ -129,9 +131,20 @@ tec_engine_quake
 	foreach_entity(ent, &it)
 	{
 		// position_t const * pos = exd_comp_get(0, entA);
-		position_t const * posENT = exd_comp_get_via_iter(COMP_POSITION, ent);
-		rotation_t const * rotENT = exd_comp_get_via_iter(COMP_ROTATION, ent);
+		position_t const * posENT = exd_comp_get(COMP_POSITION, ent);
+		rotation_t const * rotENT = exd_comp_get(COMP_ROTATION, ent);
 		kinc_log(KINC_LOG_LEVEL_INFO, "X: %d, Y: %d, ROT: %f", posENT->x, posENT->y, rotENT->degrees);
+	}
+
+	exd_world_comp_get_result_t check_result = exd_comp_get_checked(COMP_ROTATION, saved);
+	if (check_result.result == COMP_RESULT_SUCCESS)
+	{
+		position_t const * checked = check_result.component;
+		kinc_log(KINC_LOG_LEVEL_INFO, "Successful Ent Save: X: %d, Y: %d", checked->x, checked->y );
+	}
+	else if (check_result.result == COMP_RESULT_MISSING_COMPONENT)
+	{
+		kinc_log(KINC_LOG_LEVEL_INFO, "Missing!");
 	}
 
 	kinc_set_update_callback(&tec_engine_main_loop);
