@@ -1,5 +1,7 @@
 #pragma once
 
+#include "exd-config.h"
+
 #include "tectonic/ds/allocator.h"
 #include "world.h"
 #include "exd-common.h"
@@ -11,8 +13,6 @@ typedef struct exd_query
 	exd_world_t * world;
 }
 exd_query_t;
-
-#define EXD_QUERY_MAX_OPTIONAL_COMPONENT_MERGE 4
 
 typedef struct exd_query_optional_group
 {
