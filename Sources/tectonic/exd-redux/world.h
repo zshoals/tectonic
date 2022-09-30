@@ -35,7 +35,7 @@ void * exd_world_component_get_mut(exd_world_t * world, size_t component_idx, ex
 //Note: The unsafe component accessors skip the generation check
 //These are safe to use as long as they're used by entities resolved by a world query
 void const * exd_world_component_get_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent);
-void  * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent);
+void * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent);
 
 void * exd_world_component_set(exd_world_t * world, size_t component_idx, exd_entity_t ent);
 
