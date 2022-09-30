@@ -54,11 +54,11 @@ exd_world_t * exd_world_get_global_world_for_shorthand_access();
 #define exd_ent_has(COMPONENT_IDX, ENTITY) exd_world_entity_has(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 #define exd_ent_valid(ENTITY) exd_world_entity_is_valid(exd_world_get_global_world_for_shorthand_access(), ENTITY)
 
-#define exd_comp_get(COMPONENT_IDX, ENTITY) exd_world_component_get(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
-#define exd_comp_get_mut(COMPONENT_IDX, ENTITY) exd_world_component_get_mut(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
+#define exd_comp_get(COMPONENT_IDX, ITERABLE_ENTITY) exd_world_component_get_unsafe(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ITERABLE_ENTITY)
+#define exd_comp_get_mut(COMPONENT_IDX, ITERABLE_ENTITY) exd_world_component_get_mut_unsafe(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ITERABLE_ENTITY)
 
-#define exd_comp_get_via_iter(COMPONENT_IDX, ITERABLE_ENTITY) exd_world_component_get_unsafe(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ITERABLE_ENTITY)
-#define exd_comp_get_mut_via_iter(COMPONENT_IDX, ITERABLE_ENTITY) exd_world_component_get_mut_unsafe(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ITERABLE_ENTITY)
+#define exd_comp_get_checked(COMPONENT_IDX, ENTITY) exd_world_component_get(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
+#define exd_comp_get_mut_checked(COMPONENT_IDX, ENTITY) exd_world_component_get_mut(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 
 #define exd_comp_set(COMPONENT_IDX, ENTITY) exd_world_component_set(exd_world_get_global_world_for_shorthand_access(), COMPONENT_IDX, ENTITY)
 
