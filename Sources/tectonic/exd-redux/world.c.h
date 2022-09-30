@@ -94,7 +94,7 @@ void const * exd_world_component_get_unsafe(exd_world_t * world, size_t componen
 	return exd_component_get(&world->component_arrays[component_idx], void, unchecked_ent);
 }
 
-void  * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent)
+void * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent)
 {
 	exd_entity_t unchecked_ent = exd_iterable_entity_to_normal_entity(ent);
 	return exd_component_get_mut(&world->component_arrays[component_idx], void, unchecked_ent);
