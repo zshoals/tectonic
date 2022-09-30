@@ -75,13 +75,16 @@ void exd_query_optional_group_compile(exd_query_optional_group_t * optionals)
 //          Entity iter ops
 //====================================
 
+//TODO(zshoals): For debug mode, this version of the iterator may be too slow.
+//We need to find a way to shortcircuit the iteration harder so that we don't have to
+//scan over so many slots while iterating.
 exd_iterable_entity_t exd_query_iter_next(exd_query_iter_t * it)
 {
 	exd_entset_t * iteration_list = &it->q->matcher;
 
-	//We want to make an attempt to skip empty blocks entire via an if check,
-	//if the block is empty move on
-
+	//Note: Scary looking, but safe. This skip will only occur at bitflags offset 0 in a particular
+	//bitset block. If any bit is set in the block, this just gets repeatedly skipped until the next block
+	//Decent speedup results for sparse arrays
 	while(exd_entset_entity_block_is_empty(iteration_list, it->current_index) && it->current_index < EXD_MAX_ENTITIES)
 	{
 		it->current_index += EXD_ENTSET_BITWIDTH;
