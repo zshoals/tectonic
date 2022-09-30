@@ -28,9 +28,8 @@ u16 exd_freelist_get_free_id(exd_freelist_t * list)
 void exd_freelist_release_id(exd_freelist_t * list, u16 id)
 {
 	assert(list->first_free_idx + 1 < EXD_MAX_ENTITIES && id < EXD_MAX_ENTITIES);
+
 	list->first_free_idx++;
-	//TODO(zshoals): Is this bugged? It seems ok but there's something weird about this
-	//Note that this doesn't verify if the id is already in the list
 	list->free_entity_slots[list->first_free_idx] = id;
 }
 
