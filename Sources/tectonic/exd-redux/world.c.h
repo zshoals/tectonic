@@ -93,7 +93,7 @@ exd_world_comp_get_result_t exd_world_component_get(exd_world_t * world, size_t 
 
 		//TODO(zshoals): Typing it as void is an unfortunate hack...
 		//Getting the appropriate type out of world may not be super trivial, so skip it for now.
-		status.component = exd_component_get(&world->component_arrays[component_idx], void, ent);
+		status.component = exd_component_get(&world->component_arrays[component_idx], void const, ent);
 	}
 	
 	return status;
@@ -129,7 +129,7 @@ void const * exd_world_component_get_unsafe(exd_world_t * world, size_t componen
 	assert(component_idx < world->current_max_components);
 
 	exd_entity_t unchecked_ent = exd_iterable_entity_to_normal_entity(ent);
-	return exd_component_get(&world->component_arrays[component_idx], void, unchecked_ent);
+	return exd_component_get(&world->component_arrays[component_idx], void const, unchecked_ent);
 }
 
 void * exd_world_component_get_mut_unsafe(exd_world_t * world, size_t component_idx, exd_iterable_entity_t ent)
