@@ -9,11 +9,19 @@
 
 static inline u64 exd_entset_internal_compute_array_idx(exd_entity_t id)
 {
+	// Note: "pow2_divide" is equivalent to
+	// entity_id / entset_bitwidth, entset_bitwidth is likely 32bits so
+	// entity_id / 32
+	// Using "pow2_divide" is significantly faster in debug builds, but makes no difference in release
 	return exd_math_pow2_divide(exd_entity_extract_id(id), EXD_ENTSET_BITWIDTH_SHIFT);
 }
 
 static inline u32 exd_entset_internal_compute_entity_slot_mask(exd_entity_t id)
 {
+	// Note: "pow2_modulo" is equivalent to
+	// entity_id % entset_bitwidth, entset_bitwidth is likely 32bits so
+	// entity_id % 32
+	// Using "pow2_modulo" is significantly faster in debug builds, but makes no difference in release
 	u8 offset_in_block = exd_math_pow2_modulo(exd_entity_extract_id(id), EXD_ENTSET_BITWIDTH_SHIFT);
 	u32 slot_mask = exd_bits32_rotate_left(1, offset_in_block);
 	return slot_mask;
