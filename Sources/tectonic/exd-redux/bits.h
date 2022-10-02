@@ -59,12 +59,12 @@ static inline u64 exd_bits64_increment_upper(u64 a, u8 pivot)
 static inline u32 exd_bits32_and(u32 a, u32 b) { return a & b; }
 static inline u32 exd_bits32_or(u32 a, u32 b) { return a | b; }
 static inline u32 exd_bits32_not(u32 a) { return ~a; }
+static inline u32 exd_bits32_rotate_left(u32 a, u8 rotL) { return (a << rotL); }
 static inline u32 exd_bits32_mask_from_rotate_left(u8 shift)
 {
 	// assert(shift != 0);
 	return exd_bits32_rotate_left(1, shift) - 1;
 }
-static inline u32 exd_bits32_rotate_left(u32 a, u8 rotL) { return (a << rotL); }
 static inline u32 exd_bits32_rotate_right(u32 a, u8 rotR) { return (a >> rotR); }
 static inline u32 exd_bits32_extract_lower_bits(u32 a, u8 pivot)
 {
