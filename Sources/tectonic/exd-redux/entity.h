@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "exd-config.h"
+
 #include "exd-common.h"
 #include "bits.h"
 
@@ -8,7 +10,6 @@ typedef u64 exd_entity_t;
 
 #define EXD_INVALID_ENTITY 0
 
-#define EXD_ID_SHIFT 13
 #define EXD_ID_BITS (1 << EXD_ID_SHIFT)
 
 #define EXD_ID_MASK (EXD_ID_BITS - 1)
