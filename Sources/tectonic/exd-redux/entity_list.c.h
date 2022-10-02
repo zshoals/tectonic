@@ -31,7 +31,7 @@ exd_entity_t exd_entity_list_get_new_entity(exd_entity_list_t * manifest)
 
 void exd_entity_list_free_entity(exd_entity_list_t * manifest, exd_entity_t id)
 {
-	u16 slot = EXD_ENTITY_ID(id);
+	u16 slot = exd_entity_extract_id(id);
 	exd_freelist_release_id(&manifest->available_entities, slot);
 	exd_entset_clear_slot(&manifest->entity_states, id);
 
@@ -51,7 +51,7 @@ void exd_entity_list_copy_to_entset(exd_entity_list_t * manifest, exd_entset_t *
 bool exd_entity_list_is_entity_valid(exd_entity_list_t * manifest, exd_entity_t id)
 {
 	bool is_alive = exd_entset_slot_is_set(&manifest->entity_states, id); 
-	bool generations_match = manifest->entity_references[EXD_ENTITY_ID(id)] == id;
+	bool generations_match = manifest->entity_references[exd_entity_extract_id(id)] == id;
 
 	return is_alive && generations_match;
 }

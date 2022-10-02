@@ -5,7 +5,7 @@
 static inline void * exd_component_internal_get_element_location(exd_component_t * comps, exd_entity_t id)
 {
 	void * base_addr = comps->comps;
-	size_t target_index = EXD_ENTITY_ID(id);
+	size_t target_index = exd_entity_extract_id(id);
 	size_t per_element_size = comps->per_element_size;
 
 	uintptr_t location = EXD_CAST(uintptr_t, base_addr);
@@ -42,7 +42,7 @@ void exd_component_init_as_tag(exd_component_t * comps, allocator_t * mem)
 
 void const * exd_component_untyped_get(exd_component_t * comps, exd_entity_t id)
 {
-	assert(EXD_ENTITY_ID(id) != EXD_INVALID_ENTITY);
+	assert(exd_entity_extract_id(id) != EXD_INVALID_ENTITY);
 	assert(exd_entset_slot_is_set(&comps->in_use_components, id));
 
 	return (void const *)exd_component_internal_get_element_location(comps, id);
@@ -50,7 +50,7 @@ void const * exd_component_untyped_get(exd_component_t * comps, exd_entity_t id)
 
 void * exd_component_untyped_get_mut(exd_component_t * comps, exd_entity_t id)
 {
-	assert(EXD_ENTITY_ID(id) != EXD_INVALID_ENTITY);
+	assert(exd_entity_extract_id(id) != EXD_INVALID_ENTITY);
 	assert(exd_entset_slot_is_set(&comps->in_use_components, id));
 
 	return exd_component_internal_get_element_location(comps, id);
@@ -58,7 +58,7 @@ void * exd_component_untyped_get_mut(exd_component_t * comps, exd_entity_t id)
 
 void * exd_component_untyped_set(exd_component_t * comps, exd_entity_t id)
 {
-	assert(EXD_ENTITY_ID(id) < EXD_MAX_ENTITIES);
+	assert(exd_entity_extract_id(id) < EXD_MAX_ENTITIES);
 	//Note: Setting a component a second time before killing it is probably not intended behavior,
 	//so assert that the slot is currently inactive
 	assert(exd_entset_slot_is_not_set(&comps->in_use_components, id));
@@ -70,7 +70,7 @@ void * exd_component_untyped_set(exd_component_t * comps, exd_entity_t id)
 
 void exd_component_clear(exd_component_t * comps, exd_entity_t id)
 {
-	assert(EXD_ENTITY_ID(id) < EXD_MAX_ENTITIES && id != EXD_INVALID_ENTITY);
+	assert(exd_entity_extract_id(id) < EXD_MAX_ENTITIES && id != EXD_INVALID_ENTITY);
 	//Note: It's ok to clear an entity even if it doesn't currently have anything
 	//This probably makes entity deletion easier
 
@@ -79,7 +79,7 @@ void exd_component_clear(exd_component_t * comps, exd_entity_t id)
 
 bool exd_component_has(exd_component_t * comps, exd_entity_t id)
 {
-	assert(EXD_ENTITY_ID(id) < EXD_MAX_ENTITIES && id != EXD_INVALID_ENTITY);
+	assert(exd_entity_extract_id(id) < EXD_MAX_ENTITIES && id != EXD_INVALID_ENTITY);
 
 	return exd_entset_slot_is_set(&comps->in_use_components, id);
 }

@@ -54,7 +54,7 @@ exd_entity_t exd_world_entity_new(exd_world_t * world)
 
 void exd_world_entity_kill(exd_world_t * world, exd_entity_t ent)
 {
-	exd_entity_t world_reference_entity = exd_entity_list_resolve_index(&world->entities, EXD_ENTITY_ID(ent));
+	exd_entity_t world_reference_entity = exd_entity_list_resolve_index(&world->entities, exd_entity_extract_id(ent));
 	if (world_reference_entity == ent)
 	{
 		exd_entity_list_free_entity(&world->entities, ent);
