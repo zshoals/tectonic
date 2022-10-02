@@ -4,6 +4,8 @@
 #include "exd-common.h"
 #include "entity.h"
 
+//EXD_ENTSET_BITWIDTH_SHIFT is used for certain fast division and modulo operations
+//This value represents the backing integer size, before a (1 << shift) operation
 #define EXD_ENTSET_BITWIDTH_SHIFT 5
 #define EXD_ENTSET_BITWIDTH (1 << EXD_ENTSET_BITWIDTH_SHIFT)
 #define EXD_ENTSET_ELEMENT_COUNT (EXD_MAX_ENTITIES / EXD_ENTSET_BITWIDTH)
