@@ -54,7 +54,7 @@ ds_fsa_self;
 		DEBUG_ENSURE_CONST_PTR_NOT_NULL(CONST_SOURCE_PTR, "Source array was null while attempting to copy it.");\
 		DEBUG_ENSURE_PTR_NOT_NULL(DESTINATION_PTR, "Destination array was null while attempting to copy to it.");\
 		DEBUG_ENSURE_UINT_GTE(DESTINATION_PTR->capacity, CONST_SOURCE_PTR->capacity, "Copying to destination array would result in a buffer overrun (ERROR: Source buffer size exceeds Destination buffer size.)");\
-		DEBUG_ENSURE_UINT_EQUALS(sizeof(DESTINATION_PTR->data[0]), sizeof(CONST_SOURCE_PTR->data[0], "Destination array and Source array appear to have mismatched types."));\
+		DEBUG_ENSURE_UINT_EQUALS(sizeof(DESTINATION_PTR->data[0]), sizeof(CONST_SOURCE_PTR->data[0]), "Destination array and Source array appear to have mismatched types.");\
 		memcpy(&DESTINATION_PTR->data[0], &CONST_SOURCE_PTR->data[0], CONST_SOURCE_PTR->capacity);\
 	} while (0)
 
