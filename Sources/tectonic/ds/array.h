@@ -39,7 +39,7 @@ static inline void ds_func(_initialize_with_value)(ds_self_t * array, allocator_
 
 static inline ds_type const * ds_func(_get)(ds_self_t const * array, size_t index)
 {
-	DEBUG_ENSURE_PTR_NOT_NULL(array, "Array was null while accessing index");
+	DEBUG_ENSURE_CONST_PTR_NOT_NULL(array, "Array was null while accessing index");
 
 	tec_internal_array_bounds_check(index, array->length);
 	return &array->data[index];
@@ -47,13 +47,13 @@ static inline ds_type const * ds_func(_get)(ds_self_t const * array, size_t inde
 
 static inline ds_type const * ds_func(_get_unsafe)(ds_self_t const * array, size_t index)
 {
-	DEBUG_ENSURE_PTR_NOT_NULL(array, "Array was null while accessing index");
+	DEBUG_ENSURE_CONST_PTR_NOT_NULL(array, "Array was null while accessing index");
 
 	tec_internal_array_bounds_check_debug_only(index, array->length);
 	return &array->data[index];
 }
 
-static inline ds_type * ds_func(_get_mut)(ds_self_t const * array, size_t index)
+static inline ds_type * ds_func(_get_mut)(ds_self_t * array, size_t index)
 {
 	DEBUG_ENSURE_PTR_NOT_NULL(array, "Array was null while accessing index");
 
@@ -61,7 +61,7 @@ static inline ds_type * ds_func(_get_mut)(ds_self_t const * array, size_t index)
 	return &array->data[index];
 }
 
-static inline ds_type * ds_func(_get_mut_unsafe)(ds_self_t const * array, size_t index)
+static inline ds_type * ds_func(_get_mut_unsafe)(ds_self_t * array, size_t index)
 {
 	DEBUG_ENSURE_PTR_NOT_NULL(array, "Array was null while accessing index");
 
