@@ -9,6 +9,18 @@
 #define ds_self_t TEC_CONCAT(ds_self, _t)
 #define ds_func(name) TEC_CONCAT(ds_self, name)
 
+//===============
+//Fixed Sized Arrays pre-needs
+
+#define FSA_DECLARE(TYPE, MAX_ELEMENT_COUNT) FSA_TYPE(TYPE, MAX_ELEMENT_COUNT)
+#define FSA_CONCAT(A, B) A##B
+#define FSA_CC(A, B) FSA_CONCAT(A, B)
+#define FSA_TYPE(TYPE, MAX_ELEMENT_COUNT) FSA_CC( FSA_CC(fsa_, TYPE), FSA_CC(_, MAX_ELEMENT_COUNT) )
+#define FSA_FUNC(SELF, FUNCTION_SUFFIX) FSA_CC(SELF, FUNCTION_SUFFIX)
+
+//-==============
+
+
 //Interesting idea; foreach_array loop? We can maybe reverse the capture and size_t iterator type
 //TODO(zshoals): Appears to work alright, however this is NOT SETUP FOR ARRAYS YET AND NEEDS FIXED
 //Should be located in the actual array type data structure. Cool implementation!
