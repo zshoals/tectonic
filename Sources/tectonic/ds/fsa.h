@@ -44,6 +44,8 @@ ds_fsa_self;
 
 #define fsa_get(DECLARED_TYPE, FSA_PTR, IDX) FSA_FUNC(DECLARED_TYPE, _get)((FSA_PTR), (IDX))
 #define fsa_get_unsafe(DECLARED_TYPE, FSA_PTR, IDX) FSA_FUNC(DECLARED_TYPE, _get_unsafe)((FSA_PTR), (IDX))
+#define fsa_get_mut(DECLARED_TYPE, FSA_PTR, IDX) FSA_FUNC(DECLARED_TYPE, _get_mut)((FSA_PTR), (IDX))
+#define fsa_get_mut_unsafe(DECLARED_TYPE, FSA_PTR, IDX) FSA_FUNC(DECLARED_TYPE, _get_mut_unsafe)((FSA_PTR), (IDX))
 #define fsa_set(DECLARED_TYPE, FSA_PTR, IDX, VALUE) FSA_FUNC(DECLARED_TYPE, _set)((FSA_PTR), (IDX), (VALUE))
 #define fsa_set_unsafe(DECLARED_TYPE, FSA_PTR, IDX, VALUE) FSA_FUNC(DECLARED_TYPE, _set_unsafe)((FSA_PTR), (IDX), (VALUE))
 
@@ -128,7 +130,19 @@ static inline ds_type const * FSA_FUNC(ds_fsa_self, _get)(ds_fsa_self * arr, siz
 	return &arr->data[idx];
 }
 
-static inline ds_type * FSA_FUNC(ds_fsa_self, _get_unsafe)(ds_fsa_self * arr, size_t idx)
+static inline ds_type const * FSA_FUNC(ds_fsa_self, _get_unsafe)(ds_fsa_self * arr, size_t idx)
+{
+	tec_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
+	return &arr->data[idx];
+}
+
+static inline ds_type * FSA_FUNC(ds_fsa_self, _get_mut)(ds_fsa_self * arr, size_t idx)
+{
+	tec_internal_array_bounds_check( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
+	return &arr->data[idx];
+}
+
+static inline ds_type * FSA_FUNC(ds_fsa_self, _get_mut_unsafe)(ds_fsa_self * arr, size_t idx)
 {
 	tec_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
 	return &arr->data[idx];
