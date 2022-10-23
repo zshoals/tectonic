@@ -13,12 +13,6 @@
 	#define ds_type int
 #endif
 
-
-#define FSA_CONCAT(A, B) A##B
-#define FSA_CC(A, B) FSA_CONCAT(A, B)
-#define FSA_TYPE(TYPE, MAX_ELEMENT_COUNT) FSA_CC( FSA_CC(fsa_, TYPE), FSA_CC(_, MAX_ELEMENT_COUNT) )
-#define FSA_FUNC(SELF, FUNCTION_SUFFIX) FSA_CC(SELF, FUNCTION_SUFFIX)
-
 #define ds_fsa_self FSA_TYPE(ds_type, ds_element_count)
 
 typedef struct ds_fsa_self
@@ -34,7 +28,6 @@ ds_fsa_self;
 //                             Public facing API
 //
 //==============================================================================
-#define FSA_DECLARE(TYPE, MAX_ELEMENT_COUNT) FSA_TYPE(TYPE, MAX_ELEMENT_COUNT)
 
 #define fsa_init(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _init)(FSA_PTR)
 #define fsa_clear(DECLARED_TYPE, FSA_PTR) \
@@ -63,9 +56,9 @@ ds_fsa_self;
 		memcpy(&DESTINATION_PTR->data[0], &CONST_SOURCE_PTR->data[0], CONST_SOURCE_PTR->capacity);\
 	} while (0)
 
-#define fsa_size_in_bytes(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _size_in_bytes)
 #define fsa_count(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _count)()
 #define fsa_capacity(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _capacity)()
+#define fsa_size_in_bytes(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _size_in_bytes)
 
 
 static inline void FSA_FUNC(ds_fsa_self, _init)(ds_fsa_self * arr)
@@ -74,6 +67,21 @@ static inline void FSA_FUNC(ds_fsa_self, _init)(ds_fsa_self * arr)
 	arr->current_push_idx = 0;
 	arr->capacity = ds_element_count;
 	memset(&arr->data[0], 0, (ds_element_count * sizeof(ds_type)) );
+}
+
+static inline size_t FSA_FUNC(ds_fsa_self, _count)(ds_fsa_self * arr)
+{
+	return arr->current_push_idx;
+}
+
+static inline size_t FSA_FUNC(ds_fsa_self, _capacity)(void)
+{
+	return ds_element_count;
+}
+
+static inline size_t FSA_FUNC(ds_fsa_self, _size_in_bytes)(ds_fsa_self * arr)
+{
+	return sizeof(arr->data[0]) * FSA_FUNC(ds_fsa_self, _capacity)();
 }
 
 static inline void FSA_FUNC(ds_fsa_self, _push)(ds_fsa_self * arr, ds_type value)
@@ -117,13 +125,13 @@ static inline ds_type FSA_FUNC(ds_fsa_self, _pop_unsafe)(ds_fsa_self * arr)
 static inline ds_type const * FSA_FUNC(ds_fsa_self, _get)(ds_fsa_self * arr, size_t idx)
 {
 	tec_internal_array_bounds_check( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
-	return arr->data[idx];
+	return &arr->data[idx];
 }
 
 static inline ds_type * FSA_FUNC(ds_fsa_self, _get_unsafe)(ds_fsa_self * arr, size_t idx)
 {
 	tec_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
-	return arr->data[idx];
+	return &arr->data[idx];
 }
 
 static inline void FSA_FUNC(ds_fsa_self, _set)(ds_fsa_self * arr, size_t idx, ds_type value)
@@ -138,19 +146,5 @@ static inline void FSA_FUNC(ds_fsa_self, _set_unsafe)(ds_fsa_self * arr, size_t 
 	arr->data[idx] = value;
 }
 
-static inline size_t FSA_FUNC(ds_fsa_self, _size_in_bytes)(ds_fsa_self * arr)
-{
-	return sizeof(arr->data[0]) * FSA_FUNC(ds_fsa_self, _capacity)();
-}
-
-static inline size_t FSA_FUNC(ds_fsa_self, _count)(ds_fsa_self * arr)
-{
-	return arr->current_push_idx;
-}
-
-static inline size_t FSA_FUNC(ds_fsa_self, _capacity)(void)
-{
-	return ds_element_count;
-}
 
 
