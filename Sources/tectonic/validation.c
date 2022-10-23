@@ -323,3 +323,32 @@ void tec_validation_ensure_ptr_is_null(void * ptr, char const * message, char co
 		assert( (message, !ptr, 0) );
 	}
 }
+void tec_validation_ensure_const_ptr_not_null(void const * ptr, char const * message, char const * file, int line)
+{
+	if (ptr)
+	{
+		TEC_VALIDATION_NO_OP();
+	}
+	else
+	{
+
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "Const Pointer was null!");
+		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
+		assert( (message, ptr, 0) );
+	}
+}
+void tec_validation_ensure_const_ptr_is_null(void const * ptr, char const * message, char const * file, int line)
+{
+	if (!ptr)
+	{
+		TEC_VALIDATION_NO_OP();
+	}
+	else
+	{
+		kinc_log(KINC_LOG_LEVEL_ERROR, "\nASSERTION FAILED::[FILE: %s]::[LINE: %d]", file, line);
+		kinc_log(KINC_LOG_LEVEL_ERROR, "Const Pointer was not null!");
+		kinc_log(KINC_LOG_LEVEL_ERROR, "User Message: %s", message);
+		assert( (message, !ptr, 0) );
+	}
+}

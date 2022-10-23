@@ -32,6 +32,9 @@ void tec_validation_ensure_float_in_range(long double value, long double lower, 
 void tec_validation_ensure_ptr_not_null(void * ptr, char const * message, char const * file, int line);
 void tec_validation_ensure_ptr_is_null(void * ptr, char const * message, char const * file, int line);
 
+void tec_validation_ensure_const_ptr_not_null(void const * ptr, char const * message, char const * file, int line);
+void tec_validation_ensure_const_ptr_is_null(void const * ptr, char const * message, char const * file, int line);
+
 #ifndef TEC_DISABLE_UNFORCED_ASSERTS
 	#define DEBUG_ENSURE_TRUE(Expression, Message) assert(( (Message), (Expression) ))
 	#define DEBUG_ENSURE_FALSE(Expression, Message) assert(( (Message), !(Expression) ))
@@ -63,6 +66,9 @@ void tec_validation_ensure_ptr_is_null(void * ptr, char const * message, char co
 	#define DEBUG_ENSURE_PTR_NOT_NULL(Pointer, Message) tec_validation_ensure_ptr_not_null(Pointer, Message, __FILE__, __LINE__)
 	#define DEBUG_ENSURE_PTR_IS_NULL(Pointer, Message) tec_validation_ensure_ptr_is_null(Pointer, Message, __FILE__, __LINE__)
 
+	#define DEBUG_ENSURE_CONST_PTR_NOT_NULL(Pointer, Message) tec_validation_ensure_const_ptr_not_null(Pointer, Message, __FILE__, __LINE__)
+	#define DEBUG_ENSURE_CONST_PTR_IS_NULL(Pointer, Message) tec_validation_ensure_const_ptr_is_null(Pointer, Message, __FILE__, __LINE__)
+
 #else
 	#define DEBUG_ENSURE_TRUE(Expression, Message) ((void)0)
 	#define DEBUG_ENSURE_FALSE(Expression, Message) ((void)0)
@@ -93,6 +99,9 @@ void tec_validation_ensure_ptr_is_null(void * ptr, char const * message, char co
 
 	#define DEBUG_ENSURE_PTR_NOT_NULL(Pointer, Message) ((void)0)
 	#define DEBUG_ENSURE_PTR_IS_NULL(Pointer, Message) ((void)0)
+
+	#define DEBUG_ENSURE_CONST_PTR_NOT_NULL(Pointer, Message) ((void)0)
+	#define DEBUG_ENSURE_CONST_PTR_IS_NULL(Pointer, Message) ((void)0)
 #endif
 
 
