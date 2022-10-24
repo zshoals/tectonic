@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <inttypes.h>
 #include "dscommon.h"
 
 #ifndef ds_element_count
@@ -10,14 +11,13 @@
 #endif
 
 #ifndef ds_type
-	#define ds_type int
+	#define ds_type ds_ERROR_TYPE
 #endif
 
 #define ds_fsa_self FSA_TYPE(ds_type, ds_element_count)
 
 typedef struct ds_fsa_self
 {
-	size_t capacity;
 	size_t current_push_idx;
 	ds_type data[ds_element_count];
 }
@@ -29,7 +29,7 @@ ds_fsa_self;
 //
 //==============================================================================
 
-#define fsa_init(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _init)(FSA_PTR)
+// #define fsa_init(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _init)(FSA_PTR)
 #define fsa_clear(DECLARED_TYPE, FSA_PTR) \
 	do {\
 		DEBUG_ENSURE_PTR_NOT_NULL(FSA_PTR, "Pointer was null!");\
@@ -49,27 +49,33 @@ ds_fsa_self;
 #define fsa_set(DECLARED_TYPE, FSA_PTR, IDX, VALUE) FSA_FUNC(DECLARED_TYPE, _set)((FSA_PTR), (IDX), (VALUE))
 #define fsa_set_unsafe(DECLARED_TYPE, FSA_PTR, IDX, VALUE) FSA_FUNC(DECLARED_TYPE, _set_unsafe)((FSA_PTR), (IDX), (VALUE))
 
-#define fsa_copy_from(DESTINATION_PTR, CONST_SOURCE_PTR)\
+#define fsa_find(DECLARED_TYPE, FSA_PTR, VALUE) FSA_FUNC(DECLARED_TYPE, _find)( (FSA_PTR), (VALUE) )
+#define fsa_has(DECLARED_TYPE, FSA_PTR, VALUE) FSA_FUNC(DECLARED_TYPE, _has)( (FSA_PTR), (VALUE) )
+
+//Note: The single element assignment before the memcpy is to enforce that the underlying types match,
+//you'll error out otherwise
+#define fsa_copy_from(DESTINATION_TYPE, DESTINATION_PTR, SOURCE_TYPE, CONST_SOURCE_PTR)\
 	do { \
 		DEBUG_ENSURE_CONST_PTR_NOT_NULL(CONST_SOURCE_PTR, "Source array was null while attempting to copy it.");\
 		DEBUG_ENSURE_PTR_NOT_NULL(DESTINATION_PTR, "Destination array was null while attempting to copy to it.");\
-		DEBUG_ENSURE_UINT_GTE(DESTINATION_PTR->capacity, CONST_SOURCE_PTR->capacity, "Copying to destination array would result in a buffer overrun (ERROR: Source buffer size exceeds Destination buffer size.)");\
+		DEBUG_ENSURE_UINT_GTE(FSA_CALC_CAPACITY(DESTINATION_TYPE, DESTINATION_PTR), FSA_CALC_CAPACITY(SOURCE_TYPE, CONST_SOURCE_PTR), "Copying to destination array would result in a buffer overrun (ERROR: Source buffer size exceeds Destination buffer size.)");\
 		DEBUG_ENSURE_UINT_EQUALS(sizeof(DESTINATION_PTR->data[0]), sizeof(CONST_SOURCE_PTR->data[0]), "Destination array and Source array appear to have mismatched types.");\
-		memcpy(&DESTINATION_PTR->data[0], &CONST_SOURCE_PTR->data[0], CONST_SOURCE_PTR->capacity);\
+		DESTINATION_PTR->data[0] = CONST_SOURCE_PTR->data[0];\
+		memcpy( &DESTINATION_PTR->data[0], &CONST_SOURCE_PTR->data[0], FSA_CALC_CAPACITY(SOURCE_TYPE, CONST_SOURCE_PTR) * sizeof(CONST_SOURCE_PTR->data[0]) );\
 	} while (0)
 
 #define fsa_count(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _count)()
 #define fsa_capacity(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _capacity)()
 #define fsa_size_in_bytes(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _size_in_bytes)
 
-
-static inline void FSA_FUNC(ds_fsa_self, _init)(ds_fsa_self * arr)
-{
-	DEBUG_ENSURE_PTR_NOT_NULL(arr, "Pointer was null!");
-	arr->current_push_idx = 0;
-	arr->capacity = ds_element_count;
-	memset(&arr->data[0], 0, (ds_element_count * sizeof(ds_type)) );
-}
+//Unneeded as we no longer need to track the capacity of the fsa
+// static inline void FSA_FUNC(ds_fsa_self, _init)(ds_fsa_self * arr)
+// {
+// 	DEBUG_ENSURE_PTR_NOT_NULL(arr, "Pointer was null!");
+// 	arr->current_push_idx = 0;
+// 	arr->capacity = ds_element_count;
+// 	memset(&arr->data[0], 0, (ds_element_count * sizeof(ds_type)) );
+// }
 
 static inline size_t FSA_FUNC(ds_fsa_self, _count)(ds_fsa_self * arr)
 {
@@ -126,39 +132,73 @@ static inline ds_type FSA_FUNC(ds_fsa_self, _pop_unsafe)(ds_fsa_self * arr)
 
 static inline ds_type const * FSA_FUNC(ds_fsa_self, _get)(ds_fsa_self * arr, size_t idx)
 {
-	tec_internal_array_bounds_check( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
+	ds_internal_array_bounds_check( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
 	return &arr->data[idx];
 }
 
 static inline ds_type const * FSA_FUNC(ds_fsa_self, _get_unsafe)(ds_fsa_self * arr, size_t idx)
 {
-	tec_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
+	ds_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
 	return &arr->data[idx];
 }
 
 static inline ds_type * FSA_FUNC(ds_fsa_self, _get_mut)(ds_fsa_self * arr, size_t idx)
 {
-	tec_internal_array_bounds_check( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
+	ds_internal_array_bounds_check( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
 	return &arr->data[idx];
 }
 
 static inline ds_type * FSA_FUNC(ds_fsa_self, _get_mut_unsafe)(ds_fsa_self * arr, size_t idx)
 {
-	tec_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
+	ds_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
 	return &arr->data[idx];
 }
 
 static inline void FSA_FUNC(ds_fsa_self, _set)(ds_fsa_self * arr, size_t idx, ds_type value)
 {
-	tec_internal_array_bounds_check( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
+	ds_internal_array_bounds_check( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
 	arr->data[idx] = value;
 }
 
 static inline void FSA_FUNC(ds_fsa_self, _set_unsafe)(ds_fsa_self * arr, size_t idx, ds_type value)
 {
-	tec_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
+	ds_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
 	arr->data[idx] = value;
 }
 
+//TODO(zshoals): Padding in structs disturbs equality checks, the user needs to provide a compare function
+//Fix this
+static inline ds_fsa_search_result FSA_FUNC(ds_fsa_self, _find)(ds_fsa_self * arr, ds_type * value)
+{
+	size_t const cap = FSA_FUNC(ds_fsa_self, _capacity)();
+	for (size_t i = 0; i < cap; ++i)
+	{
+		int located = memcmp(&arr->data[i], value, sizeof(*value));
+		if (located != 0)
+		{
+			continue;
+		}
+		else
+		{
+			return (ds_fsa_search_result){
+				.idx = i,
+				.value_found = true
+			};
+		}
+	}
 
+	return (ds_fsa_search_result){
+		.idx = SIZE_MAX,
+		.value_found = false
+	};
+}
+
+static inline bool FSA_FUNC(ds_fsa_self, _has)(ds_fsa_self * arr, ds_type * value)
+{
+	return FSA_FUNC(ds_fsa_self, _find)(arr, value).value_found;
+}
+
+#undef ds_type
+#undef ds_element_count
+#undef ds_fsa_self
 
