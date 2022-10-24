@@ -38,9 +38,9 @@ ds_fsa_self;
 	} while (0)
 
 #define fsa_push(DECLARED_TYPE, FSA_PTR, DATA) FSA_FUNC(DECLARED_TYPE, _push)(FSA_PTR, DATA)
-#define fsa_pop(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _pop)(FSA_PTR, DATA)
+#define fsa_pop(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _pop)(FSA_PTR)
 #define fsa_push_unsafe(DECLARED_TYPE, FSA_PTR, DATA) FSA_FUNC(DECLARED_TYPE, _push)(FSA_PTR, DATA)
-#define fsa_pop_unsafe(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _pop)(FSA_PTR, DATA)
+#define fsa_pop_unsafe(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _pop)(FSA_PTR)
 
 #define fsa_get(DECLARED_TYPE, FSA_PTR, IDX) FSA_FUNC(DECLARED_TYPE, _get)((FSA_PTR), (IDX))
 #define fsa_get_unsafe(DECLARED_TYPE, FSA_PTR, IDX) FSA_FUNC(DECLARED_TYPE, _get_unsafe)((FSA_PTR), (IDX))
@@ -64,9 +64,9 @@ ds_fsa_self;
 		memcpy( &DESTINATION_PTR->data[0], &CONST_SOURCE_PTR->data[0], FSA_CALC_CAPACITY(SOURCE_TYPE, CONST_SOURCE_PTR) * sizeof(CONST_SOURCE_PTR->data[0]) );\
 	} while (0)
 
-#define fsa_count(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _count)()
+#define fsa_count(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _count)(FSA_PTR)
 #define fsa_capacity(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _capacity)()
-#define fsa_size_in_bytes(DECLARED_TYPE) FSA_FUNC(DECLARED_TYPE, _size_in_bytes)
+#define fsa_size_in_bytes(DECLARED_TYPE, FSA_PTR) FSA_FUNC(DECLARED_TYPE, _size_in_bytes)(FSA_PTR)
 
 //Unneeded as we no longer need to track the capacity of the fsa
 // static inline void FSA_FUNC(ds_fsa_self, _init)(ds_fsa_self * arr)
@@ -95,7 +95,7 @@ static inline size_t FSA_FUNC(ds_fsa_self, _size_in_bytes)(ds_fsa_self * arr)
 static inline void FSA_FUNC(ds_fsa_self, _push)(ds_fsa_self * arr, ds_type value)
 {
 	size_t max_cap = FSA_FUNC(ds_fsa_self, _capacity)();
-	ENSURE_UINT_LT(arr->current_push_idx + 1, max_cap, "Array tried to push a value exceeding its capacity.");
+	ENSURE_UINT_LTE(arr->current_push_idx + 1, max_cap, "Array tried to push a value exceeding its capacity.");
 	arr->data[arr->current_push_idx] = value;
 	arr->current_push_idx++;
 }
@@ -103,7 +103,7 @@ static inline void FSA_FUNC(ds_fsa_self, _push)(ds_fsa_self * arr, ds_type value
 static inline void FSA_FUNC(ds_fsa_self, _push_unsafe)(ds_fsa_self * arr, ds_type value)
 {
 	size_t max_cap = FSA_FUNC(ds_fsa_self, _capacity)();
-	DEBUG_ENSURE_UINT_LT(arr->current_push_idx + 1, max_cap, "Array tried to push a value exceeding its capacity.");
+	DEBUG_ENSURE_UINT_LTE(arr->current_push_idx + 1, max_cap, "Array tried to push a value exceeding its capacity.");
 	arr->data[arr->current_push_idx] = value;
 	arr->current_push_idx++;
 }
@@ -111,7 +111,7 @@ static inline void FSA_FUNC(ds_fsa_self, _push_unsafe)(ds_fsa_self * arr, ds_typ
 static inline ds_type FSA_FUNC(ds_fsa_self, _pop)(ds_fsa_self * arr)
 {
 	size_t max_cap = FSA_FUNC(ds_fsa_self, _capacity());
-	ENSURE_UINT_LT(arr->current_push_idx, max_cap, "Array push index exceeded array capacity while attempting to pop a value. Memory error?");
+	ENSURE_UINT_LTE(arr->current_push_idx, max_cap, "Array push index exceeded array capacity while attempting to pop a value. Memory error?");
 	ENSURE_UINT_GTZERO(arr->current_push_idx, "Array pop index would underflow if the value was popped.");
 
 	size_t target_idx = arr->current_push_idx - 1;
@@ -122,7 +122,7 @@ static inline ds_type FSA_FUNC(ds_fsa_self, _pop)(ds_fsa_self * arr)
 static inline ds_type FSA_FUNC(ds_fsa_self, _pop_unsafe)(ds_fsa_self * arr)
 {
 	size_t max_cap = FSA_FUNC(ds_fsa_self, _capacity());
-	DEBUG_ENSURE_UINT_LT(arr->current_push_idx, max_cap, "Array push index exceeded array capacity while attempting to pop a value. Memory error?");
+	DEBUG_ENSURE_UINT_LTE(arr->current_push_idx, max_cap, "Array push index exceeded array capacity while attempting to pop a value. Memory error?");
 	DEBUG_ENSURE_UINT_GTZERO(arr->current_push_idx, "Array pop index would underflow if the value was popped.");
 
 	size_t target_idx = arr->current_push_idx - 1;
@@ -168,12 +168,14 @@ static inline void FSA_FUNC(ds_fsa_self, _set_unsafe)(ds_fsa_self * arr, size_t 
 
 //TODO(zshoals): Padding in structs disturbs equality checks, the user needs to provide a compare function
 //Fix this
+
+#ifdef ds_compare_function
 static inline ds_fsa_search_result FSA_FUNC(ds_fsa_self, _find)(ds_fsa_self * arr, ds_type * value)
 {
 	size_t const cap = FSA_FUNC(ds_fsa_self, _capacity)();
 	for (size_t i = 0; i < cap; ++i)
 	{
-		int located = memcmp(&arr->data[i], value, sizeof(*value));
+		int located = ds_compare_function(&arr->data[i], value);
 		if (located != 0)
 		{
 			continue;
@@ -197,8 +199,10 @@ static inline bool FSA_FUNC(ds_fsa_self, _has)(ds_fsa_self * arr, ds_type * valu
 {
 	return FSA_FUNC(ds_fsa_self, _find)(arr, value).value_found;
 }
+#endif
 
 #undef ds_type
 #undef ds_element_count
 #undef ds_fsa_self
+#undef ds_compare_function
 
