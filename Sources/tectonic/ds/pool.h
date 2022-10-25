@@ -1,4 +1,7 @@
 
+
+//DO NOT use pragma once here, this file is intended to be included multiple times
+
 #include "dscommon.h"
 #include "string.h"
 
@@ -13,7 +16,7 @@
 
 #define ds_pool_self POOL_TYPE(ds_type, ds_element_count)
 #define ds_pool_key POOL_KEY_TYPE(ds_type, ds_element_count)
-#define ds_pool_union_type POOL_TYPE(val_or_ptr_, ds_element_count)
+#define ds_pool_union_type POOL_TYPE(val_or_ptr, ds_element_count)
 
 #define DS_POOL_DEPLETED SIZE_MAX
 
