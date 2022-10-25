@@ -36,9 +36,10 @@ ds_ringbuf_self;
 #define __ringbuf_end_internal TEC_CONCAT(_tec_iterator_end_, __LINE__)
 
 #define foreach_ringbuf(CAPTURE, DECLARATION_TYPE, DATA_TYPE, RINGBUF_PTR)\
-	size_t __ringbuf_iterator_internal = (RINGBUF_PTR)->start;\
-	const size_t __ringbuf_end_internal = ringbuf_internal_calc_end(DECLARATION_TYPE, RINGBUF_PTR);\
-	for (DATA_TYPE * CAPTURE = NULL; CAPTURE = &((RINGBUF_PTR)->data[__ringbuf_iterator_internal]), __ringbuf_iterator_internal != __ringbuf_end_internal; (__ringbuf_iterator_internal + 1) & ringbuf_capacity(DECLARATION_TYPE))
+	size_t __ringbuf_iterator_internal = 0;\
+	size_t __ringbuf_loop_count = ringbuf_count(DECLARATION_TYPE, RINGBUF_PTR);\
+	size_t __ringbuf_index = (RINGBUF_PTR)->start;\
+	for (DATA_TYPE * CAPTURE = NULL; CAPTURE = &((RINGBUF_PTR)->data[__ringbuf_index]), __ringbuf_iterator_internal < __ringbuf_loop_count; __ringbuf_index = (__ringbuf_index + 1) & (ringbuf_capacity(DECLARATION_TYPE) - 1), ++__ringbuf_iterator_internal)
 
 
 DS_INLINE size_t RINGBUF_FUNC(ds_ringbuf_self, _capacity)(void)
@@ -48,7 +49,7 @@ DS_INLINE size_t RINGBUF_FUNC(ds_ringbuf_self, _capacity)(void)
 
 DS_INLINE size_t RINGBUF_FUNC(ds_ringbuf_self, _internal_calc_end)(ds_ringbuf_self * ring)
 {
-	return (ring->start + ring->count) & ringbuf_capacity(ds_ringbuf_self);
+	return (ring->start + ring->count) & (ringbuf_capacity(ds_ringbuf_self) - 1);
 }
 
 DS_INLINE size_t RINGBUF_FUNC(ds_ringbuf_self, _count)(ds_ringbuf_self * ring)
@@ -72,12 +73,14 @@ DS_INLINE void RINGBUF_FUNC(ds_ringbuf_self, _push_back)(ds_ringbuf_self * ring,
 {
 	size_t cap = ringbuf_capacity(ds_ringbuf_self);
 	DEBUG_ENSURE_UINT_EQUALS( (cap & (cap - 1)), 0, "Ringbuffers must be created with a power of 2 elements");
-	ring->data[ringbuf_internal_calc_end(ring)] = value;
+	ring->data[ringbuf_internal_calc_end(ds_ringbuf_self, ring)] = value;
 
 	//If ring count is at the max capacity, advance ring->start by 1 as we have no more room in the ring buffer,
 	//otherwise don't advance start as we are not being pushed forward by the imaginary "end" 
 	ring->start += (ring->count == cap);
-	ring->start &= cap;
+	ring->start &= cap - 1;
+
+	ring->count += (ring->count < cap);
 }
 
 DS_INLINE ds_type RINGBUF_FUNC(ds_ringbuf_self, _pop_front)(ds_ringbuf_self * ring)
@@ -85,7 +88,9 @@ DS_INLINE ds_type RINGBUF_FUNC(ds_ringbuf_self, _pop_front)(ds_ringbuf_self * ri
 	DEBUG_ENSURE_UINT_GTZERO(ring->count, "Tried to pop a value off an empty ringbuffer!");
 	size_t target_idx = ring->start;
 	ring->start++;
-	ring->start &= ringbuf_capacity(ds_ringbuf_self);
+	ring->start &= ringbuf_capacity(ds_ringbuf_self) - 1;
+
+	ring->count--;
 
 	return ring->data[target_idx];
 }
