@@ -30,6 +30,8 @@ ds_ringbuf_self;
 #define ringbuf_capacity(DECLARED_TYPE) RINGBUF_FUNC(DECLARED_TYPE, _capacity)()
 #define ringbuf_count(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _count)(RINGBUF_PTR)
 #define ringbuf_populated(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _populated)(RINGBUF_PTR)
+#define ringbuf_filled(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _filled)(RINGBUF_PTR)
+#define ringbuf_empty(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _empty)(RINGBUF_PTR)
 #define ringbuf_internal_calc_end(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _internal_calc_end)(RINGBUF_PTR)
 
 #define __ringbuf_iterator_internal TEC_CONCAT(_tec_iterator_i_, __LINE__)
@@ -60,6 +62,16 @@ DS_INLINE size_t RINGBUF_FUNC(ds_ringbuf_self, _count)(ds_ringbuf_self * ring)
 DS_INLINE bool RINGBUF_FUNC(ds_ringbuf_self, _populated)(ds_ringbuf_self * ring)
 {
 	return (ringbuf_count(ds_ringbuf_self, ring) > 0);
+}
+
+DS_INLINE bool RINGBUF_FUNC(ds_ringbuf_self, _filled)(ds_ringbuf_self * ring)
+{
+	return (ringbuf_count(ds_ringbuf_self, ring) == ringbuf_capacity(ds_ringbuf_self));
+}
+
+DS_INLINE bool RINGBUF_FUNC(ds_ringbuf_self, _empty)(ds_ringbuf_self * ring)
+{
+	return (ringbuf_count(ds_ringbuf_self, ring) == 0);
 }
 
 DS_INLINE void RINGBUF_FUNC(ds_ringbuf_self, _clear)(ds_ringbuf_self * ring)
