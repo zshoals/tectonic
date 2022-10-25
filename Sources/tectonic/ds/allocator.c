@@ -103,6 +103,7 @@ void * allocator_aligned_malloc(allocator_t * a, size_t target_alignment, size_t
 			return &a->memory_origin[target_offset];
 		default:
 			ENSURE_UNREACHABLE("Incorrect allocator mode while attempting memory allocation");
+			return NULL;
 	}
 }
 
