@@ -8,8 +8,8 @@
 			"name": "Kinc: Launch",
 			"type": "cppvsdbg",
 			"request": "launch",
-			"program": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment\\Tectonic.exe",
-			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment",
+			"program": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment\\Tectonic.exe",
+			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment",
 			"preLaunchTask": "Kinc: Build for Windows (VS2019)",
 			"console": "newExternalWindow",
 			"logging": {
@@ -21,8 +21,8 @@
 			"name": "Kinc: Launch (NoShader)",
 			"type": "cppvsdbg",
 			"request": "launch",
-			"program": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment\\Tectonic.exe",
-			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment",
+			"program": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment\\Tectonic.exe",
+			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment",
 			"preLaunchTask": "Kinc: Build for Windows (VS2019) NoShaders",
 			"console": "newExternalWindow",
 			"logging": {
@@ -34,9 +34,35 @@
 			"name": "Kinc (Release): Launch (NoShader)",
 			"type": "cppvsdbg",
 			"request": "launch",
-			"program": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment\\Tectonic.exe",
-			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming Projects\\Tectonic\\Deployment",
+			"program": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment\\Tectonic.exe",
+			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment",
 			"preLaunchTask": "Kinc (Release): Build for Windows (VS2019) NoShaders",
+			"console": "newExternalWindow",
+			"logging": {
+				"moduleLoad": false,
+				"trace": true
+			}
+		},
+		{
+			"name": "Tec: Debug Launch",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment\\Tectonic.exe",
+			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment",
+			"preLaunchTask": "Tec: Debug Compile",
+			"console": "newExternalWindow",
+			"logging": {
+				"moduleLoad": false,
+				"trace": true
+			}
+		},
+		{
+			"name": "Tec: Release Launch",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment\\Tectonic.exe",
+			"cwd": "c:\\Users\\Zanarias\\Desktop\\Programming_Projects\\Tectonic\\Deployment",
+			"preLaunchTask": "Tec: Release Compile",
 			"console": "newExternalWindow",
 			"logging": {
 				"moduleLoad": false,

@@ -65,6 +65,20 @@
 			],
 			"group": "build",
 			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Tec: Debug Compile",
+			"type": "shell",
+			"command": "C:/Users/Zanarias/Desktop/Programming_Projects/tectonic/build_debug.bat",
+			"group": "build",
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "Tec: Release Compile",
+			"type": "shell",
+			"command": "C:/Users/Zanarias/Desktop/Programming_Projects/tectonic/build_release.bat",
+			"group": "build",
+			"problemMatcher": "$msCompile"
 		}
 	]
 }
