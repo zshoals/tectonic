@@ -79,7 +79,11 @@ typedef enum
 exd_component_e;
 
 #include "ds/dscommon.h"
-
+#define ds_type int
+#define ds_element_count 4
+#define intring RINGBUF_DECLARE(int, 4)
+#include "ds/fixed/ringbuf.h"
+#include "ds/ds_undef.h"
 
 void 
 tec_engine_quake
@@ -153,6 +157,24 @@ tec_engine_quake
 	{
 		kinc_log(KINC_LOG_LEVEL_INFO, "Missing!");
 	}
+	
+	intring circle = {0};
+	ringbuf_push_back(intring, &circle, 1);
+	ringbuf_push_back(intring, &circle, 2);
+	ringbuf_push_back(intring, &circle, 3);
+	ringbuf_push_back(intring, &circle, 4);
+	ringbuf_push_back(intring, &circle, 5);
+	ringbuf_pop_front(intring, &circle);
+	ringbuf_pop_front(intring, &circle);
+	ringbuf_pop_front(intring, &circle);
+
+	int accum = 0;
+	foreach_ringbuf(elem, intring, int, &circle)
+	{
+		accum += *elem;
+	}
+
+	kinc_log(KINC_LOG_LEVEL_INFO, "Ring: %zu", accum);
 
 	kinc_set_update_callback(&tec_engine_main_loop);
 	kinc_start();

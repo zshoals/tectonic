@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <inttypes.h>
-#include "dscommon.h"
+#include "../dscommon.h"
 
 #ifndef ds_element_count
 	#define ds_element_count 0
