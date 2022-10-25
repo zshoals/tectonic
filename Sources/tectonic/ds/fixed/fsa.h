@@ -49,6 +49,9 @@ ds_fsa_self;
 #define fsa_set(DECLARED_TYPE, FSA_PTR, IDX, VALUE) FSA_FUNC(DECLARED_TYPE, _set)((FSA_PTR), (IDX), (VALUE))
 #define fsa_set_unsafe(DECLARED_TYPE, FSA_PTR, IDX, VALUE) FSA_FUNC(DECLARED_TYPE, _set_unsafe)((FSA_PTR), (IDX), (VALUE))
 
+#define fsa_swap(DECLARED_TYPE, FSA_PTR, IDX_A, IDX_B) FSA_FUNC(DECLARED_TYPE, _swap)( (FSA_PTR), (IDX_A), (IDX_B) )
+#define fsa_swap_unsafe(DECLARED_TYPE, FSA_PTR, IDX_A, IDX_B) FSA_FUNC(DECLARED_TYPE, _swap_unsafe)( (FSA_PTR), (IDX_A), (IDX_B) )
+
 #define fsa_find(DECLARED_TYPE, FSA_PTR, VALUE) FSA_FUNC(DECLARED_TYPE, _find)( (FSA_PTR), (VALUE) )
 #define fsa_has(DECLARED_TYPE, FSA_PTR, VALUE) FSA_FUNC(DECLARED_TYPE, _has)( (FSA_PTR), (VALUE) )
 
@@ -191,6 +194,28 @@ DS_INLINE void FSA_FUNC(ds_fsa_self, _set_unsafe)(ds_fsa_self * arr, size_t idx,
 {
 	ds_internal_array_bounds_check_debug_only( idx, FSA_FUNC(ds_fsa_self, _capacity)() );
 	arr->data[idx] = value;
+}
+
+DS_INLINE void FSA_FUNC(ds_fsa_self, _swap)(ds_fsa_self * arr, size_t idx_a, size_t idx_b)
+{
+	DEBUG_ENSURE_PTR_NOT_NULL(arr, "Arr was null while swapping.");
+	ds_internal_array_bounds_check(idx_a, FSA_FUNC(ds_fsa_self, _capacity)());
+	ds_internal_array_bounds_check(idx_b, FSA_FUNC(ds_fsa_self, _capacity)());
+
+	ds_type temp = arr->data[idx_a];
+	arr->data[idx_a] = arr->data[idx_b];
+	arr->data[idx_b] = temp;
+}
+
+DS_INLINE void FSA_FUNC(ds_fsa_self, _swap_unsafe)(ds_fsa_self * arr, size_t idx_a, size_t idx_b)
+{
+	DEBUG_ENSURE_PTR_NOT_NULL(arr, "Arr was null while swapping.");
+	ds_internal_array_bounds_check_debug_only(idx_a, FSA_FUNC(ds_fsa_self, _capacity)());
+	ds_internal_array_bounds_check_debug_only(idx_b, FSA_FUNC(ds_fsa_self, _capacity)());
+
+	ds_type temp = arr->data[idx_a];
+	arr->data[idx_a] = arr->data[idx_b];
+	arr->data[idx_b] = temp;
 }
 
 #ifdef ds_compare_function
