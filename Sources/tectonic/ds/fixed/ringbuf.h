@@ -25,8 +25,8 @@ typedef struct ds_ringbuf_self
 ds_ringbuf_self;
 
 #define ringbuf_clear(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _clear)(RINGBUF_PTR)
-#define ringbuf_push_back(DECLARED_TYPE, RINGBUF_PTR, DATA) RINGBUF_FUNC(DECLARED_TYPE, _add)(RINGBUF_PTR, DATA)
-#define ringbuf_pop_front(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _remove)(RINGBUF_PTR)
+#define ringbuf_push_back(DECLARED_TYPE, RINGBUF_PTR, DATA) RINGBUF_FUNC(DECLARED_TYPE, _push_back)(RINGBUF_PTR, DATA)
+#define ringbuf_pop_front(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _pop_front)(RINGBUF_PTR)
 #define ringbuf_capacity(DECLARED_TYPE) RINGBUF_FUNC(DECLARED_TYPE, _capacity)()
 #define ringbuf_count(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _count)(RINGBUF_PTR)
 #define ringbuf_populated(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _populated)(RINGBUF_PTR)
@@ -36,9 +36,9 @@ ds_ringbuf_self;
 #define __ringbuf_end_internal TEC_CONCAT(_tec_iterator_end_, __LINE__)
 
 #define foreach_ringbuf(CAPTURE, DECLARATION_TYPE, DATA_TYPE, RINGBUF_PTR)\
-	size_t __ringbuf_iterator_internal = RINGBUF_PTR->start;\
+	size_t __ringbuf_iterator_internal = (RINGBUF_PTR)->start;\
 	const size_t __ringbuf_end_internal = ringbuf_internal_calc_end(DECLARATION_TYPE, RINGBUF_PTR);\
-	for (DATA_TYPE * CAPTURE = NULL; CAPTURE = &((ARRAY_PTR)->data[__ringbuf_iterator_internal]), __ringbuf_iterator_internal != __ringbuf_end_internal; (__ringbuf_iterator_internal + 1) & ringbuf_capacity(DECLARATION_TYPE))
+	for (DATA_TYPE * CAPTURE = NULL; CAPTURE = &((RINGBUF_PTR)->data[__ringbuf_iterator_internal]), __ringbuf_iterator_internal != __ringbuf_end_internal; (__ringbuf_iterator_internal + 1) & ringbuf_capacity(DECLARATION_TYPE))
 
 
 DS_INLINE size_t RINGBUF_FUNC(ds_ringbuf_self, _capacity)(void)
