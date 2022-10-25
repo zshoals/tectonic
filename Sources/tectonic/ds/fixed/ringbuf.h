@@ -33,8 +33,8 @@ ds_ringbuf_self;
 #define ringbuf_internal_calc_end(DECLARED_TYPE, RINGBUF_PTR) RINGBUF_FUNC(DECLARED_TYPE, _internal_calc_end)(RINGBUF_PTR)
 
 #define __ringbuf_iterator_internal TEC_CONCAT(_tec_iterator_i_, __LINE__)
-#define __ringbuf_end_internal TEC_CONCAT(_tec_iterator_end_, __LINE__)
-
+#define __ringbuf_loop_count TEC_CONCAT(_tec_loop_count_, __LINE__)
+#define __ringbuf_index TEC_CONCAT(_tec_index_, __LINE__)
 #define foreach_ringbuf(CAPTURE, DECLARATION_TYPE, DATA_TYPE, RINGBUF_PTR)\
 	size_t __ringbuf_iterator_internal = 0;\
 	size_t __ringbuf_loop_count = ringbuf_count(DECLARATION_TYPE, RINGBUF_PTR);\
