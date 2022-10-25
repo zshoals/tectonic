@@ -78,6 +78,9 @@ typedef enum
 }
 exd_component_e;
 
+#include "ds/dscommon.h"
+
+
 void 
 tec_engine_quake
 (
@@ -115,7 +118,7 @@ tec_engine_quake
 		if (i == 1000) 
 		{
 			rotation_t * rot = exd_comp_set(COMP_ROTATION, entD);
-			rot->degrees = 33.023;
+			rot->degrees = 33.023f;
 		}
 
 	}
