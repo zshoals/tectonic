@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include "kinc/log.h"
-#include "inttypes.h"
+#include "kinc/system.h"
 #include "tectonic/validation.h"
 
 //Allow all logs by default
@@ -17,17 +17,17 @@ void tec_internal_log_verbose(kinc_log_level_t level, char const * format, char 
 	{
 		case KINC_LOG_LEVEL_INFO:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[Info]::[%s]::[File: %s]::[Line: %zu]", format, file, line);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[Info: %0.5f]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), format, file, line);
 			break;
 		}
 		case KINC_LOG_LEVEL_WARNING:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[WARNING]::[%s]::[File: %s]::[Line: %zu]", format, file, line);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[WARNING: %0.5f]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), format, file, line);
 			break;
 		}
 		case KINC_LOG_LEVEL_ERROR:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[ERROR]::[%s]::[File: %s]::[Line: %zu]", format, file, line);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[ERROR: %0.5f]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), format, file, line);
 			break;
 		}
 		default:
@@ -45,17 +45,17 @@ void tec_internal_log(kinc_log_level_t level, char const * format, char const * 
 	{
 		case KINC_LOG_LEVEL_INFO:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[Info]::[%s]", format);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[Info: %0.5f]::[%s]", kinc_time(), format);
 			break;
 		}
 		case KINC_LOG_LEVEL_WARNING:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[WARNING]::[%s]", format);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[WARNING: %0.5f]::[%s]", kinc_time(), format);
 			break;
 		}
 		case KINC_LOG_LEVEL_ERROR:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[ERROR]::[%s]", format);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[ERROR: %0.5f]::[%s]", kinc_time(), format);
 			break;
 		}
 		default:
