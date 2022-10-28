@@ -13,7 +13,11 @@
 	#define ds_element_count 0
 #endif
 
-#define ds_ringbuf_self RINGBUF_TYPE(ds_type, ds_element_count)
+#ifndef ds_tag
+	#define ds_ringbuf_self RINGBUF_TYPE(ds_type, ds_element_count)
+#else
+	#define ds_ringbuf_self FSA_CC(ringbuf_, ds_tag)
+#endif
 #define DS_RINGBUF_FULL SIZE_MAX
 
 typedef struct ds_ringbuf_self
@@ -39,7 +43,7 @@ ds_ringbuf_self;
 #define __ringbuf_index TEC_CONCAT(_tec_index_, __LINE__)
 #define foreach_ringbuf(CAPTURE, DECLARATION_TYPE, DATA_TYPE, RINGBUF_PTR)\
 	size_t __ringbuf_iterator_internal = 0;\
-	size_t __ringbuf_loop_count = ringbuf_count(DECLARATION_TYPE, RINGBUF_PTR);\
+	size_t const __ringbuf_loop_count = ringbuf_count(DECLARATION_TYPE, RINGBUF_PTR);\
 	size_t __ringbuf_index = (RINGBUF_PTR)->start;\
 	for (DATA_TYPE * CAPTURE = NULL; CAPTURE = &((RINGBUF_PTR)->data[__ringbuf_index]), __ringbuf_iterator_internal < __ringbuf_loop_count; __ringbuf_index = (__ringbuf_index + 1) & (ringbuf_capacity(DECLARATION_TYPE) - 1), ++__ringbuf_iterator_internal)
 
