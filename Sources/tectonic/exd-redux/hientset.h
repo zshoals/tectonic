@@ -15,8 +15,8 @@
 
 //Represents how many integer blocks are in each layer
 #define EXD_HIENTSET_LAYER0_SIZE EXD_HIENTSET_ELEMENT_COUNT
-#define EXD_HIENTSET_LAYER1_SIZE (EXD_HIENTSET_LAYER0_SIZE / EXD_HIENTSET_BITWIDTH)
-#define EXD_HIENTSET_LAYER2_SIZE (EXD_HIENTSET_LAYER1_SIZE / EXD_HIENTSET_BITWIDTH)
+#define EXD_HIENTSET_LAYER1_SIZE (((EXD_HIENTSET_LAYER0_SIZE / EXD_HIENTSET_BITWIDTH) | 1))
+#define EXD_HIENTSET_LAYER2_SIZE (((EXD_HIENTSET_LAYER1_SIZE / EXD_HIENTSET_BITWIDTH) | 1))
 #define EXD_HIENTSET_LAYER3_SIZE (1)
 
 //Used to determine which array block to land in
@@ -39,7 +39,7 @@ typedef struct exd_hientset
 }
 exd_hientset_t;
 
-void exd_hientset_init(allocator_t * mem, exd_hientset_t * ents);
+void exd_hientset_init(exd_hientset_t * ents, allocator_t * mem);
 void exd_hientset_copy_data_from(exd_hientset_t * destination, exd_hientset_t * source);
 
 void exd_hientset_set_slot(exd_hientset_t * ents, exd_entity_t slot);
@@ -49,8 +49,8 @@ void exd_hientset_and(exd_hientset_t * destination, exd_hientset_t * source);
 void exd_hientset_or(exd_hientset_t * destination, exd_hientset_t * source);
 void exd_hientset_not(exd_hientset_t * destination, exd_hientset_t * source);
 
-bool exd_hientset_slot_entity_exists(exd_hientset_t * ents, exd_entity_t slot);
-bool exd_hientset_slot_entity_does_not_exist(exd_hientset_t * ents, exd_entity_t slot);
+bool exd_hientset_entity_exists(exd_hientset_t * ents, exd_entity_t slot);
+bool exd_hientset_entity_does_not_exist(exd_hientset_t * ents, exd_entity_t slot);
 
 //===================
 //     Iterator
@@ -58,9 +58,10 @@ bool exd_hientset_slot_entity_does_not_exist(exd_hientset_t * ents, exd_entity_t
 
 typedef struct exd_hientset_iter
 {
-	exd_hientset_t * entset;
+	exd_hientset_t entset;
 	u32 current_idx;
 }
 exd_hientset_iter_t;
 
+exd_hientset_iter_t exd_hientset_iter_create(exd_hientset_t * entset);
 u32 exd_hientset_iter_next(exd_hientset_iter_t * it);

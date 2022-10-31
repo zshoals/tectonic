@@ -1,5 +1,9 @@
-#include <string.h>
 #include "hientset.h"
+
+#include <string.h>
+#include "tectonic/ds/allocator.h"
+#include "exd-math.h"
+#include "tectonic/logging.h"
 
 //==========================
 //Bit block this entity fell into
@@ -34,10 +38,26 @@ static inline u32 layer_mask(exd_entity_t id, u32 shift)
 	u32 slot_mask = exd_bits32_rotate_left(1, offset_in_block);
 	return slot_mask;
 }
-static inline u32 layer0_mask(exd_entity_t id) { return layer_mask(id, EXD_HIENTSET_LAYER0_SHIFT); }
-static inline u32 layer1_mask(exd_entity_t id) { return layer_mask(id, EXD_HIENTSET_LAYER1_SHIFT); }
-static inline u32 layer2_mask(exd_entity_t id) { return layer_mask(id, EXD_HIENTSET_LAYER2_SHIFT); }
-static inline u32 layer3_mask(exd_entity_t id) { return layer_mask(id, EXD_HIENTSET_LAYER3_SHIFT); }
+//TODO(zshoals): Something wrong here with shifting or something?
+static inline u32 layer0_mask(exd_entity_t id) 
+{ 
+	return layer_mask(id, EXD_HIENTSET_BITWIDTH_SHIFT); 
+}
+static inline u32 layer1_mask(exd_entity_t id) 
+{
+	u32 slot = exd_entity_extract_id(id);
+	return layer_mask(exd_math_pow2_divide(slot, EXD_HIENTSET_LAYER1_SHIFT), EXD_HIENTSET_BITWIDTH_SHIFT); 
+}
+static inline u32 layer2_mask(exd_entity_t id) 
+{ 
+	u32 slot = exd_entity_extract_id(id);
+	return layer_mask(exd_math_pow2_divide(slot, EXD_HIENTSET_LAYER2_SHIFT), EXD_HIENTSET_BITWIDTH_SHIFT); 
+}
+static inline u32 layer3_mask(exd_entity_t id) 
+{
+	u32 slot = exd_entity_extract_id(id);
+	return layer_mask(exd_math_pow2_divide(slot, EXD_HIENTSET_LAYER3_SHIFT), EXD_HIENTSET_BITWIDTH_SHIFT);
+}
 
 //==========================
 //Layer contains id or not
@@ -136,29 +156,31 @@ static inline void set_slot_layer3(exd_hientset_t * ents, exd_entity_t id)
 //Now, actually provide user facing functions
 //==================================
 
-void exd_hientset_init(allocator_t * mem, exd_hientset_t * ents)
+void exd_hientset_init(exd_hientset_t * ents, allocator_t * mem)
 {
 	ents->layer3 = 0;
 	ents->layer2 = allocator_malloc(mem, u32, EXD_HIENTSET_LAYER2_SIZE); 
 	ents->layer1 = allocator_malloc(mem, u32, EXD_HIENTSET_LAYER1_SIZE); 
 	ents->layer0 = allocator_malloc(mem, u32, EXD_HIENTSET_LAYER0_SIZE);
 
-	memset(ents->layer2, 0, sizeof(u32) * sizeof(EXD_HIENTSET_LAYER2_SIZE));
-	memset(ents->layer1, 0, sizeof(u32) * sizeof(EXD_HIENTSET_LAYER1_SIZE));
-	memset(ents->layer0, 0, sizeof(u32) * sizeof(EXD_HIENTSET_LAYER0_SIZE));
+	memset(ents->layer2, 0, sizeof(u32) * EXD_HIENTSET_LAYER2_SIZE);
+	memset(ents->layer1, 0, sizeof(u32) * EXD_HIENTSET_LAYER1_SIZE);
+	memset(ents->layer0, 0, sizeof(u32) * EXD_HIENTSET_LAYER0_SIZE);
 
 }
 
 void exd_hientset_copy_data_from(exd_hientset_t * destination, exd_hientset_t * source)
 {
 	destination->layer3 = source->layer3;
-	memcpy(destination->layer2, source->layer2, sizeof(u32) * sizeof(EXD_HIENTSET_LAYER2_SIZE));
-	memcpy(destination->layer1, source->layer1, sizeof(u32) * sizeof(EXD_HIENTSET_LAYER1_SIZE));
-	memcpy(destination->layer0, source->layer0, sizeof(u32) * sizeof(EXD_HIENTSET_LAYER0_SIZE));
+	memcpy(destination->layer2, source->layer2, sizeof(u32) * EXD_HIENTSET_LAYER2_SIZE);
+	memcpy(destination->layer1, source->layer1, sizeof(u32) * EXD_HIENTSET_LAYER1_SIZE);
+	memcpy(destination->layer0, source->layer0, sizeof(u32) * EXD_HIENTSET_LAYER0_SIZE);
 }
 
 void exd_hientset_set_slot(exd_hientset_t * ents, exd_entity_t slot)
 {
+	//TODO-URGENT(zshoals): Set 1, 2, 3 are not working correctly. They seem to be
+	//simply doing the same thing as layer0, which is not correct
 	set_slot_layer0(ents, slot);
 	set_slot_layer1(ents, slot);
 	set_slot_layer2(ents, slot);
@@ -235,7 +257,7 @@ bool exd_hientset_entity_exists(exd_hientset_t * ents, exd_entity_t slot)
 	return layer0_has(ents, slot);
 }
 
-bool exd_hientset_slot_entity_does_not_exist(exd_hientset_t * ents, exd_entity_t slot)
+bool exd_hientset_entity_does_not_exist(exd_hientset_t * ents, exd_entity_t slot)
 {
 	return !layer0_has(ents, slot);
 }
@@ -243,21 +265,29 @@ bool exd_hientset_slot_entity_does_not_exist(exd_hientset_t * ents, exd_entity_t
 //===================
 //     Iterator
 //===================
+exd_hientset_iter_t exd_hientset_iter_create(exd_hientset_t * entset)
+{
+	return (exd_hientset_iter_t){
+		.current_idx = 0,
+		.entset = entset
+	};
+}
+
 u32 exd_hientset_iter_next(exd_hientset_iter_t * it)
 {
-	while (!layer3_has(it->entset, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
+	while (!layer3_has(&it->entset, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
 	{
 		it->current_idx += EXD_HIENTSET_LAYER3_ITER_ADVANCE;
 	}
-	while (!layer2_has(it->entset, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
+	while (!layer2_has(&it->entset, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
 	{
 		it->current_idx += EXD_HIENTSET_LAYER2_ITER_ADVANCE;
 	}
-	while (!layer1_has(it->entset, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
+	while (!layer1_has(&it->entset, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
 	{
 		it->current_idx += EXD_HIENTSET_LAYER1_ITER_ADVANCE;
 	}
-	while (!layer0_has(it->entset, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
+	while (!layer0_has(&it->entset, it->current_idx) && it->current_idx < EXD_MAX_ENTITIES)
 	{
 		it->current_idx += EXD_HIENTSET_LAYER0_ITER_ADVANCE;
 	}

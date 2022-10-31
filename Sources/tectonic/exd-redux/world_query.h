@@ -3,22 +3,23 @@
 #include "exd-config.h"
 
 #include "tectonic/ds/allocator.h"
+#include "hientset.h"
 #include "world.h"
 #include "exd-common.h"
 #include "iterable_entity.h"
 
 typedef struct exd_query
 {
-	exd_entset_t matcher;
+	exd_hientset_iter_t it;
 	exd_world_t * world;
 }
 exd_query_t;
 
 typedef struct exd_query_optional_group
 {
-	exd_entset_t matcher;
-	exd_entset_t * optionals[EXD_QUERY_MAX_OPTIONAL_COMPONENT_MERGE];
-	size_t optionals_count;
+	exd_hientset_t matcher;
+	// exd_entset_t * optionals[EXD_QUERY_MAX_OPTIONAL_COMPONENT_MERGE];
+	// size_t optionals_count;
 	exd_world_t * world;
 }
 exd_query_optional_group_t;
@@ -26,7 +27,6 @@ exd_query_optional_group_t;
 typedef struct exd_query_iter
 {
 	exd_query_t * q;
-	u32 current_index;
 }
 exd_query_iter_t;
 

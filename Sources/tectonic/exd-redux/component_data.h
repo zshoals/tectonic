@@ -2,15 +2,15 @@
 
 #include <stddef.h>
 #include "tectonic/ds/allocator.h"
+#include "hientset.h"
 #include "exd-common.h"
 #include "entity_list.h"
 #include "entity.h"
-#include "entset.h"
 
 typedef struct exd_component
 {
 	void * comps;
-	exd_entset_t in_use_components;
+	exd_hientset_t in_use_components;
 	size_t per_element_size;
 }
 exd_component_t;
