@@ -7,6 +7,8 @@
 
 #define TEC_LOG_MAX_BUFFER_LEN 1024
 
+#define LOG_ALL ~((tec_logging_flags)(0))
+#define LOG_NO_EXCLUSIONS ((tec_logging_flags)(0))
 typedef enum
 {
 	LOG_INFO = (1 << 0),

@@ -6,7 +6,7 @@
 #include "tectonic/validation.h"
 
 //Allow all logs by default
-static tec_logging_flags active_filter = ~0;
+static tec_logging_flags active_permitted = ~0;
 //Exclude nothing by default
 static tec_logging_flags active_exclusions = 0;
 
@@ -69,7 +69,7 @@ void tec_internal_log(kinc_log_level_t level, char const * format, char const * 
 
 void tec_log_set_filtering(tec_logging_flags flags, tec_logging_flags exclusions)
 {
-	active_filter = flags; 
+	active_permitted = flags; 
 	active_exclusions = exclusions;
 }
 
@@ -90,7 +90,7 @@ void tec_log_filtered(tec_logging_flags flags, char const * format, ...)
 		filtered_flags = flags;
 	}
 
-	if (filtered_flags & active_filter)
+	if (filtered_flags & active_permitted)
 	{
 		if (flags & LOG_VERBOSE)
 		{
