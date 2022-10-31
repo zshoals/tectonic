@@ -113,7 +113,7 @@ tec_engine_quake
 
 	exd_entity_t saved = EXD_INVALID_ENTITY;
 
-	for (size_t i = 0; i < 254; ++i)
+	for (size_t i = 0; i < 8000; ++i)
 	{
 		exd_entity_t entD = exd_ent_new();
 		saved = entD;
