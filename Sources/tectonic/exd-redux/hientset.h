@@ -10,6 +10,7 @@
 //This value represents the backing integer size, before a (1 << shift) operation
 #define EXD_HIENTSET_BITWIDTH_SHIFT 5
 #define EXD_HIENTSET_BITWIDTH (1 << EXD_HIENTSET_BITWIDTH_SHIFT)
+//The total amount of integers for storage of layer0 
 #define EXD_HIENTSET_ELEMENT_COUNT (EXD_MAX_ENTITIES / EXD_HIENTSET_BITWIDTH)
 
 //Represents how many integer blocks are in each layer
