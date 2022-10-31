@@ -49,8 +49,8 @@ void exd_hientset_and(exd_hientset_t * destination, exd_hientset_t * source);
 void exd_hientset_or(exd_hientset_t * destination, exd_hientset_t * source);
 void exd_hientset_not(exd_hientset_t * destination, exd_hientset_t * source);
 
-bool exd_hientset_slot_is_set(exd_hientset_t * ents, exd_entity_t slot);
-bool exd_hientset_slot_is_not_set(exd_hientset_t * ents, exd_entity_t slot);
+bool exd_hientset_slot_entity_exists(exd_hientset_t * ents, exd_entity_t slot);
+bool exd_hientset_slot_entity_does_not_exist(exd_hientset_t * ents, exd_entity_t slot);
 
 //===================
 //     Iterator
