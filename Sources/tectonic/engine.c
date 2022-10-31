@@ -19,6 +19,8 @@
 #include "lib/HandmadeMath.h"
 #include "math/random.h"
 
+#include "logging.h"
+
 #include "validation.h"
 #include "tectonic/memory/memory.h"
 
@@ -159,14 +161,15 @@ tec_engine_quake
 	}
 	
 	intring circle = {0};
-	ringbuf_push_back(intring, &circle, 1);
-	ringbuf_push_back(intring, &circle, 2);
-	ringbuf_push_back(intring, &circle, 3);
-	ringbuf_push_back(intring, &circle, 4);
-	ringbuf_push_back(intring, &circle, 5);
-	ringbuf_pop_front(intring, &circle);
-	ringbuf_pop_front(intring, &circle);
-	ringbuf_pop_front(intring, &circle);
+	intring * circptr = &circle;
+	ringbuf_push_back(intring, circptr, 1);
+	ringbuf_push_back(intring, circptr, 2);
+	ringbuf_push_back(intring, circptr, 3);
+	ringbuf_push_back(intring, circptr, 4);
+	ringbuf_push_back(intring, circptr, 5);
+	ringbuf_pop_front(intring, circptr);
+	ringbuf_pop_front(intring, circptr);
+	ringbuf_pop_front(intring, circptr);
 
 	int accum = 0;
 	foreach_ringbuf(elem, intring, int, &circle)
@@ -175,6 +178,28 @@ tec_engine_quake
 	}
 
 	kinc_log(KINC_LOG_LEVEL_INFO, "Ring: %zu", accum);
+
+	tec_log_set_filtering(LOG_ALL, LOG_NO_EXCLUSIONS);
+
+	TEC_LOG
+	(
+		LOG_INFO | LOG_VERBOSE | LOG_ENGINE,
+		"Attempting a basic log message. Value: %d",
+		accum
+	);
+
+	TEC_LOG
+	(
+		LOG_ERROR | LOG_PHYSICS,
+		"CRASHED!!!! %zu",
+		45603468904
+	);
+
+	TEC_LOG
+	(
+		LOG_WARNING | LOG_GAME,
+		"Game message!"
+	);
 
 	kinc_set_update_callback(&tec_engine_main_loop);
 	kinc_start();
