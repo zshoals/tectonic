@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <assert.h>
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -28,5 +29,13 @@ typedef unsigned int uint;
 #define CAST(TYPE) (TYPE)
 #define DEREF(PTR) (*(PTR))
 
-#define for_range(STOP) for (size_t _i = 0; _i < (STOP); ++_i)
-#define for_range_var(CAPTURE, STOP) for (size_t (CAPTURE) = 0; (CAPTURE) < (STOP); ++(CAPTURE))
+//Note: For now, only support positive values
+#define for_range(STOP)\
+	assert(STOP >= 0);\
+	for (size_t TEC_CONCAT(_i, __LINE__) = 0; TEC_CONCAT(_i, __LINE__) < (STOP); ++TEC_CONCAT(_i, __LINE__))
+#define for_range_var(CAPTURE, STOP)\
+	assert(STOP >= 0);\
+	for (size_t (CAPTURE) = 0; (CAPTURE) < (STOP); ++(CAPTURE))
+#define for_range_var_slice(CAPTURE, START, STOP)\
+	assert(START >= 0 && STOP >= 0);\
+	for (size_t (CAPTURE) = START; (CAPTURE) < (STOP); ++(CAPTURE))
