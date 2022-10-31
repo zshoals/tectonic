@@ -245,19 +245,19 @@ bool exd_hientset_slot_is_not_set(exd_hientset_t * ents, exd_entity_t slot)
 //===================
 u32 exd_hientset_iter_next(exd_hientset_iter_t * it)
 {
-	while (!layer3_has(it->entset, it->current_idx) && it->current_idx < EXD_HIENTSET_LAYER3_SIZE)
+	while (!layer3_has(it->entset, it->current_idx) && it->current_idx < EXD_HIENTSET_ELEMENT_COUNT)
 	{
 		it->current_idx += EXD_HIENTSET_LAYER3_ITER_ADVANCE;
 	}
-	while (!layer2_has(it->entset, it->current_idx) && it->current_idx < EXD_HIENTSET_LAYER2_SIZE)
+	while (!layer2_has(it->entset, it->current_idx) && it->current_idx < EXD_HIENTSET_ELEMENT_COUNT)
 	{
 		it->current_idx += EXD_HIENTSET_LAYER2_ITER_ADVANCE;
 	}
-	while (!layer1_has(it->entset, it->current_idx) && it->current_idx < EXD_HIENTSET_LAYER1_SIZE)
+	while (!layer1_has(it->entset, it->current_idx) && it->current_idx < EXD_HIENTSET_ELEMENT_COUNT)
 	{
 		it->current_idx += EXD_HIENTSET_LAYER1_ITER_ADVANCE;
 	}
-	while (!layer0_has(it->entset, it->current_idx) && it->current_idx < EXD_HIENTSET_LAYER0_SIZE)
+	while (!layer0_has(it->entset, it->current_idx) && it->current_idx < EXD_HIENTSET_ELEMENT_COUNT)
 	{
 		it->current_idx += EXD_HIENTSET_LAYER0_ITER_ADVANCE;
 	}
