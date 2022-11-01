@@ -80,16 +80,78 @@ void exd_query_optional_group_compile(exd_query_optional_group_t * optionals)
 //scan over so many slots while iterating.
 exd_iterable_entity_t exd_query_iter_next(exd_query_iter_t * it)
 {
-	exd_entset_t * iteration_list = &it->q->matcher;
+	exd_entset_t const * iteration_list = &it->q->matcher;
 
 	//Note: Scary looking, but safe. This skip will only occur at bitflags offset 0 in a particular
 	//bitset block. If any bit is set in the block, this just gets repeatedly skipped until the next block
 	//Decent speedup results for sparse arrays
-	while(exd_entset_entity_block_is_empty(iteration_list, it->current_index) && it->current_index < EXD_MAX_ENTITIES)
+
+	//Note: This may be too many lookaheads? Register pressure or something?
+	//Lookahead 16 slots, and check if the group is empty. If it is, advance by (likely) 32 * 16 (512) elements
+	// while
+	// (
+	// 	(exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 0)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 1)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 2)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 3)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 4)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 5)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 6)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 7)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 8)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 9)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 10)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 11)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 12)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 13)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 14)) &
+	// 	exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 15))) &&
+	// 	it->current_index < EXD_MAX_ENTITIES
+	// )
+	// {
+	// 	// assert(it->current_index + (EXD_ENTSET_BITWIDTH * 16) < EXD_MAX_ENTITIES);
+	// 	it->current_index += EXD_ENTSET_BITWIDTH * 16;
+	// }
+
+	//Lookahead 8 slots, and check if the group is empty. If it is, advance by (likely) 32 * 8 (256) elements
+	while
+	(
+		(exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 0)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 1)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 2)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 3)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 4)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 5)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 6)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 7))) &&
+		it->current_index < EXD_MAX_ENTITIES
+	)
+	{
+		// assert(it->current_index + (EXD_ENTSET_BITWIDTH * 8) < EXD_MAX_ENTITIES);
+		it->current_index += EXD_ENTSET_BITWIDTH * 8;
+	}
+
+	//Lookahead 4 slots, and check if the group is empty. If it is, advance by (likely) 32 * 4 (128) elements
+	while
+	(
+		(exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 0)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 1)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 2)) &
+		exd_entset_block_is_empty(iteration_list, it->current_index + (EXD_ENTSET_BITWIDTH * 3))) &&
+		it->current_index < EXD_MAX_ENTITIES
+	)
+	{
+		// assert(it->current_index + (EXD_ENTSET_BITWIDTH * 4) < EXD_MAX_ENTITIES);
+		it->current_index += EXD_ENTSET_BITWIDTH * 4;
+	}
+
+	//Don't lookahead, but advance by the bitwidth if this block is empty
+	while(exd_entset_block_is_empty(iteration_list, it->current_index) && it->current_index < EXD_MAX_ENTITIES)
 	{
 		it->current_index += EXD_ENTSET_BITWIDTH;
 	}
 
+	//We have an entity somewhere in this block, advance empty entities until we locate it
 	while(exd_entset_slot_is_not_set(iteration_list, it->current_index) && it->current_index < EXD_MAX_ENTITIES)
 	{
 		it->current_index++;
