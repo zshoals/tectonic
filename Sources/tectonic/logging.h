@@ -6,6 +6,7 @@
 #include "tcommon.h"
 
 #define TEC_LOG_MAX_BUFFER_LEN 1024
+#define TEC_LOG_MAX_SUBBUFFER_LEN 256
 
 #define LOG_ALL ~((tec_logging_flags)(0))
 #define LOG_NO_EXCLUSIONS ((tec_logging_flags)(0))
@@ -32,15 +33,15 @@ typedef u64 tec_logging_flags;
 //exclusions will completely suppress a message with a selected tag
 void tec_log_set_filtering(tec_logging_flags flags, tec_logging_flags exclusions, bool force_verbose);
 
-void tec_internal_log_verbose(kinc_log_level_t level, char const * format, char const * file, size_t line, va_list args);
-void tec_internal_log(kinc_log_level_t level, char const * format, char const * file, size_t line, va_list args);
+void tec_internal_log_verbose(kinc_log_level_t level, tec_logging_flags flags, char const * format, char const * file, size_t line, va_list args);
+void tec_internal_log(kinc_log_level_t level, tec_logging_flags flags, char const * format, char const * file, size_t line, va_list args);
 void tec_log_filtered(tec_logging_flags flags, char const * format, ...);
 
 #define TEC_LOG(FILTER, FORMAT, ...) tec_log_filtered(FILTER, FORMAT, __VA_ARGS__)
-#define log_warn_verbose(FORMAT, ARGS) tec_internal_log_verbose(KINC_LOG_LEVEL_WARNING, FORMAT, __FILE__, __LINE__, ARGS)
-#define log_info_verbose(FORMAT, ARGS) tec_internal_log_verbose(KINC_LOG_LEVEL_INFO, FORMAT, __FILE__, __LINE__, ARGS)
-#define log_error_verbose(FORMAT, ARGS) tec_internal_log_verbose(KINC_LOG_LEVEL_ERROR, FORMAT, __FILE__, __LINE__, ARGS)
+#define log_warn_verbose(FORMAT, FLAGS, ARGS) tec_internal_log_verbose(KINC_LOG_LEVEL_WARNING, FLAGS, FORMAT, __FILE__, __LINE__, ARGS)
+#define log_info_verbose(FORMAT, FLAGS, ARGS) tec_internal_log_verbose(KINC_LOG_LEVEL_INFO, FLAGS, FORMAT, __FILE__, __LINE__, ARGS)
+#define log_error_verbose(FORMAT, FLAGS, ARGS) tec_internal_log_verbose(KINC_LOG_LEVEL_ERROR, FLAGS, FORMAT, __FILE__, __LINE__, ARGS)
 
-#define log_warn(FORMAT, ARGS) tec_internal_log(KINC_LOG_LEVEL_WARNING, FORMAT, __FILE__, __LINE__, ARGS)
-#define log_info(FORMAT, ARGS) tec_internal_log(KINC_LOG_LEVEL_INFO, FORMAT, __FILE__, __LINE__, ARGS)
-#define log_error(FORMAT, ARGS) tec_internal_log(KINC_LOG_LEVEL_ERROR, FORMAT, __FILE__, __LINE__, ARGS)
+#define log_warn(FORMAT, FLAGS, ARGS) tec_internal_log(KINC_LOG_LEVEL_WARNING, FLAGS, FORMAT, __FILE__, __LINE__, ARGS)
+#define log_info(FORMAT, FLAGS, ARGS) tec_internal_log(KINC_LOG_LEVEL_INFO, FLAGS, FORMAT, __FILE__, __LINE__, ARGS)
+#define log_error(FORMAT, FLAGS, ARGS) tec_internal_log(KINC_LOG_LEVEL_ERROR, FLAGS, FORMAT, __FILE__, __LINE__, ARGS)

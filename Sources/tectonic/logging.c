@@ -1,9 +1,26 @@
 #include "logging.h"
 
+#include <string.h>
 #include <stdio.h>
 #include "kinc/log.h"
+#include "tectonic/tcommon.h"
 #include "kinc/system.h"
 #include "tectonic/validation.h"
+
+static char const * log_type_names[] =
+{
+	"Info ",
+	"Warning ",
+	"Error ",
+	"Verbose ",
+	"Engine ",
+	"Game ",
+	"ECS ",
+	"Physics ",
+	"Graphics ",
+	"Input ",
+	"Performance ",
+};
 
 //Allow all logs by default
 static tec_logging_flags active_permitted = ~0;
@@ -12,24 +29,51 @@ static tec_logging_flags active_exclusions = 0;
 //Whether or not all log messages should be required to print detailed info
 static bool tec_logging_force_verbose = false;
 
-void tec_internal_log_verbose(kinc_log_level_t level, char const * format, char const * file, size_t line, va_list args)
+void tec_internal_log_append(char * buffer, size_t current_offset, char const * string)
 {
-	char buffer[TEC_LOG_MAX_BUFFER_LEN];
+	snprintf(buffer + current_offset, TEC_LOG_MAX_SUBBUFFER_LEN - current_offset, string);
+}
+
+void tec_internal_log_type(char * buffer, tec_logging_flags flags)
+{
+	size_t offset = 0;
+	//Flags size = 64
+	for_range_var(i, 64)
+	{
+		//Hack and skip info, warning, error, and verbose flags
+		if (i < 4) continue;
+
+		if (flags & (1 << i))
+		{
+			if (log_type_names[i])
+			{
+				tec_internal_log_append(buffer, offset, log_type_names[i]);
+				offset += strlen(log_type_names[i]);
+			}
+		}
+	}
+}
+
+void tec_internal_log_verbose(kinc_log_level_t level, tec_logging_flags flags, char const * format, char const * file, size_t line, va_list args)
+{
+	char buffer[TEC_LOG_MAX_BUFFER_LEN] = {0};
+	char subbuf[TEC_LOG_MAX_SUBBUFFER_LEN] = {0};
+	tec_internal_log_type(subbuf, flags);
 	switch (level)
 	{
 		case KINC_LOG_LEVEL_INFO:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[Info: %0.5f]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), format, file, line);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[Info: %0.5f]::[Class: %s]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), subbuf, format, file, line);
 			break;
 		}
 		case KINC_LOG_LEVEL_WARNING:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[WARNING: %0.5f]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), format, file, line);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[WARNING: %0.5f]::[Class: %s]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), subbuf, format, file, line);
 			break;
 		}
 		case KINC_LOG_LEVEL_ERROR:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[ERROR: %0.5f]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), format, file, line);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[ERROR: %0.5f]::[Class: %s]::[%s]::[File: %s]::[Line: %zu]", kinc_time(), subbuf, format, file, line);
 			break;
 		}
 		default:
@@ -40,24 +84,26 @@ void tec_internal_log_verbose(kinc_log_level_t level, char const * format, char 
 	kinc_log_args(level, string, args);
 }
 
-void tec_internal_log(kinc_log_level_t level, char const * format, char const * file, size_t line, va_list args)
+void tec_internal_log(kinc_log_level_t level, tec_logging_flags flags, char const * format, char const * file, size_t line, va_list args)
 {
 	char buffer[TEC_LOG_MAX_BUFFER_LEN];
+	char subbuf[TEC_LOG_MAX_SUBBUFFER_LEN] = {0};
+	tec_internal_log_type(subbuf, flags);
 	switch (level)
 	{
 		case KINC_LOG_LEVEL_INFO:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[Info: %0.5f]::[%s]", kinc_time(), format);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[Info: %0.5f]::[Class: %s]::[%s]", kinc_time(), subbuf, format);
 			break;
 		}
 		case KINC_LOG_LEVEL_WARNING:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[WARNING: %0.5f]::[%s]", kinc_time(), format);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[WARNING: %0.5f]::[Class: %s]::[%s]", kinc_time(), subbuf, format);
 			break;
 		}
 		case KINC_LOG_LEVEL_ERROR:
 		{
-			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[ERROR: %0.5f]::[%s]", kinc_time(), format);
+			snprintf(buffer, TEC_LOG_MAX_BUFFER_LEN, "[ERROR: %0.5f]::[Class: %s]::[%s]", kinc_time(), subbuf, format);
 			break;
 		}
 		default:
@@ -100,30 +146,30 @@ void tec_log_filtered(tec_logging_flags flags, char const * format, ...)
 		{
 			if (flags & LOG_INFO)
 			{
-				log_info_verbose(format, args);
+				log_info_verbose(format, flags, args);
 			}
 			if (flags & LOG_WARNING)
 			{
-				log_warn_verbose(format, args);
+				log_warn_verbose(format, flags, args);
 			}
 			if (flags & LOG_ERROR)
 			{
-				log_error_verbose(format, args);
+				log_error_verbose(format, flags, args);
 			}
 		}
 		else
 		{
 			if (flags & LOG_INFO)
 			{
-				log_info(format, args);
+				log_info(format, flags, args);
 			}
 			if (flags & LOG_WARNING)
 			{
-				log_warn(format, args);
+				log_warn(format, flags, args);
 			}
 			if (flags & LOG_ERROR)
 			{
-				log_error(format, args);
+				log_error(format, flags, args);
 			}
 		}
 	}

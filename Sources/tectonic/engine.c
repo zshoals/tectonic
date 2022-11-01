@@ -183,7 +183,7 @@ tec_engine_quake
 
 	TEC_LOG
 	(
-		LOG_INFO | LOG_VERBOSE | LOG_ENGINE,
+		LOG_INFO | LOG_VERBOSE | LOG_ENGINE | LOG_GAME | LOG_PHYSICS,
 		"Attempting a basic log message. Value: %d",
 		accum
 	);
