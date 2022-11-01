@@ -55,12 +55,12 @@ void exd_entset_clear_slot(exd_entset_t * ents, exd_entity_t slot)
 	ents->bitset[exd_entset_internal_compute_array_idx(slot)] &= ~(exd_entset_internal_compute_entity_slot_mask(slot));
 }
 
-bool exd_entset_entity_block_is_empty(exd_entset_t * ents, exd_entity_t slot)
+bool exd_entset_block_is_empty(exd_entset_t const * ents, exd_entity_t slot)
 {
 	return ents->bitset[exd_entset_internal_compute_array_idx(slot)] == 0;
 }
 
-bool exd_entset_block_is_full(exd_entset_t * ents, exd_entity_t slot)
+bool exd_entset_block_is_full(exd_entset_t const * ents, exd_entity_t slot)
 {
 	return ents->bitset[exd_entset_internal_compute_array_idx(slot)] == 0xffffffff;
 }
@@ -89,14 +89,14 @@ void exd_entset_not(exd_entset_t * destination, exd_entset_t * source)
 	}
 }
 
-bool exd_entset_slot_is_set(exd_entset_t * ents, exd_entity_t slot)
+bool exd_entset_slot_is_set(exd_entset_t const * ents, exd_entity_t slot)
 {
 	u32 slot_mask = exd_entset_internal_compute_entity_slot_mask(slot);
 	u64 index = exd_entset_internal_compute_array_idx(slot);
 	return ents->bitset[index] & slot_mask;
 }
 
-bool exd_entset_slot_is_not_set(exd_entset_t * ents, exd_entity_t slot)
+bool exd_entset_slot_is_not_set(exd_entset_t const * ents, exd_entity_t slot)
 {
 	return !(exd_entset_slot_is_set(ents, slot));
 }
