@@ -47,6 +47,11 @@ typedef struct ds_ERROR_TYPE
 }
 ds_ERROR_TYPE;
 
+#define DS_EXPAND(A) A
+#define DS_CONCAT(A, B) A##B
+#define DS_CC(A, B) DS_CONCAT(A, B)
+
+
 //===============
 //Fixed Sized Arrays pre-needs
 
