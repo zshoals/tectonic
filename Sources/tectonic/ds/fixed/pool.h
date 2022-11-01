@@ -30,6 +30,7 @@ ds_pool_union_type;
 typedef struct ds_pool_self
 {
 	ds_pool_union_type pool[ds_element_count];
+	size_t count_in_use;
 	size_t first_free;
 }
 ds_pool_self;
@@ -46,10 +47,16 @@ ds_pool_key;
 #define pool_release(DECLARED_TYPE, POOL_PTR, POOL_KEY) POOL_FUNC(DECLARED_TYPE, _release)(POOL_PTR, POOL_KEY)
 #define pool_resolve_key(DECLARED_TYPE, POOL_PTR, POOL_KEY) POOL_FUNC(DECLARED_TYPE, _resolve_key)(POOL_PTR, POOL_KEY)
 #define pool_capacity(DECLARED_TYPE) POOL_FUNC(DECLARED_TYPE, _capacity)()
+#define pool_count_free(DECLARED_TYPE, POOL_PTR), POOL_FUNC(DECLARED_TYPE, _count_free)(POOL_PTR)
 
 DS_INLINE size_t POOL_FUNC(ds_pool_self, _capacity)(void)
 {
 	return ds_element_count;
+}
+
+DS_INLINE size_t POOL_FUNC(ds_pool_self, _count_free)(ds_pool_self * pool)
+{
+	return pool_capacity(ds_pool_self) - pool->count_in_use;
 }
 
 DS_INLINE void POOL_FUNC(ds_pool_self, _init)(ds_pool_self * pool)
@@ -66,10 +73,12 @@ DS_INLINE void POOL_FUNC(ds_pool_self, _init)(ds_pool_self * pool)
 	pool->pool[pool_capacity(ds_pool_self) - 1].next_free = DS_POOL_DEPLETED;
 
 	pool->first_free = 0;
+	pool->count_in_use = 0;
 }
 
 DS_INLINE void POOL_FUNC(ds_pool_self, _clear)(ds_pool_self * pool)
 {
+	DEBUG_ENSURE_PTR_NOT_NULL(pool, "Pool was null!");
 	pool_init(ds_pool_self, pool);
 }
 
@@ -89,6 +98,7 @@ DS_INLINE ds_pool_key POOL_FUNC(ds_pool_self, _take)(ds_pool_self * pool)
 	//This hurts to read
 	//This sets the pools current first free targeted slot to the next available free slot
 	pool->first_free = pool->pool[pool->first_free].next_free;
+	pool->count_in_use++;
 
 	return key;
 }
@@ -96,8 +106,9 @@ DS_INLINE ds_pool_key POOL_FUNC(ds_pool_self, _take)(ds_pool_self * pool)
 DS_INLINE void POOL_FUNC(ds_pool_self, _release)(ds_pool_self * pool, ds_pool_key key)
 {
 	DEBUG_ENSURE_PTR_NOT_NULL(pool, "Pool was null!");
+	DEBUG_ENSURE_UINT_LTE(pool->count_in_use + 1, pool_capacity(ds_pool_self, pool), "Pool performed a double release somewhere.");
 
 	ds_pool_union_type * element = &pool->pool[key.handle];
 	element->next_free = pool->first_free;
 	pool->first_free = key.handle;
-}
+	pool->count_in_use--;
