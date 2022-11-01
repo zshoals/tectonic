@@ -9,6 +9,8 @@
 static tec_logging_flags active_permitted = ~0;
 //Exclude nothing by default
 static tec_logging_flags active_exclusions = 0;
+//Whether or not all log messages should be required to print detailed info
+static bool tec_logging_force_verbose = false;
 
 void tec_internal_log_verbose(kinc_log_level_t level, char const * format, char const * file, size_t line, va_list args)
 {
@@ -67,10 +69,11 @@ void tec_internal_log(kinc_log_level_t level, char const * format, char const * 
 
 }
 
-void tec_log_set_filtering(tec_logging_flags flags, tec_logging_flags exclusions)
+void tec_log_set_filtering(tec_logging_flags flags, tec_logging_flags exclusions, bool force_verbose)
 {
 	active_permitted = flags; 
 	active_exclusions = exclusions;
+	tec_logging_force_verbose = force_verbose;
 }
 
 void tec_log_filtered(tec_logging_flags flags, char const * format, ...)
@@ -79,6 +82,7 @@ void tec_log_filtered(tec_logging_flags flags, char const * format, ...)
 	va_start(args, format);
 
 	tec_logging_flags filtered_flags;
+
 	//If flags contains any flag that's currently excluded, this log message
 	//will not be output
 	if (flags & active_exclusions)
@@ -92,7 +96,7 @@ void tec_log_filtered(tec_logging_flags flags, char const * format, ...)
 
 	if (filtered_flags & active_permitted)
 	{
-		if (flags & LOG_VERBOSE)
+		if (tec_logging_force_verbose || (flags & LOG_VERBOSE))
 		{
 			if (flags & LOG_INFO)
 			{

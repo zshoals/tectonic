@@ -21,6 +21,8 @@ typedef enum
 	LOG_ECS = (1 << 6),
 	LOG_PHYSICS = (1 << 7),
 	LOG_GRAPHICS = (1 << 8),
+	LOG_INPUT = (1 << 9),
+	LOG_PERFORMANCE = (1 << 10),
 }      
 tec_logging_filter_e;
 
@@ -28,7 +30,7 @@ typedef u64 tec_logging_flags;
 
 //Pass a list of flags to allow. Log message with even a single flag present will print,
 //exclusions will completely suppress a message with a selected tag
-void tec_log_set_filtering(tec_logging_flags flags, tec_logging_flags exclusions);
+void tec_log_set_filtering(tec_logging_flags flags, tec_logging_flags exclusions, bool force_verbose);
 
 void tec_internal_log_verbose(kinc_log_level_t level, char const * format, char const * file, size_t line, va_list args);
 void tec_internal_log(kinc_log_level_t level, char const * format, char const * file, size_t line, va_list args);

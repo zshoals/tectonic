@@ -179,7 +179,7 @@ tec_engine_quake
 
 	kinc_log(KINC_LOG_LEVEL_INFO, "Ring: %zu", accum);
 
-	tec_log_set_filtering(LOG_ALL, LOG_NO_EXCLUSIONS);
+	tec_log_set_filtering(LOG_ALL, LOG_NO_EXCLUSIONS, false);
 
 	TEC_LOG
 	(
