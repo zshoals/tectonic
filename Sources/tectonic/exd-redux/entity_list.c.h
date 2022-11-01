@@ -31,7 +31,7 @@ exd_entity_t exd_entity_list_get_new_entity(exd_entity_list_t * manifest)
 
 void exd_entity_list_free_entity(exd_entity_list_t * manifest, exd_entity_t id)
 {
-	u16 slot = exd_entity_extract_id(id);
+	u16 slot = (u16)exd_entity_extract_id(id);
 	exd_freelist_release_id(&manifest->available_entities, slot);
 	exd_entset_clear_slot(&manifest->entity_states, id);
 
